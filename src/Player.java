@@ -42,6 +42,15 @@ public class Player {
 		    
 		  }
 	  }
+    
+      public static String detectExtension(String file) {
+          String extension = "";
+          int i = file.lastIndexOf(".");
+          if (i > 0) {
+              extension += file.substring(i + 1);
+          }
+          return extension;
+      }
 	 
 	  
 	  public static void main(String[] args) throws Exception {
