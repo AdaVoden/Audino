@@ -11,7 +11,7 @@ import Audino.MetadataParser;
 public class App {
     // public static void main(String[] args) {
     //     try {
-    //         File folder = new File("D:/Music/phoenixdk/Doom II  Delta-Q-Delta");
+    //         File folder = new File("I:/Temp/wavtest");
     //         for (File fileEntry : folder.listFiles()) {
     //             Metadata parsed = MetadataParser.parseAudio(fileEntry.getCanonicalPath());
     //             System.out.println(parsed.toString());
