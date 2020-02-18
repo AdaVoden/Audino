@@ -12,6 +12,7 @@ public class Track {
     public Track(String fileLocation) {
         Metadata metadata = MetadataParser.parseAudio(fileLocation);
         this.title = metadata.get("title");
+        //TODO Wav
         if (FilenameUtils.getExtension(fileLocation).equals("wav")){
             this.album = metadata.get("album");
             System.out.print(metadata.toString());

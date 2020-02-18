@@ -47,6 +47,7 @@ public class MetadataParser {
                 parser = new AudioParser();
             }
             parser.parse(input, handler, toReturn, parseCont);
+            input.close(); //Good practice
             return toReturn;
         }
         catch (IOException e){
