@@ -1,8 +1,11 @@
 package Audino;
 import org.apache.tika.metadata.Metadata;
+
+import java.io.Serializable;
+
 import org.apache.commons.io.FilenameUtils;
 
-public class Track {
+public class Track implements Serializable {
     private String title;
     private String album;
     private String artist;
@@ -15,13 +18,21 @@ public class Track {
         //TODO Wav
         if (FilenameUtils.getExtension(fileLocation).equals("wav")){
             this.album = metadata.get("album");
-            System.out.print(metadata.toString());
         }
         else {
             this.album = metadata.get("xmpDM:album");
         }
         this.artist = metadata.get("xmpDM:artist");
         // this.duration = Double.parseDouble(metadata.get("xmpDM:duration"));
+        if (this.title == null){
+            this.title = "????";
+        }
+        if (this.album == null){
+            this.album = "????";
+        }
+        if (this.artist == null){
+            this.artist = "????";
+        }
     }
 
 	public String getTitle() {
@@ -43,5 +54,20 @@ public class Track {
 	public String getFileLocation() {
 		return fileLocation;
 	}
+    public Boolean equals(Track other){
+        if (!other.album.equals(this.album)){
+            return false;
+        }
+        if (!other.artist.equals(this.artist)) {
+            return false;
+        }
+        if (!other.title.equals(this.title)) {
+            return false;
+        }
+        if (other.duration != this.duration) {
+            return false;
+        }
+        return true;
+    }
 
 }
