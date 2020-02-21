@@ -17,11 +17,12 @@ public class Track implements Serializable {
         this.title = metadata.get("title");
         //TODO Wav
         if (FilenameUtils.getExtension(fileLocation).equals("wav")){
-            this.album = metadata.get("album");
+            System.out.println(metadata.toString());
         }
-        else {
+        // else {
             this.album = metadata.get("xmpDM:album");
-        }
+        // }
+
         this.artist = metadata.get("xmpDM:artist");
         // this.duration = Double.parseDouble(metadata.get("xmpDM:duration"));
         if (this.title == null){

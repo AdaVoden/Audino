@@ -43,6 +43,9 @@ public class MetadataParser {
             case "ogg":
                 parser = new VorbisParser();
                 break;
+            case "wav":
+                // TODO WAV doesn't work properly.
+                parser = new AudioParser();
             default:
                 parser = new AudioParser();
             }
@@ -60,6 +63,9 @@ public class MetadataParser {
         }
         catch (TikaException e){
             //TODO
+            e.printStackTrace();
+        }
+        catch (RiffProcessingException e){
             e.printStackTrace();
         }
         return null;
