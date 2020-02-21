@@ -16,13 +16,14 @@ public class AudioFXTest {
 	public static Mixer mixer;
 	public static Clip clip;
 	public static File testSound = new File("test.wav");
+	public static float gainLvl = 0;
+	public static float panLvl = 0;
 
 	/*
 	* This is just some temporary code that plays a short audio file,
 	* once the player is more fleshed out i'll swap this code out for it afterwards
 	*/
-	
-	public static void play(File sound, Float gain) {
+	public static void play(File sound) {
 		DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
 		try {
 			clip = (Clip)mixer.getLine(dataInfo);
@@ -40,10 +41,14 @@ public class AudioFXTest {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-		
-		// set gain level: 
+
+		// adjusts gain
 		FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(gain);
+		gainControl.setValue(gainLvl);
+
+		// adjusts panning (not sure how useful this'll be in the context of listening to music, but it's here lol)
+		FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
+		panControl.setValue(panLvl);
 
 		// starts playing the clip: 
 		clip.start();
@@ -57,13 +62,13 @@ public class AudioFXTest {
 		}
 	}
 
-	/*
-	public static void gainAdjust(double gain) {
-		// set gain level: 
-		FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue((float)gain);
+	public static void gainAdjust(float gain) {
+		gainLvl = gain;
 	}
-	*/
+
+	public static void panAdjust(float pan) {
+		panLvl = pan;
+	}
 
 	public static void main(String[] args) {
 		Scanner gainSc = new Scanner(System.in);
@@ -72,13 +77,26 @@ public class AudioFXTest {
 		Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
 		mixer = AudioSystem.getMixer(mixInfos[2]);
 
-		play(testSound, 0f);
+		// plays sound untouched
+		System.out.println("Currently playing default...");
+		play(testSound);
 
 		System.out.print("Enter gain: ");
 		String g = gainSc.nextLine();
 		float gain = Float.parseFloat(g);
-		//gainAdjust(gain);
+		gainAdjust(gain);
+
+		// plays sound after gain is adjusted
+		System.out.println("Currently playing gain adjustment...");
+		play(testSound);
 		
-		play(testSound, gain);
+		System.out.print("Enter pan: ");
+		String p = gainSc.nextLine();
+		float pan = Float.parseFloat(p);
+		panAdjust(pan);
+
+		// plays sound after panning is adjusted
+		System.out.println("Currently playing pan adjustment...");
+		play(testSound);
 	}
 }
