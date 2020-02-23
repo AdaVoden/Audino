@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.BooleanControl;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
@@ -16,12 +17,16 @@ public class AudioFXTest {
 	public static Mixer mixer;
 	public static Clip clip;
 	public static File testSound = new File("test.wav");
+	
 	public static float gainLvl = 0;
 	public static float panLvl = 0;
+	public static boolean muteValue = false;
 
 	/*
 	* This is just some temporary code that plays a short audio file,
-	* once the player is more fleshed out i'll swap this code out for it afterwards
+	* once the player is more fleshed out i'll swap this code out for it afterwards.
+	* -----
+	* this was also written just to try and get a general understanding of java's sound api
 	*/
 	public static void play(File sound) {
 		DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
@@ -50,6 +55,10 @@ public class AudioFXTest {
 		FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
 		panControl.setValue(panLvl);
 
+		// mute toggle, (again, not sure how useful, especially considering that clips pre-stored into memory)
+		BooleanControl muteToggle = (BooleanControl)clip.getControl(BooleanControl.Type.MUTE);
+		muteToggle.setValue(muteValue);
+
 		// starts playing the clip: 
 		clip.start();
 
@@ -68,6 +77,10 @@ public class AudioFXTest {
 
 	public static void panAdjust(float pan) {
 		panLvl = pan;
+	}
+
+	public static void muteToggle(boolean mute) {
+		muteValue = mute;
 	}
 
 	public static void main(String[] args) {
