@@ -91,7 +91,6 @@ public class App {
 
     private static void clearScreen() {
         //Brings us back to a clear console
-        System.out.print("\033[H\033[2J");
         System.out.flush();
     }
     private static void mainMenu(String[] menu){
