@@ -44,55 +44,55 @@ public class Player {
 	  }
 	 
 	  
-	  public static void main(String[] args) throws Exception {
-		  	 //I set these up for the pause function.
-			 boolean run = true;
-			 String status;
-			 
-			 /*
-			  * Setting up a scanner to take the next input for a file directory, 
-			  * ie) /Users/ryanmchale/Desktop/crazylungs.wav
-			  * I haven't found a way to error test whether or not they enter a 
-			  * correct directory path yet.
-			  */
-			 
-			 Scanner file = new Scanner(System.in);
-			 Scanner running = new Scanner(System.in);
-			 System.out.println("Enter Directory Path to a .wav file: ");
-			 String filename = file.next();
-
-			 
-			 /* This calls the PlaySound method from above, which starts the audio playing
-			  * and also stores the current AudioStream in the variable 'sound', so that
-			  * we can interact with said AudioStream, I needed it to stop the stream.
-			  */
-			 
-			 Clip sound = PlaySound(filename);
-			 /*
-			  * This block of code allows the user to run commands on the AudioStream,
-			  * and makes sure that any invalid command is fixed.
-			  * This will come in handy when we have more functions than stop.
-			  */
-			 while(run == true) {
-				 System.out.println("To stop playback, type \"stop\" ");
-				 status = running.next();
-				 //Making it non-case sensitive.
-				 status = status.toLowerCase();
-				 if(status.contentEquals("stop")) run = false;
-				 //If they type the wrong thing, they can keep trying til they type 'stop'.
-				 else {
-					 System.out.println("You typed: " +status);
-					 System.out.println("Invalid Entry. ");
-				 }
-			 }
-			 
-			 /* Once 'stop' is typed, this block will run, stopping the AudioStream and
-			  * ending the program.
-			  */
-			 
-			 sound.stop();
-			 System.out.println("Goodbye.");
-			 }
+//	  public static void main(String[] args) throws Exception {
+//		  	 //I set these up for the pause function.
+//			 boolean run = true;
+//			 String status;
+//			 
+//			 /*
+//			  * Setting up a scanner to take the next input for a file directory, 
+//			  * ie) /Users/ryanmchale/Desktop/crazylungs.wav
+//			  * I haven't found a way to error test whether or not they enter a 
+//			  * correct directory path yet.
+//			  */
+//			 
+//			 Scanner file = new Scanner(System.in);
+//			 Scanner running = new Scanner(System.in);
+//			 System.out.println("Enter Directory Path to a .wav file: ");
+//			 String filename = file.next();
+//
+//			 
+//			 /* This calls the PlaySound method from above, which starts the audio playing
+//			  * and also stores the current AudioStream in the variable 'sound', so that
+//			  * we can interact with said AudioStream, I needed it to stop the stream.
+//			  */
+//			 
+//			 Clip sound = PlaySound(filename);
+//			 /*
+//			  * This block of code allows the user to run commands on the AudioStream,
+//			  * and makes sure that any invalid command is fixed.
+//			  * This will come in handy when we have more functions than stop.
+//			  */
+//			 while(run == true) {
+//				 System.out.println("To stop playback, type \"stop\" ");
+//				 status = running.next();
+//				 //Making it non-case sensitive.
+//				 status = status.toLowerCase();
+//				 if(status.contentEquals("stop")) run = false;
+//				 //If they type the wrong thing, they can keep trying til they type 'stop'.
+//				 else {
+//					 System.out.println("You typed: " +status);
+//					 System.out.println("Invalid Entry. ");
+//				 }
+//			 }
+//			 
+//			 /* Once 'stop' is typed, this block will run, stopping the AudioStream and
+//			  * ending the program.
+//			  */
+//			 
+//			 sound.stop();
+//			 System.out.println("Goodbye.");
+//			 }
 }
 
 

@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.github.trilarion:java-vorbis-support:1.2.1'
     implementation 'org.apache.tika:tika-parsers:1.23'
     // implementation 'org.jflac:jflac-codec:1.5.2'
-    // implementation 'com.googlecode.soundlibs:mp3spi:1.9.5.4'
+    implementation 'com.googlecode.soundlibs:mp3spi:1.9.5.4'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -36,4 +36,8 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClassName = 'Audino.App'
+}
+
+run {
+    standardInput = System.in
 }

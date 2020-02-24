@@ -65,9 +65,6 @@ public class MetadataParser {
             //TODO
             e.printStackTrace();
         }
-        catch (RiffProcessingException e){
-            e.printStackTrace();
-        }
         return null;
     }
 }
