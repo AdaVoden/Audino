@@ -3,28 +3,31 @@ package Audino;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import Audino.AudioFile;
+import org.apache.commons.io.FilenameUtils;
 //import Audino.Playlist;
 
 public class App {
 
     public static void main(String[] args){
-        String[] currentMenu = {
-            "1. Play/Pause loaded track",
-            "2. Play next track",
-            "3. Play previous track",
-            "4. Stop loaded track",
-            "5. Load song from file",
-            "6. Load playlist (TODO)",
-            "7. Library(TODO)",
-            "The current loaded song is: ",
-            "The current playlist loaded is: ",
-            "The next track in the playlist is: ",
-            "The previous track in the playlist is: ",
-            "0. Quit",
-            "Please type the number you want and hit enter: "
-        };
+        ArrayList<String> currentMenu = new ArrayList<String>();
+
+        currentMenu.add("1. Play/Pause loaded track");
+        currentMenu.add("2. Play next track");
+        currentMenu.add("3. Play previous track");
+        currentMenu.add("4. Stop loaded track");
+        currentMenu.add("5. Load song from file");
+        currentMenu.add("6. Load playlist (TODO)");
+        currentMenu.add("7. Library(TODO)");
+        currentMenu.add("The current loaded song is: ");
+        currentMenu.add("The current playlist loaded is:");
+        currentMenu.add("The next track in the playlist is: ");
+        currentMenu.add("The previous track in the playlist is: ");
+        currentMenu.add("0. Quit");
+        currentMenu.add("Please type the number you want and hit enter: ");
+
 
         AudioFile track = new AudioFile();
         //Playlist playlist = new Playlist();
@@ -67,7 +70,8 @@ public class App {
                     System.out.println("Please enter filepath of track");
                     line = scanner.nextLine();
                     track = new AudioFile(line);
-                    track.playClip();
+                    currentMenu.set(7, "The current loaded song is: " + FilenameUtils.getName(line));
+                    clearScreen();
                     break;
                 case "6": //load playlist
                     break;
@@ -93,7 +97,7 @@ public class App {
         //Brings us back to a clear console
         System.out.flush();
     }
-    private static void mainMenu(String[] menu){
+    private static void mainMenu(ArrayList<String> menu){
 
         for (String item: menu){
             System.out.println(item);
