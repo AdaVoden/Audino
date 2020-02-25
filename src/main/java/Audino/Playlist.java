@@ -1,3 +1,4 @@
+package Audino;
 /*
 to add:
     - ability to create playlist names with spaces

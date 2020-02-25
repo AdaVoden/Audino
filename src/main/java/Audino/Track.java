@@ -11,6 +11,7 @@ public class Track implements Serializable {
     private String artist;
     private double duration = 0.0;
     private String fileLocation;
+    private static final long serialVersionUID = 2L;
 
     public Track(String fileLocation) {
         Metadata metadata = MetadataParser.parseAudio(fileLocation);

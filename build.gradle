@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.apache.tika:tika-parsers:1.23'
     // implementation 'org.jflac:jflac-codec:1.5.2'
     implementation 'com.googlecode.soundlibs:mp3spi:1.9.5.4'
+    implementation 'commons-io:commons-io:2.6'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

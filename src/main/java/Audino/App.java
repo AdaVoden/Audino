@@ -15,14 +15,14 @@ public class App {
         ArrayList<String> currentMenu = new ArrayList<String>();
 
         currentMenu.add("1. Play/Pause loaded track");
-        currentMenu.add("2. Play next track");
-        currentMenu.add("3. Play previous track");
-        currentMenu.add("4. Stop loaded track");
+        currentMenu.add("2. Play next track (TODO)");
+        currentMenu.add("3. Play previous track (TODO)");
+        currentMenu.add("4. Stop loaded track (TODO)");
         currentMenu.add("5. Load song from file");
         currentMenu.add("6. Load playlist (TODO)");
         currentMenu.add("7. Library(TODO)");
         currentMenu.add("The current loaded song is: ");
-        currentMenu.add("The current playlist loaded is:");
+        currentMenu.add("The current playlist loaded is: ");
         currentMenu.add("The next track in the playlist is: ");
         currentMenu.add("The previous track in the playlist is: ");
         currentMenu.add("0. Quit");
