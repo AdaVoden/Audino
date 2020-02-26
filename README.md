@@ -1,4 +1,29 @@
-# CPSC_219_Project
-U of C CPSC 219 group project
-I GOT A BRANCH!!
-guys ryan got a branch
+# Audino
+
+To build:
+
+Clone into your desired folder and run
+
+```./gradlew build``` 
+
+# Contributions
+Written by Harlan:
+App.java
+Library.java
+MetadataParser.java
+Track.java
+
+Written by Aidan:
+Playlist.java
+PlaylistLibrary.java
+
+Written by Ryan:
+AudioFile.java
+
+Written by Julian:
+Julian's classes are not currently in this implementation and are is in his branch, julian.
+This is due to the fact that we couldn't tie it into the main set of functions.
+
+# Style Guide
+Currently using the Twitter Java styleguide located here:
+https://github.com/twitter-archive/commons/blob/master/src/java/com/twitter/common/styleguide.md
