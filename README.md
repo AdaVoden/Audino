@@ -1,4 +1,7 @@
-# CPSC_219_Project
-U of C CPSC 219 group project
-I GOT A BRANCH!!
-guys ryan got a branch
+# Audino
+
+To build:
+
+Clone into your desired folder and run
+
+```./gradlew build```
