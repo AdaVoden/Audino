@@ -6,14 +6,25 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 import Audino.AudioFile;
+import Audino.Playlist;
+
 import org.apache.commons.io.FilenameUtils;
-//import Audino.Playlist;
 
+/**
+ * Runner class. This is the main code that initializes and runs the project.
+ *
+ * Written by: Harlan Shaw
+ * Email: harlan.shaw@ucalgary.ca
+ */
 public class App {
-
+    /**
+     * Main entry point into application, runs basic text UI and calls other functions as necessary
+     *
+     *@param args The list of commandline arguments pass into the application
+     */
     public static void main(String[] args){
         ArrayList<String> currentMenu = new ArrayList<String>();
-
+        // Making the menu into an ArrayList<String> as to make it easier to individually modify
         currentMenu.add("1. Play/Pause loaded track");
         currentMenu.add("2. Play next track (TODO)");
         currentMenu.add("3. Play previous track (TODO)");
@@ -28,21 +39,22 @@ public class App {
         currentMenu.add("0. Quit");
         currentMenu.add("Please type the number you want and hit enter: ");
 
-
+        //Init variables
         AudioFile track = new AudioFile();
-        //Playlist playlist = new Playlist();
+        Playlist playlist = new Playlist();
+        Scanner scanner = new Scanner(System.in);
+        int playlistIndex = 0;
         try {
+            //If any file is added to the args we want to try and play it, but only the first one
             for (String arg: args){
                 File input = new File(arg);
                 if (input.isFile()){
-                    // Here we play a file immediately if it's been thrown at the program
                     track = new AudioFile(input.toString());
                     track.playClip();
                     break;
                 }
             }
 
-            Scanner scanner = new Scanner(System.in);
             while (true){
                 // input loop, run indefinitely until quit
                 clearScreen();
@@ -70,6 +82,7 @@ public class App {
                     System.out.println("Please enter filepath of track");
                     line = scanner.nextLine();
                     track = new AudioFile(line);
+                    //This may be better as a hashmap
                     currentMenu.set(7, "The current loaded song is: " + FilenameUtils.getName(line));
                     clearScreen();
                     break;
@@ -80,8 +93,10 @@ public class App {
                 case "8":
                     break;
                 case "0":
+                    //Kill the program we're done
                     System.exit(0);
                 default:
+                    //Any bad info gets us returned. Sleep is bad form, but suffices for the moment
                     System.out.println("I didn't understand that");
                     Thread.sleep(2000);
                 }
@@ -89,14 +104,26 @@ public class App {
             }
         }
         catch (Exception e){
+            //TODO(All Exceptions)
             e.printStackTrace();
         }
     }
 
+    /**
+     * Clears out the console when called. Currently does not work.
+     * TODO fix this
+     */
     private static void clearScreen() {
         //Brings us back to a clear console
         System.out.flush();
     }
+
+    /**
+     * Prints out the main menu. Can be retooled for any primitive menu.
+     * TODO retool for any primitive menu.
+     *
+     * @param menu The menu to be printed out line by line
+     */
     private static void mainMenu(ArrayList<String> menu){
 
         for (String item: menu){
