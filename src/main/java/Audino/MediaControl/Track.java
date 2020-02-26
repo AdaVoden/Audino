@@ -1,6 +1,8 @@
-package Audino;
+package Audino.MediaControl;
 
 import org.apache.tika.metadata.Metadata;
+
+import Audino.Utility.MetadataParser;
 
 import java.io.Serializable;
 

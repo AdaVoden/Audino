@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-import Audino.AudioFile;
-import Audino.Playlist;
+import Audino.MediaControl.Player;
+import Audino.MediaControl.Playlist;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -40,8 +40,8 @@ public class App {
         currentMenu.add("Please type the number you want and hit enter: ");
 
         //Init variables
-        AudioFile track = new AudioFile();
-        Playlist playlist = new Playlist();
+        Player player = new Player();
+        //Playlist playlist = new Playlist();
         Scanner scanner = new Scanner(System.in);
         int playlistIndex = 0;
         try {
@@ -49,8 +49,8 @@ public class App {
             for (String arg: args){
                 File input = new File(arg);
                 if (input.isFile()){
-                    track = new AudioFile(input.toString());
-                    track.playClip();
+                    player = new Player(input.toString());
+                    player.playClip();
                     break;
                 }
             }
@@ -62,12 +62,12 @@ public class App {
                 String line = scanner.nextLine();
                 switch (line){
                 case "1": //play/pause
-                    if (track != null){
-                        if (track.getIsPlaying()){
-                            track.pauseClip();
+                    if (player != null){
+                        if (player.getIsPlaying()){
+                            player.pauseClip();
                         }
                         else {
-                            track.playClip();
+                            player.playClip();
                         }
                     }
                     break;
@@ -76,12 +76,12 @@ public class App {
                 case "3": //prev track
                     break;
                 case "4": //stop track
-                    track.stopClip();
+                    player.stopClip();
                     break;
                 case "5": //load track
                     System.out.println("Please enter filepath of track");
                     line = scanner.nextLine();
-                    track = new AudioFile(line);
+                    player = new Player(line);
                     //This may be better as a hashmap
                     currentMenu.set(7, "The current loaded song is: " + FilenameUtils.getName(line));
                     clearScreen();

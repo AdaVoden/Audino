@@ -1,7 +1,7 @@
 package Audino;
 
 import java.util.ArrayList;
-import Audino.Playlist;
+import Audino.MediaControl.Playlist;
 
 public class PlaylistLibrary {
     

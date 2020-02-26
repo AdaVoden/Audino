@@ -2,6 +2,10 @@ package Audino;
 
 import org.apache.poi.sl.draw.geom.Path;
 import org.junit.Test;
+
+import Audino.MediaControl.Library;
+import Audino.MediaControl.Track;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -30,7 +34,7 @@ public class LibraryTest {
         Library test = new Library();
         test.collectTracks(tracks);
         try{
-            test.Serialize(test);
+            test.serialize(test);
         }
         catch (IOException e){
             e.printStackTrace();
@@ -52,11 +56,11 @@ public class LibraryTest {
         Library test = new Library();
         test.collectTracks(tracks);
         try{
-            test.Serialize(test);
+            test.serialize(test);
             File file = new File("Library.ser");
             assertTrue(file.exists());
             Library deserialized = new Library();
-            deserialized = Library.Deserialize();
+            deserialized = Library.deserialize();
             ArrayList<Track> testTrackList = test.getTrackList();
             ArrayList<Track> desTrackList = deserialized.getTrackList();
 

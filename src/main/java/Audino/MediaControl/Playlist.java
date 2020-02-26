@@ -1,4 +1,4 @@
-package Audino;
+package Audino.MediaControl;
 /*
 to add:
     - ability to create playlist names with spaces
@@ -10,6 +10,8 @@ to add:
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Audino.PlaylistLibrary;
 
 public class Playlist {
     

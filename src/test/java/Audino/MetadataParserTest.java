@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import Audino.Utility.MetadataParser;
+
 public class MetadataParserTest {
     @Test public void testFlacParser(){
         File file = new File("src/test/resources/test_audio/testflac.flac");
