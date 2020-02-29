@@ -1,4 +1,4 @@
-package Audino;
+package Audino.MediaControl;
 
 import org.apache.tika.metadata.Metadata;
 

@@ -1,6 +1,4 @@
-package Audino;
-
-import Audino.Track;
+package Audino.MediaControl;
 
 import java.io.File;
 import java.io.Serializable;

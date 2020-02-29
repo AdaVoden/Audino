@@ -1,4 +1,4 @@
-package Audino;
+package Audino.MediaControl;
 
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;

@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-import Audino.AudioFile;
-import Audino.Playlist;
+import Audino.MediaControl.AudioFile;
+import Audino.MediaControl.Playlist;
+import Audino.MediaControl.Library;
+import Audino.MediaControl.Track;
 
 import org.apache.commons.io.FilenameUtils;
 
