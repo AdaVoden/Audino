@@ -298,7 +298,6 @@ public class Library implements Serializable {
         
         System.out.println("ERROR : A playlist by the name \"" + aPlaylist + "\" already exists.");
         System.out.println();
-        System.out.print("Enter another command : ");
         
     }
 
@@ -313,7 +312,6 @@ public class Library implements Serializable {
         
         System.out.println("ERROR : \"" + aTrack + "\" already exists in \"" + aPlaylist + ".\"");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -321,21 +319,27 @@ public class Library implements Serializable {
         
         System.out.println("ERROR : \"" + aTrack + "\" does not exist in \"" + aPlaylist + ".\"");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
     public void syntaxError() {
+
         System.out.println("ERROR : Syntax not recognized.");
         System.out.println();
-        System.out.print("Enter another command : ");
 
     }
 
     public void noPlaylistsError() {
+
         System.out.println("ERROR : No playlists found.");
         System.out.println();
-        System.out.print("Enter another command : ");
+
+    }
+
+    public void noTracksError() {
+
+        System.out.println("ERROR : No tracks found.");
+        System.out.println();
 
     }
 
@@ -345,7 +349,6 @@ public class Library implements Serializable {
         
         System.out.println("SUCCESS : Playlist called \"" + aPlaylist + "\" created.");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -353,7 +356,6 @@ public class Library implements Serializable {
         
         System.out.println("SUCCESS : Playlist called \"" + aPlaylist + "\" deleted.");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -361,7 +363,6 @@ public class Library implements Serializable {
 
         System.out.println("SUCCESS : \"" + aTrack + "\" has been added.");
         System.out.println();
-        System.out.print("Enter another command : ");
 
     }
 
@@ -369,7 +370,6 @@ public class Library implements Serializable {
 
         System.out.println("SUCCESS : \"" + aTrack + "\" has been removed.");
         System.out.println();
-        System.out.print("Enter another command : ");
 
     }
 
@@ -377,7 +377,6 @@ public class Library implements Serializable {
         
         System.out.println("SUCCESS : \"" + aTrack + "\" has been added to \"" + aPlaylist + ".\"");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -385,7 +384,6 @@ public class Library implements Serializable {
         
         System.out.println("SUCCESS : \"" + aTrack + "\" has been removed from \"" + aPlaylist + ".\"");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -393,7 +391,6 @@ public class Library implements Serializable {
         
         System.out.println("SUCCESS : all playlists listed.");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -401,7 +398,6 @@ public class Library implements Serializable {
 
         System.out.println("SUCCESS : all tracks listed.");
         System.out.println();
-        System.out.print("Enter another command : ");
     
     }
 
@@ -447,6 +443,17 @@ public class Library implements Serializable {
         System.out.println();                                 // status.
         System.out.print("Enter a command # : ");
 
+    }
+
+    public void printLibraryView() {
+        System.out.println("===============================");
+        System.out.println("    1. List all tracks"         );
+        System.out.println("    2. List all playlists"     );
+        System.out.println("    3. List a playlist's tracks");
+        System.out.println("    4. Exit"                    );
+        System.out.println("===============================");
+        System.out.println();                                
+        System.out.print("Enter a command # : ");
     }
 
     // public void status() {

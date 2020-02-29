@@ -1,7 +1,7 @@
 package Audino;
 
 import java.io.File;
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -106,93 +106,130 @@ public class App {
                 case "6": //create playlist
 
                     System.out.print("Enter the name of the playlist to be created : ");
-                    String name = scanner.nextLine();
-                    library.addPlaylist(name);
+                    String playlistName = scanner.nextLine();
+
+                    Boolean playlistExists = library.playlistExists(playlistName);
+
+                    if (playlistExists == false) {
+                        library.addPlaylist(playlistName);
+                    }
+
+                    else if (playlistExists == true) {
+                        library.playlistExistsError(playlistName);
+                    }
 
                     break;
 
                 case "7": //edit playlist
 
                     System.out.print("Enter the name of the playlist to be edited : ");
-                    String playlistName = scanner.nextLine();
-         
-                    Boolean running = true;
-                    while (running == true) {
+                    playlistName = scanner.nextLine();
 
-                        // Prompt a command.
-                        clearScreen();
-                        library.printPlaylistEditor(playlistName);
-                        String commandNum = scanner.nextLine();
+                    playlistExists = library.playlistExists(playlistName);
+                    
+                    if (playlistExists == true) {
+                        Boolean running = true;
+                        while (running == true) {
 
-                        switch(commandNum) {
-                            case "1": //add track
+                            // Prompt a command.
+                            clearScreen();
+                            library.printPlaylistEditor(playlistName);
+                            String commandNum = scanner.nextLine();
 
-                                System.out.print("Enter the name of the track you wish to add : ");
-                                String trackName = scanner.nextLine();
+                            switch (commandNum) {
+                                case "1": // add track
 
-                                // If track already exists in playlist, notify user.
-                                if (library.trackExistsInPlaylist(trackName, playlistName) == true) {
-                                    library.trackExistsInPlaylistError(trackName, playlistName);
-                                }
+                                    if (library.getTrackList().size() > 0) {
+                                        System.out.print("Enter the name of the track you wish to add : ");
+                                        String trackName = scanner.nextLine();
 
-                                // If the track DNE in playlist,
-                                else if (library.trackExistsInPlaylist(trackName, playlistName) == false) {
-                                    int trackIndex = 0;
-
-                                    // get the track from the library,
-                                    for (Track t : library.getTrackList()) {
-                                        if (t.getTitle().equals(trackName)) {
-                                            trackIndex = library.getTrackList().indexOf(t);
+                                        // If track already exists in playlist, notify user.
+                                        if (library.trackExistsInPlaylist(trackName, playlistName) == true) {
+                                            library.trackExistsInPlaylistError(trackName, playlistName);
                                         }
-                                    }
 
-                                    // create a track clone to add,
-                                    Track toAdd = library.getTrackList().get(trackIndex);
+                                        // If the track DNE in playlist,
+                                        else if (library.trackExistsInPlaylist(trackName, playlistName) == false) {
+                                            int trackIndex = 0;
 
-                                    // add the track to the playlist.
-                                    for (Playlist p : library.getPlaylists()) {
-                                        if (p.getName().equals(playlistName)) {
-                                            library.addTrackToPlaylist(toAdd, playlistName);
-                                        }
-                                    }
-                                }
-
-                                break;
-
-                            case "2": //remove track
-                                
-                                System.out.print("Enter the name of the track you wish to add : ");
-                                trackName = scanner.nextLine();
-
-                                // If the track exists in the playlist,
-                                if (library.trackExistsInPlaylist(trackName, playlistName) == true) {
-
-                                    // remove the track.
-                                    for (Playlist p : library.getPlaylists()) {
-                                        if (p.getName().equals(playlistName)) {
-                                            for (Track t : p.getTracks()) {                                                   
+                                            // get the track from the library,
+                                            for (Track t : library.getTrackList()) {
                                                 if (t.getTitle().equals(trackName)) {
-                                                    library.removeTrackFromPlaylist(t, playlistName);
+                                                    trackIndex = library.getTrackList().indexOf(t);
+                                                }
+                                            }
+
+                                            // create a track clone to add,
+                                            Track toAdd = library.getTrackList().get(trackIndex);
+
+                                            // add the track to the playlist.
+                                            for (Playlist p : library.getPlaylists()) {
+                                                if (p.getName().equals(playlistName)) {
+                                                    library.addTrackToPlaylist(toAdd, playlistName);
                                                 }
                                             }
                                         }
                                     }
-                                }
 
-                                // If the track DNE in the playlist, notify the user.
-                                else if (library.trackExistsInPlaylist(trackName, playlistName) == false) {
-                                    library.trackDNE_InPlaylistError(trackName, playlistName);
-                                }
+                                    else if (library.getTrackList().size() == 0) {
+                                        library.noTracksError();
+                                    }
 
-                                break;
-                                
-                            case "3": //edit playlist name
-                                // TODO
+                                    break;
 
-                            case "4": // exit editor
-                                running = false;
-                        
+                                case "2": // remove track
+
+                                    // Check if the playlist has any tracks in it to remove.
+                                    Boolean playlistHasTracks = true;
+                                    for (Playlist p : library.getPlaylists()) {
+                                        if ( (p.getName().equals(playlistName)) && (p.getTracks().size() == 0) ) {
+                                            playlistHasTracks = false;
+                                        }
+                                    }
+
+                                    if (playlistHasTracks == true) {
+                                        System.out.print("Enter the name of the track you wish to remove : ");
+                                        String trackName = scanner.nextLine();
+
+                                        // If the track exists in the playlist,
+                                        if (library.trackExistsInPlaylist(trackName, playlistName) == true) {
+
+                                            // remove the track.
+                                            for (Playlist p : library.getPlaylists()) {
+                                                if (p.getName().equals(playlistName)) {
+                                                    for (Track t : p.getTracks()) {
+                                                        if (t.getTitle().equals(trackName)) {
+                                                            library.removeTrackFromPlaylist(t, playlistName);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        // If the track DNE in the playlist, notify the user.
+                                        else if (library.trackExistsInPlaylist(trackName, playlistName) == false) {
+                                            library.trackDNE_InPlaylistError(trackName, playlistName);
+                                        }
+                                    }
+
+                                    else if (playlistHasTracks == false) {
+                                        library.noTracksError();
+                                    }
+
+                                    break;
+
+                                case "3": // edit playlist name
+                                    // TODO
+
+                                case "4": // exit editor
+                                    running = false;
+
+                            }
                         }
+                    }
+
+                    else if (playlistExists == false) {
+                        library.playlistDNE_Error(playlistName);
                     }
 
                     break;
@@ -202,95 +239,165 @@ public class App {
                     System.out.print("Enter the name of the playlist to be loaded : ");
                     playlistName = scanner.nextLine();
 
-                    // Check if the provided playlist exists.
-                    Boolean playlistExists = false;
-                    while (playlistExists == false) {
+                    playlistExists = library.playlistExists(playlistName);
+                    
+                    if (playlistExists == true) {
+                        // Check if the provided playlist exists.
+                        // playlistExists = false;
+                        // while (playlistExists == false) {
 
-                        System.out.print("Enter the name of the playlist to be loaded : ");
-                        playlistName = scanner.nextLine();
+                        // System.out.print("Enter the name of the playlist to be loaded : ");
+                        // playlistName = scanner.nextLine();
 
-                        if (library.playlistExists(playlistName) == true) {
-                            playlistExists = true;
-                        }
-                        else {
-                            library.playlistDNE_Error(playlistName);
-                        }
-                    }
+                        // if (library.playlistExists(playlistName) == true) {
+                        // playlistExists = true;
+                        // }
+                        // else {
+                        // library.playlistDNE_Error(playlistName);
+                        // }
+                        // }
 
-                    // Initialize playingIndex and playlistLength.
-                    int playingIndex = 0;
-                    int playlistLength = 0;
+                        // Initialize playingIndex and playlistLength.
+                        int playingIndex = 0;
+                        int playlistLength = 0;
 
-                    // Get the proper playlistLength.
-                    for (Playlist p : library.getPlaylists()) {
-                        if (p.getName().equals(playlistName)) {
-                            playlistLength = p.getTracks().size();
-                        }
-                    }
-
-                    Boolean loaded = true;
-                    while (loaded == true) {
-                        
-                        AudioFile playing = new AudioFile();
-
-                        // Load the first track from the playlist into the AudioFile to be played.
+                        // Get the proper playlistLength.
                         for (Playlist p : library.getPlaylists()) {
                             if (p.getName().equals(playlistName)) {
-                                playing = new AudioFile(p.getTracks().get(playingIndex).getFileLocation());
+                                playlistLength = p.getTracks().size();
                             }
                         }
 
-                        while (0 <= playingIndex && playingIndex < playlistLength) {
+                        Boolean loaded = true;
+                        while (loaded == true) {
 
-                            clearScreen();
-                            library.printPlaylistCommands();
-                            String commandNum = scanner.nextLine();
+                            AudioFile playing = new AudioFile();
 
-                            switch (commandNum) {
-                                case "1": // play / pause
+                            // Load the first track from the playlist into the AudioFile to be played.
+                            for (Playlist p : library.getPlaylists()) {
+                                if (p.getName().equals(playlistName)) {
+                                    playing = new AudioFile(p.getTracks().get(playingIndex).getFileLocation());
+                                }
+                            }
 
-                                    if (playing.getIsPlaying()) {
-                                        playing.pauseClip();
-                                    } 
-                                    else {
-                                        playing.playClip();
-                                    }
+                            while (0 <= playingIndex && playingIndex < playlistLength) {
 
-                                    break;
+                                clearScreen();
+                                library.printPlaylistCommands();
+                                String commandNum = scanner.nextLine();
 
-                                case "2": // load next track
-                                    playingIndex += 1;
-                                    for (Playlist p : library.getPlaylists()) {
-                                        if (p.getName().equals(playlistName)) {
-                                            playing = new AudioFile(p.getTracks().get(playingIndex).getFileLocation());
-                                            System.out.println("SUCCESS : Next song loaded.");
+                                switch (commandNum) {
+                                    case "1": // play / pause
+
+                                        if (playing.getIsPlaying()) {
+                                            playing.pauseClip();
+                                        } else {
+                                            playing.playClip();
                                         }
-                                    }
 
-                                    break;
+                                        break;
 
-                                case "3": // load previous track
-                                    playingIndex -= 1;
-                                    for (Playlist p : library.getPlaylists()) {
-                                        if (p.getName().equals(playlistName)) {
-                                            playing = new AudioFile(p.getTracks().get(playingIndex).getFileLocation());
-                                            System.out.println("SUCCESS : Previous song loaded.");
+                                    case "2": // load next track
+                                        playingIndex += 1;
+                                        for (Playlist p : library.getPlaylists()) {
+                                            if (p.getName().equals(playlistName)) {
+                                                playing = new AudioFile(
+                                                        p.getTracks().get(playingIndex).getFileLocation());
+                                                System.out.println("SUCCESS : Next song loaded.");
+                                            }
                                         }
-                                    }
 
-                                    break;
+                                        break;
 
-                                case "4": // unload playlist
-                                    loaded = false;
+                                    case "3": // load previous track
+                                        playingIndex -= 1;
+                                        for (Playlist p : library.getPlaylists()) {
+                                            if (p.getName().equals(playlistName)) {
+                                                playing = new AudioFile(
+                                                        p.getTracks().get(playingIndex).getFileLocation());
+                                                System.out.println("SUCCESS : Previous song loaded.");
+                                            }
+                                        }
+
+                                        break;
+
+                                    case "4": // unload playlist
+                                        loaded = false;
+                                }
                             }
                         }
                     }
 
+                    else if (playlistExists == false) {
+                        library.playlistDNE_Error(playlistName);
+                    }
 
                     break;
 
                 case "9": // print library
 
+                    Boolean running = true;
+                    while (running == true) {
+
+                        clearScreen();
+                        library.printLibraryView();
+                        String commandNum = scanner.nextLine();
+
+                        switch (commandNum) {
+                            case "1": // list all tracks
+                                
+                                if (library.getTrackList().size() > 0) {
+                                    System.out.println();
+                                    System.out.println(library.tracksToString());
+                                    System.out.println();
+                                }
+                                else {
+                                    library.noTracksError();
+                                }
+
+                                break;
+
+                            case "2": // list all playlist
+
+                                if (library.getPlaylists().size() > 0) {
+                                    System.out.println();
+                                    System.out.println(library.playlistsToString());
+                                    System.out.println();
+                                }
+                                else {
+                                    library.noPlaylistsError();
+                                }
+
+                                break;
+
+                            case "3": // list a playlist's tracks
+                                
+                                System.out.print("Enter the name of the playlist to be listed : ");
+                                playlistName = scanner.nextLine();
+
+                                playlistExists = library.playlistExists(playlistName);
+                                
+                                if (playlistExists == true) {
+                                    for (Playlist p : library.getPlaylists()) {
+                                        if ((p.getName().equals(playlistName)) && (p.getTracks().size() > 0)) {
+                                            p.tracksToString(playlistName);
+                                        } else if ((p.getName().equals(playlistName)) && (p.getTracks().size() == 0)) {
+                                            library.noTracksError();
+                                        }
+                                    }
+                                }
+                                else if (playlistExists == false) {
+                                    library.playlistDNE_Error(playlistName);
+                                }
+
+                                break;
+
+                            case "4": // exit
+                                running = false;
+                                break;
+                           
+                        }
+                    }
                     break;
 
                 case "10": // show player status
