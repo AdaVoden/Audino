@@ -152,7 +152,7 @@ public class App {
                                         else if (library.trackExistsInPlaylist(trackName, playlistName) == false) {
                                             int trackIndex = 0;
 
-                                            // get the track from the library,
+                                            // get the track index from the library,
                                             for (Track t : library.getTrackList()) {
                                                 if (t.getTitle().equals(trackName)) {
                                                     trackIndex = library.getTrackList().indexOf(t);
@@ -242,20 +242,6 @@ public class App {
                     playlistExists = library.playlistExists(playlistName);
                     
                     if (playlistExists == true) {
-                        // Check if the provided playlist exists.
-                        // playlistExists = false;
-                        // while (playlistExists == false) {
-
-                        // System.out.print("Enter the name of the playlist to be loaded : ");
-                        // playlistName = scanner.nextLine();
-
-                        // if (library.playlistExists(playlistName) == true) {
-                        // playlistExists = true;
-                        // }
-                        // else {
-                        // library.playlistDNE_Error(playlistName);
-                        // }
-                        // }
 
                         // Initialize playingIndex and playlistLength.
                         int playingIndex = 0;
