@@ -293,6 +293,10 @@ public class App {
 
                     break;
 
+                case "10": // show player status
+
+                    break;
+
                 case "0": // quit
 
                     //Kill the program we're done
