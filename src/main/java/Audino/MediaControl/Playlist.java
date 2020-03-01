@@ -19,13 +19,13 @@ public class Playlist {
 
     private String name;
     private ArrayList<String> songs = new ArrayList<String>();
-    
+
     // ====================================================================== ( getters )
 
     public String getName() {
         return this.name;
     }
-    
+
     public ArrayList<String> getSongs() {
         ArrayList<String> cloneList = new ArrayList<String>();
         for(String s : songs) {
@@ -42,13 +42,13 @@ public class Playlist {
         }
         else {
             name = aName;
-        }      
+        }
     }
-    
+
     public void addSong(String aSong) {
         songs.add(aSong);
     }
-    
+
     public void removeSong(String aSong) {
         songs.remove(aSong);
      }
@@ -63,7 +63,7 @@ public class Playlist {
         else {
             System.out.println("ERROR: Invalid name.");
         }
-        
+
     }
     public void PlayList(){
 
@@ -88,16 +88,16 @@ public class Playlist {
     // ====================================================================== ( methods )
 
     public void userAddSongs() {
-        
+
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Enter a directory path to a song you would like to add to this playlist (blank line finish): ");
         String dirpath = keyboard.nextLine();
-        
+
         while (dirpath != "") {
             songs.add(dirpath);
             dirpath = keyboard.nextLine();
         }
-        
+
         System.out.println("Songs added.");
         keyboard.close();
     }
@@ -110,7 +110,7 @@ public class Playlist {
             return true;
         }
     }
-    
+
     // ====================================================================== ( main method )
     public static void main(String[] args) {
 
@@ -122,14 +122,14 @@ public class Playlist {
         String input = keyboard.nextLine();
 
         while (input != "") {
-            
+
             // If user is creating a playlist,
             if (input.length() > 16 && input.substring(0, 16).contains("create playlist ")) {
 
                 // get the name,
                 int indexOf_ = input.lastIndexOf(' ');
                 String playlistName = input.substring(indexOf_ + 1);
-                
+
                 // Check if the given name is valid.
                 Boolean validName = validName(playlistName);
 

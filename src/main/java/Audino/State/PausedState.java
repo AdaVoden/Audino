@@ -3,12 +3,13 @@ package Audino.State;
 import Audino.MediaControl.Player;
 
 /**
- * State for when the player has a track loaded and is playing it.
+ * State for when the player has a track loaded, is not playing, but has a time
+ * value greater than 0
  *
  */
-public class PlayingState extends State {
+public class PausedState extends State {
 
-	PlayingState(Player player) {
+	PausedState(Player player) {
 		super(player);
 		//TODO Auto-generated constructor stub
 	}
