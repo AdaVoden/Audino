@@ -1,10 +1,11 @@
 package Audino.MediaControl;
 
-import org.apache.tika.metadata.Metadata;
-
 import Audino.Utility.MetadataParser;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -22,8 +23,10 @@ public class Track implements Serializable {
     private String title;
     private String album;
     private String artist;
-    private double duration = 0.0;
-    private String fileLocation;
+    private String track;
+    private String year;
+    private int duration = 0;
+    private File file;
     private static final long serialVersionUID = 2L;
     /**
      * Only constructor for Track as the file location is the only thing
@@ -31,27 +34,15 @@ public class Track implements Serializable {
      * user friendliness.
      */
     public Track(String fileLocation) {
-        Metadata metadata = MetadataParser.parseAudio(fileLocation);
-        this.title = metadata.get("title");
-        //TODO Wav
-        if (FilenameUtils.getExtension(fileLocation).equals("wav")){
-            System.out.println(metadata.toString());
-        }
-        // else {
-            this.album = metadata.get("xmpDM:album");
-        // }
-
-        this.artist = metadata.get("xmpDM:artist");
-        // this.duration = Double.parseDouble(metadata.get("xmpDM:duration"));
-        if (this.title == null){
-            this.title = "????";
-        }
-        if (this.album == null){
-            this.album = "????";
-        }
-        if (this.artist == null){
-            this.artist = "????";
-        }
+        this.file = new File(fileLocation);
+        ArrayList<String> metadata = MetadataParser.parseAudio(this.file);
+        this.artist = metadata.get(0);
+        this.album = metadata.get(1);
+        this.title = metadata.get(2);
+        this.track = metadata.get(3);
+        this.year = metadata.get(4);
+        int metadataDuration = Integer.parseInt(metadata.get(5));
+        this.duration = metadataDuration;
     }
   /**
    * Returns the title of the track.
@@ -82,20 +73,24 @@ public class Track implements Serializable {
    *
    * @return double the track's duration.
    */
-    public double getDuration() {
+    public int getDuration() {
 		return duration;
 	}
+
   /**
-   * Returns the location of the track on disk.
+   * Returns new file reference
    *
-   * @return String the track's location on disk.
+   * @return New file reference
+ * @throws IOException
    */
-	public String getFileLocation() {
-		return fileLocation;
+	public File getFile() {
+      //TODO privacy leak
+      return this.file;
 	}
+    //TODO return true if the file's hash is the same along with location
   /**
    * Compares two tracks and returns true if equal. It's only the same if the data is the same.
-   * TODO: Return true if the file's hash is the same along with location
+   *
    *
    * @param other A potentially different track to compare with
    * @return Boolean true if they are the same track, false otherwise

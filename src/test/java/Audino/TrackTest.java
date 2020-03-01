@@ -17,6 +17,7 @@ public class TrackTest {
         assertNotNull("Artist should not be null", testTrack.getArtist());
         assertNotNull("Album should not be null", testTrack.getAlbum());
         assertNotNull("Duration should not be null", testTrack.getDuration());
+        System.out.println(testTrack.getArtist());
     }
     @Test
     public void testOggTrack() {
@@ -26,16 +27,20 @@ public class TrackTest {
         assertNotNull("Artist should not be null", testTrack.getArtist());
         assertNotNull("Album should not be null", testTrack.getAlbum());
         assertNotNull("Duration should not be null", testTrack.getDuration());
+        System.out.println(testTrack.getArtist());
+
     }
-    // @Test
-    // public void testWavTrack() {
-    //     File file = new File("src/test/resources/test_audio/testwav.wav");
-    //     Track testTrack = new Track(file.getAbsolutePath());
-    //     assertNotNull("Title should not be null", testTrack.getTitle());
-    //     assertNotNull("Artist should not be null", testTrack.getArtist());
-    //     assertNotNull("Album should not be null", testTrack.getAlbum());
-    //     assertNotNull("Duration should not be null", testTrack.getDuration());
-    // }
+    @Test
+    public void testWavTrack() {
+        File file = new File("src/test/resources/test_audio/testwav.wav");
+        Track testTrack = new Track(file.getAbsolutePath());
+        assertNotNull("Title should not be null", testTrack.getTitle());
+        assertNotNull("Artist should not be null", testTrack.getArtist());
+        assertNotNull("Album should not be null", testTrack.getAlbum());
+        assertNotNull("Duration should not be null", testTrack.getDuration());
+        System.out.println(testTrack.getArtist());
+
+    }
     @Test
     public void testMp3Track() {
         File file = new File("src/test/resources/test_audio/testmp3.mp3");
@@ -44,6 +49,8 @@ public class TrackTest {
         assertNotNull("Artist should not be null", testTrack.getArtist());
         assertNotNull("Album should not be null", testTrack.getAlbum());
         assertNotNull("Duration should not be null", testTrack.getDuration());
+        System.out.println(testTrack.getArtist());
+
     }
 
 }

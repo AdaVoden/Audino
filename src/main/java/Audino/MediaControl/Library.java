@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Email: harlan.shaw@ucalgary.ca
  */
 public class Library implements Serializable {
-    private final ArrayList<Track> trackList = new ArrayList<Track>();
+    private ArrayList<Track> trackList = new ArrayList<Track>();
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -73,8 +73,8 @@ public class Library implements Serializable {
      * @param folderList List of folders that
      */
     public void collectTracks(final ArrayList<String> folderList){
-        for (final String file: folderList) {
-            final Track newTrack = new Track(file);
+        for (String file: folderList) {
+            Track newTrack = new Track(file);
             trackList.add(newTrack);
             // TODO Skip/Retry/Ignore bad trackfile?
         }
