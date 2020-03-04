@@ -4,15 +4,15 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.BooleanControl;
 
-/**
-*
+/*
+* Basic player controls such as volume (gain), panning and mute (among others, possibly).
 *
 */
 public class AudioControl {
+    private Player player;
     private float gainLvl;
 	private float panLvl;
     private boolean muteState;
-    private Player player;
     
     // constructors
     public AudioControl(Player player) {
@@ -57,7 +57,7 @@ public class AudioControl {
 		panControl.setValue(panLvl);
     }
 
-    public void toggleMute(boolean mute) {
+    public void setMute(boolean mute) {
         muteState = mute;
         Clip clip = player.getCurrentClip();
         BooleanControl muteToggle = (BooleanControl)clip.getControl(BooleanControl.Type.MUTE);
