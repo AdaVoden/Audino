@@ -1,14 +1,16 @@
 package Audino.MediaControl;
 
-import java.io.*;
-
 import Audino.MediaControl.Library;
 import Audino.MediaControl.Playlist;
+
+import java.io.IOException;
+
 import Audino.MediaControl.AudioFX;
+
 import Audino.State.PlayerState.PausedState;
 import Audino.State.PlayerState.PlayingState;
 import Audino.State.PlayerState.ReadyState;
-import Audino.State.PlayerState.State;
+import Audino.State.PlayerState.PlayerState;
 import Audino.State.PlayerState.UnreadyState;
 
 import javafx.scene.media.Media;
@@ -20,7 +22,7 @@ import javafx.util.Duration;
 /*
  * This class takes care of playing audio and all of the basic functions
  * such as pause/play and stop.
-*/
+ */
 public class Player {
     /*
      * The instance variables are limited to what is useful, for example AudioStream
@@ -28,7 +30,7 @@ public class Player {
      * go between functions.
      */
     private Track currentTrack;
-    private State state;
+    private PlayerState state;
     private double volume;
     private Playlist playlist;
     private Library Library;
@@ -47,17 +49,17 @@ public class Player {
     // }
     /*
 
-    /*
-     * IsPlaying returns a boolean that tells you if there is a clip playing or
-     * not.
-     */
+      /*
+      * IsPlaying returns a boolean that tells you if there is a clip playing or
+      * not.
+      */
     public boolean IsPlaying()
     {
-    	Status status = mediaPlayer.getStatus();
-    	if (status.equals(MediaPlayer.Status.PLAYING)) {
-    		return true;
-    	}
-    	return false;
+        Status status = mediaPlayer.getStatus();
+        if (status.equals(MediaPlayer.Status.PLAYING)) {
+            return true;
+        }
+        return false;
     }
     //Setters
 
@@ -107,26 +109,26 @@ public class Player {
      */
     public void startPlayback()
     {
-    	MediaPlayer player = this.mediaPlayer;
-    	Status status =  player.getStatus();
-    	Status paused = MediaPlayer.Status.PAUSED;
-    	if (status.equals(paused)) {
-    		player.play();
-    	} else {
-        	Media file;
-    		try {
-    			file = currentTrack.getMedia();
-    	    	this.mediaPlayer = new MediaPlayer(file);
-    	    	this.mediaPlayer.setOnReady(() -> {
-    	    		mediaPlayer.setVolume(volume);
-    	    		mediaPlayer.play();
-    	    		this.state = new PlayingState(this);
-    	    	});
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    	}
+        MediaPlayer player = this.mediaPlayer;
+        Status status =  player.getStatus();
+        Status paused = MediaPlayer.Status.PAUSED;
+        if (status.equals(paused)) {
+            player.play();
+        } else {
+            Media file;
+            try {
+                file = currentTrack.getMedia();
+                this.mediaPlayer = new MediaPlayer(file);
+                this.mediaPlayer.setOnReady(() -> {
+                        mediaPlayer.setVolume(volume);
+                        mediaPlayer.play();
+                        this.state = new PlayingState(this);
+                    });
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                this.state = new UnreadyState(this);
+            }
+        }
     }
 
     /*
@@ -134,11 +136,11 @@ public class Player {
      */
     public void stopPlayback()
     {
-    	if (mediaPlayer != null) {
-    		mediaPlayer.stop();
-    		mediaPlayer.dispose();
-    		this.state = new ReadyState(this);
-    	}
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+            this.state = new ReadyState(this);
+        }
     }
     /*
      * Stops the clip and remembers where it left off, in order to be able to resume
@@ -146,54 +148,62 @@ public class Player {
      */
     public void pausePlayback()
     {
-    	if (mediaPlayer != null) {
-    		mediaPlayer.pause();
-    		this.state = new PausedState(this);
-    	}
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            this.state = new PausedState(this);
+        }
     }
     public void fastForward() {
-    	if (mediaPlayer != null) {
-    		Duration toAdd = new Duration(1000);
-    		Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-    		mediaPlayer.seek(newTime);
-    		mediaPlayer.play();
-    		this.state = new PlayingState(this);
-    	}
+        if (mediaPlayer != null) {
+            Duration toAdd = new Duration(1000);
+            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
+            mediaPlayer.seek(newTime);
+            mediaPlayer.play();
+            this.state = new PlayingState(this);
+        }
     }
     public void rewind() {
-    	if (mediaPlayer != null) {
-    		Duration toAdd = new Duration(-1000);
-    		Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-    		mediaPlayer.seek(newTime);
-    		mediaPlayer.play();
-    		this.state = new PlayingState(this);
-    	}
+        if (mediaPlayer != null) {
+            Duration toAdd = new Duration(-1000);
+            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
+            mediaPlayer.seek(newTime);
+            mediaPlayer.play();
+            this.state = new PlayingState(this);
+        }
+    }
+    public void seek(double seekTo){
+        if (mediaPlayer != null){
+            Duration time = new Duration(seekTo);
+            mediaPlayer.seek(time);
+        }
     }
     public void playNext() {
-     	this.currentTrack = playlist.nextTrack();
-    	startPlayback();
+        playlist.getState().onNext();
+        this.currentTrack = playlist.getCurrentTrack();
+        startPlayback();
     }
     public void playPrevious() {
-    	this.currentTrack = playlist.previousTrack();
-    	startPlayback();
+        playlist.getState().onPrevious();
+        this.currentTrack = playlist.getCurrentTrack();
+        startPlayback();
     }
-    public State getState() {
-    	return this.state;
+    public PlayerState getState() {
+        return this.state;
     }
     public Library getLibrary() {
-    	return this.Library;
+        return this.Library;
     }
     public Playlist getPlaylist() {
-    	return this.playlist;
+        return this.playlist;
     }
     public void setPlaylist(Playlist playlist) {
-    	this.playlist = playlist;
-    	this.currentTrack = this.playlist.getCurrentTrack();
-    	this.state = new ReadyState(this);
+        this.playlist = playlist;
+        this.currentTrack = this.playlist.getCurrentTrack();
+        this.state = new ReadyState(this);
     }
     public void setTrack(Track track) {
-    	this.currentTrack = track;
-    	this.playlist = new Playlist(track);
-    	this.state = new ReadyState(this);
+        this.currentTrack = track;
+        this.playlist = new Playlist(track);
+        this.state = new ReadyState(this);
     }
 }

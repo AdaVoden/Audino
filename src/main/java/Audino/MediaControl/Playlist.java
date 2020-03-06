@@ -1,30 +1,30 @@
 package Audino.MediaControl;
 /*
-to add:
-    - ability to create playlist names with spaces
-    - Player can read playlists and play them
-    - User has the ability to add multiple songs to a playlist on one command
-    - toStrings
+  to add:
+  - ability to create playlist names with spaces
+  - Player can read playlists and play them
+  - User has the ability to add multiple songs to a playlist on one command
+  - toStrings
 */
 
 
 import java.util.ArrayList;
 
 import Audino.State.PlaylistState.DefaultState;
-import Audino.State.PlaylistState.State;
+import Audino.State.PlaylistState.PlaylistState;
 
 public class Playlist {
     
     // ====================================================================== ( instance )
 
     private ArrayList<Track> tracks = new ArrayList<Track>();
-    private State state;
+    private PlaylistState state;
     private int trackIndex = 0;
     private boolean shuffle = false;
 
     // ====================================================================== ( getters )
 
-    public ArrayList<Track> getSongs() {
+    public ArrayList<Track> getTracks() {
         ArrayList<Track> cloneList = new ArrayList<Track>();
         for(Track s : tracks) {
             cloneList.add(s);
@@ -33,37 +33,55 @@ public class Playlist {
     }
     
     public int getPlaylistSize() {
-    	return this.tracks.size();
+        return this.tracks.size();
     }
     
     public int getTrackIndex() {
-    	return this.trackIndex;
+        return this.trackIndex;
+    }
+
+    public Track getCurrentTrack() {
+        return this.tracks.get(trackIndex);
+    }
+
+    public PlaylistState getState() {
+        return this.state;
+
     }
 
     // ====================================================================== ( setters )
 
     public void setShuffle(boolean toSet) {
-    	this.shuffle = toSet;
+        this.shuffle = toSet;
     }
+
+    public void setIndex(int newIndex) {
+        this.trackIndex = newIndex;
+    }
+
+    public void setState(PlaylistState state) {
+        this.state = state;
+    }
+
     // ====================================================================== ( constructors )
 
     public Playlist() {
-    	this.state = new DefaultState(this);
+        this.state = new DefaultState(this);
     }
 
     public Playlist(Track aTrack) {
-    	tracks.add(aTrack);
-    	this.state = new DefaultState(this);
+        tracks.add(aTrack);
+        this.state = new DefaultState(this);
     }
     
     public Playlist(ArrayList<Track> tracks) {
-    	this.tracks.addAll(tracks);
-    	this.state = new DefaultState(this);
+        this.tracks.addAll(tracks);
+        this.state = new DefaultState(this);
     }
 
     // ====================================================================== ( toString )
 
-	public String songsToString() {
+    public String songsToString() {
         String allSongs = "";
         for (Track s : tracks) {
             allSongs += s.getFile().getName() + ", ";
@@ -73,39 +91,14 @@ public class Playlist {
 
     // ====================================================================== ( methods )
 	
-	public Track nextTrack() {
-		if (this.trackIndex < tracks.size() - 1) {
-			trackIndex++;
-			return tracks.get(trackIndex);
-		}
-		return tracks.get(trackIndex);
-	}
-	public Track previousTrack() {
-		if (this.trackIndex > 0) {
-			trackIndex--;
-			return tracks.get(trackIndex);
-		}
-		return tracks.get(trackIndex);
-	}
     public void addTrack(Track aTrack) {
         tracks.add(aTrack);
+    }
+    public void addTrack(ArrayList<Track> tracks){
+        tracks.addAll(tracks);
     }
 
     public void removeTrack(Track aTrack) {
         tracks.remove(aTrack);
-     }
-    public Track getCurrentTrack() {
-    	return this.tracks.get(trackIndex);
     }
-
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

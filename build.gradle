@@ -28,7 +28,6 @@ eclipse {
     jdt {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
-        javaRuntimeName = "J2SE-1.8"
     }
     classpath {
         file {

@@ -7,10 +7,10 @@ import Audino.MediaControl.Player;
  * Taken from:
  * https://refactoring.guru/design-patterns/state/java/example
  */
-public abstract class State {
+public abstract class PlayerState {
     Player player;
 
-    State(Player player) {
+    PlayerState(Player player) {
         this.player = player;
     }
 

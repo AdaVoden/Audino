@@ -7,7 +7,7 @@ import Audino.MediaControl.Player;
  * Example: Track is loaded, but not paused or started.
  *
  */
-public class ReadyState extends State {
+public class ReadyState extends PlayerState {
 
 	public ReadyState(Player player) {
 		super(player);

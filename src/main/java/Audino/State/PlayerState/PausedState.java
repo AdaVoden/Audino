@@ -7,7 +7,7 @@ import Audino.MediaControl.Player;
  * value greater than 0
  *
  */
-public class PausedState extends State {
+public class PausedState extends PlayerState {
 
 	public PausedState(Player player) {
 		super(player);

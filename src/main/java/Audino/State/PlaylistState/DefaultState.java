@@ -2,23 +2,33 @@ package Audino.State.PlaylistState;
 
 import Audino.MediaControl.Playlist;
 
-public class DefaultState extends State {
+public class DefaultState extends PlaylistState {
 
-	public DefaultState(Playlist playlist) {
-		super(playlist);
+    public DefaultState(Playlist playlist) {
+      super(playlist);
 		//TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onNext() {
-		// TODO Auto-generated method stub
-		
+      int index = playlist.getTrackIndex();
+      int newIndex = 0;
+      int playlistSize = playlist.getPlaylistSize();
+      if (index < playlistSize -1) {
+          newIndex = index + 1;
+          playlist.setIndex(newIndex);
+      }
+      // else we do nothing
 	}
 
 	@Override
-	public void OnPrevious() {
-		// TODO Auto-generated method stub
-		
+	public void onPrevious() {
+        int index = playlist.getTrackIndex();
+        int newIndex = 0;
+        if (index > 0) {
+            newIndex = index - 1;
+            playlist.setIndex(newIndex);
+        }
 	}
 	
 }
