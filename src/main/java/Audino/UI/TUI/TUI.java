@@ -7,13 +7,20 @@ import Audino.UI.UI;
  *
  *
  */
-public class TUI extends UI {
-
+public class TUI implements UI {
+    Player player;
+    /**
+     *
+     *
+     */
 	public TUI(Player player) {
-		super(player);
+        this.player = player;
 		//TODO Auto-generated constructor stub
 	}
-
+    /**
+     *
+     *
+     */
     @Override
     public void init() {
         // TODO do something

@@ -75,7 +75,9 @@ public class Library implements Serializable {
     public void collectTracks(final ArrayList<String> folderList){
         for (String file: folderList) {
             Track newTrack = new Track(file);
-            trackList.add(newTrack);
+            if (newTrack != null){
+                trackList.add(newTrack);
+            }
             // TODO Skip/Retry/Ignore bad trackfile?
         }
     }

@@ -3,19 +3,37 @@ package Audino.UI.GUI;
 import Audino.MediaControl.Player;
 import Audino.UI.UI;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+
+
 /**
  *
  *
  */
-public class GUI extends UI {
-
+public class GUI extends Application implements UI {
+    private Player player;
+    /**
+     *
+     *
+     */
     public GUI(Player player) {
-      super(player);
-      //TODO Auto-generated constructor stub
+        this.player = player;
     }
-
-    @Override
+    /**
+     *
+     *
+     */
     public void init(){
+        Stage stage = new Stage();
+        start(stage);
+    }
+    /**
+     *
+     *
+     */
+    public void start(Stage stage){
         //TODO do something
     }
 }

@@ -1,4 +1,4 @@
-package Audino.State;
+package Audino.State.PlayerState;
 
 import Audino.MediaControl.Player;
 
@@ -7,16 +7,15 @@ import Audino.MediaControl.Player;
  * Taken from:
  * https://refactoring.guru/design-patterns/state/java/example
  */
-abstract class State {
+public abstract class State {
     Player player;
 
     State(Player player) {
         this.player = player;
     }
 
-    public abstract String onPlay();
-    public abstract String onPause();
-    public abstract String onStop();
-    public abstract String onNext();
-    public abstract String onPrevious();
+    public abstract void onPlay();
+    public abstract void onStop();
+    public abstract void onNext();
+    public abstract void onPrevious();
 }

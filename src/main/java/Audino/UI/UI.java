@@ -2,15 +2,16 @@ package Audino.UI;
 
 import Audino.MediaControl.Player;
 
+
 /**
  *
  *
  */
-public abstract class UI{
-    Player player;
-
-    public UI (Player player){
-        this.player = player;
-    }
-    public void init(){};
+public interface UI {
+    /**
+     *
+     *
+     */
+    // Is this interface even useful with 1 method?
+    public void init();
 }

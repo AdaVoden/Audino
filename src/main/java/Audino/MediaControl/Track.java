@@ -1,6 +1,7 @@
 package Audino.MediaControl;
 
 import Audino.Utility.MetadataParser;
+import javafx.scene.media.Media;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class Track implements Serializable {
     public Track(String fileLocation) {
         this.file = new File(fileLocation);
         ArrayList<String> metadata = MetadataParser.parseAudio(this.file);
+        //TODO replace with enum?
         this.artist = metadata.get(0);
         this.album = metadata.get(1);
         this.title = metadata.get(2);
@@ -84,10 +86,21 @@ public class Track implements Serializable {
  * @throws IOException
    */
 	public File getFile() {
-      //TODO privacy leak
-      return this.file;
+      File newReference = null;
+      try {
+          newReference = new File(this.file.getCanonicalPath());
+      } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          //This shouldn't fire because we've already done this work
+      }
+      return newReference;
 	}
     //TODO return true if the file's hash is the same along with location
+	public Media getMedia() throws IOException {
+		Media toReturn = new Media(this.file.getCanonicalPath());
+		return toReturn;
+	}
   /**
    * Compares two tracks and returns true if equal. It's only the same if the data is the same.
    *
