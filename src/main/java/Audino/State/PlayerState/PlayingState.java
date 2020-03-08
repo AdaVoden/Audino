@@ -6,7 +6,7 @@ import Audino.MediaControl.Player;
  * State for when the player has a track loaded and is playing it.
  *
  */
-public class PlayingState extends State {
+public class PlayingState extends PlayerState {
 
 	public PlayingState(Player player) {
 		super(player);

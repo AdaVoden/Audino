@@ -2,22 +2,18 @@ package Audino.State.PlaylistState;
 
 import Audino.MediaControl.Playlist;
 
-public class RepeatOneState extends State {
-	public RepeatOneState(Playlist playlist) {
-		super(playlist);
+public class RepeatOneState extends PlaylistState {
+    public RepeatOneState(Playlist playlist) {
+        super(playlist);
 		//TODO Auto-generated constructor stub
 	}
+    @Override
+    public void onNext() {
+        // do nothing
+    }
 
-	@Override
-	public void onNext() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void OnPrevious() {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    @Override
+    public void onPrevious() {
+        // do nothing
+    }
 }
