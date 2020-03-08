@@ -3,6 +3,7 @@ package Audino.MediaControl;
 import Audino.MediaControl.Library;
 import Audino.MediaControl.Playlist;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import Audino.MediaControl.AudioFX;
@@ -95,7 +96,10 @@ public class Player {
         
         try {
             this.Library = Library.deserialize();
-        } catch (ClassNotFoundException | IOException e) {
+            if (this.Library == null){
+                    this.Library = new Library();
+                }
+        } catch (ClassNotFoundException e) {
             this.Library = new Library();
         }
     }
@@ -182,8 +186,8 @@ public class Player {
                 Media file = currentTrack.getMedia();
                 this.mediaPlayer = new MediaPlayer(file);
                 this.mediaPlayer.setOnReady(() ->{
-                        mediaPlayer.setVolume(volume);
-                        mediaPlayer.play();
+                        this.mediaPlayer.setVolume(volume);
+                        this.mediaPlayer.play();
                         this.state = new PlayingState(this);
                     });
             }
@@ -198,10 +202,9 @@ public class Player {
      */
     public void stopPlayback()
     {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.setOnStopped(() -> {
-                    mediaPlayer.dispose();
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.stop();
+            this.mediaPlayer.setOnStopped(() -> {
                     this.state = new ReadyState(this);
             });
         }
@@ -215,9 +218,9 @@ public class Player {
      */
     public void pausePlayback()
     {
-        if (mediaPlayer != null) {
-            mediaPlayer.pause();
-            mediaPlayer.setOnPaused(() -> {
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.pause();
+            this.mediaPlayer.setOnPaused(() -> {
                 this.state = new PausedState(this);
             });
 
@@ -251,12 +254,12 @@ public class Player {
         }
     }
     public void playNext() {
-        playlist.getState().onNext();
+        this.playlist.getState().onNext();
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }
     public void playPrevious() {
-        playlist.getState().onPrevious();
+        this.playlist.getState().onPrevious();
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }

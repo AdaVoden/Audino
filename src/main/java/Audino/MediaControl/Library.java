@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import java.lang.ClassNotFoundException;
@@ -49,7 +50,7 @@ public class Library implements Serializable {
      *
      * @return Library the library.ser file that was written to disk
      */
-    public static Library deserialize() throws IOException, ClassNotFoundException{
+    public static Library deserialize() throws ClassNotFoundException {
         try {
             ObjectInputStream lib = new ObjectInputStream(new FileInputStream(new File(fileName)));
 
@@ -59,13 +60,12 @@ public class Library implements Serializable {
         }
         catch (final IOException e){
             // TODO
-            e.printStackTrace();
+            return null;
         }
         catch (final ClassNotFoundException e){
             // TODO
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
     /**
      * Finds tracks from user-defined folder list for import into library.
