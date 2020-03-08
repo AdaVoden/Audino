@@ -6,8 +6,8 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.BooleanControl;
 
 /**
-* Basic controls for Player such as volume (gain), panning and mute. 
-*/
+ * Basic controls for Player such as volume (gain), panning and mute. 
+ */
 public class AudioControl {
     private Player player;
     private float gainLvl;
