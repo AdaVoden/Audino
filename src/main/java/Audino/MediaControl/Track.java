@@ -98,7 +98,8 @@ public class Track implements Serializable {
 	}
     //TODO return true if the file's hash is the same along with location
 	public Media getMedia() throws IOException {
-		Media toReturn = new Media(this.file.getCanonicalPath());
+      String cleanString = file.toURI().toString();
+      Media toReturn = new Media(cleanString);
 		return toReturn;
 	}
   /**

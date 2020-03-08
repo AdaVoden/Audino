@@ -22,7 +22,7 @@ public class TUI implements UI {
      *
      */
     @Override
-    public void init() {
+    public void initialize(String[] args) {
         // TODO do something
     }
 

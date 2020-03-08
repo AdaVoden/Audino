@@ -3,7 +3,7 @@ package Audino;
 import Audino.MediaControl.Player;
 import Audino.UI.UI;
 import Audino.UI.TUI.TUI;
-import Audino.UI.GUI.GUI;
+import Audino.UI.GUI.Main;
 /**
  * Runner class. This is the main code that initializes and runs the project.
  *
@@ -19,12 +19,12 @@ public class App {
      */
     public static void main(String[] args) {
         Player player = new Player();
-        UI ui = new GUI(player);
+        UI ui = new Main();
         if (args.length > 1){
             if (args[0].equals("--text-ui")) {
                 ui = new TUI(player);
             }
         }
-        ui.init();
+        ui.initialize(args);
     }
 }

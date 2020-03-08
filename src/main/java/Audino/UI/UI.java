@@ -13,5 +13,5 @@ public interface UI {
      *
      */
     // Is this interface even useful with 1 method?
-    public void init();
+    public void initialize(String[] args);
 }

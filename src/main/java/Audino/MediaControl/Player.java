@@ -31,7 +31,7 @@ public class Player {
      */
     private Track currentTrack;
     private PlayerState state;
-    private double volume;
+    private double volume = 1;
     private Playlist playlist;
     private Library Library;
     private AudioFX audioFX;
@@ -55,18 +55,24 @@ public class Player {
       */
     public boolean IsPlaying()
     {
-        Status status = mediaPlayer.getStatus();
-        if (status.equals(MediaPlayer.Status.PLAYING)) {
-            return true;
+        if (mediaPlayer != null) {
+            Status status = mediaPlayer.getStatus();
+            if (status.equals(MediaPlayer.Status.PLAYING)) {
+                return true;
+            }
         }
+
         return false;
     }
-    public boolean 	IsPaused() {
-    	Status status = mediaPlayer.getStatus();
-    	if (status.equals(MediaPlayer.Status.PAUSED)) {
-    		return true;
-    	}
-    	return false;
+    public boolean IsPaused() {
+        if (mediaPlayer != null){
+            Status status = mediaPlayer.getStatus();
+            if (status.equals(MediaPlayer.Status.PAUSED)) {
+                return true;
+            }
+        }
+
+        return false;
   
     }
     //Setters
@@ -117,23 +123,71 @@ public class Player {
      */
     public void startPlayback()
     {
-        MediaPlayer player = this.mediaPlayer;
-        Status status =  player.getStatus();
-        Status paused = MediaPlayer.Status.PAUSED;
-        if (status.equals(paused)) {
-            player.play();
-        } else {
+        if (this.mediaPlayer != null){
+            Status status = mediaPlayer.getStatus();
             Media file;
+            switch (status){
+            case PAUSED:
+                mediaPlayer.play();
+                this.state = new PlayingState(this);
+                break;
+            case UNKNOWN:
+                try {
+                    file = currentTrack.getMedia();
+                    MediaPlayer player = new MediaPlayer(file);
+                    player.setVolume(volume);
+                    this.state = new PlayingState(this);
+                    player.setOnReady(() -> {
+                         player.play();
+                        });
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    this.state = new UnreadyState(this);
+                }
+                break;
+            case PLAYING:
+                // Do nothing
+                break;
+            case STOPPED:
+                this.mediaPlayer.play();
+                this.state = new PlayingState(this);
+
+                break;
+
+            case READY:
+                this.mediaPlayer.play();
+                this.state = new PlayingState(this);
+
+                break;
+            case DISPOSED:
+                try {
+                    file = currentTrack.getMedia();
+                    MediaPlayer player = new MediaPlayer(file);
+                    player.setVolume(volume);
+                    this.state = new PlayingState(this);
+
+                    player.setOnReady(() -> {
+                        player.play();
+                    });
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    this.state = new UnreadyState(this);
+                }
+                break;
+            }
+        }
+
+        else {
             try {
-                file = currentTrack.getMedia();
+                Media file = currentTrack.getMedia();
                 this.mediaPlayer = new MediaPlayer(file);
-                this.mediaPlayer.setOnReady(() -> {
+                this.mediaPlayer.setOnReady(() ->{
                         mediaPlayer.setVolume(volume);
                         mediaPlayer.play();
                         this.state = new PlayingState(this);
                     });
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
+            }
+            catch (IOException e) {
                 this.state = new UnreadyState(this);
             }
         }
@@ -146,8 +200,13 @@ public class Player {
     {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
-            mediaPlayer.dispose();
-            this.state = new ReadyState(this);
+            mediaPlayer.setOnStopped(() -> {
+                    mediaPlayer.dispose();
+                    this.state = new ReadyState(this);
+            });
+        }
+        else {
+            this.state = new UnreadyState(this);
         }
     }
     /*
@@ -158,7 +217,13 @@ public class Player {
     {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
-            this.state = new PausedState(this);
+            mediaPlayer.setOnPaused(() -> {
+                this.state = new PausedState(this);
+            });
+
+        }
+        else {
+            this.state = new UnreadyState(this);
         }
     }
     public void fastForward() {
