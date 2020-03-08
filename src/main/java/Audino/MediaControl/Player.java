@@ -59,6 +59,14 @@ public class Player {
     	}
     	return false;
     }
+    public boolean 	IsPaused() {
+    	Status status = mediaPlayer.getStatus();
+    	if (status.equals(MediaPlayer.Status.PAUSED)) {
+    		return true;
+    	}
+    	return false;
+  
+    }
     //Setters
 
     /*
