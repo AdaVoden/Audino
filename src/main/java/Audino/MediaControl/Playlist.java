@@ -1,386 +1,156 @@
 package Audino.MediaControl;
-/*
-to add:
-    - ability to create playlist names with spaces
-    - Player can read playlists and play them
-    - User has the ability to add multiple songs to a playlist on one command
-    - toStrings
-*/
-
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import Audino.PlaylistLibrary;
+import Audino.State.PlaylistState.DefaultState;
+import Audino.State.PlaylistState.PlaylistState;
 
 public class Playlist {
     
     // ====================================================================== ( instance )
 
-    private String name;
-    private ArrayList<String> songs = new ArrayList<String>();
-    
+    private ArrayList<Track> tracks = new ArrayList<Track>();
+    private PlaylistState state;
+    private int trackIndex = 0;
+    private boolean shuffle = false;
+
     // ====================================================================== ( getters )
 
-    public String getName() {
-        return this.name;
-    }
-    
-    public ArrayList<String> getSongs() {
-        ArrayList<String> cloneList = new ArrayList<String>();
-        for(String s : songs) {
+    /**
+     * Gets all the tracks in a playlist.
+     * @return ArrayList<Track> ArrayList containing all songs in the playlist.
+     */
+    public ArrayList<Track> getTracks() {
+        ArrayList<Track> cloneList = new ArrayList<Track>();
+        for(Track s : tracks) {
             cloneList.add(s);
         }
         return cloneList;
     }
+    
+    /**
+     * Gets the size of a playlist.
+     * @return int The size of the playlist.
+     */
+    public int getPlaylistSize() {
+        return this.tracks.size();
+    }
+    
+    /**
+     * Gets the current trackIndex of a playlist.
+     * @return int The trackIndex of the playlist.
+     */
+    public int getTrackIndex() {
+        return this.trackIndex;
+    }
+
+    /**
+     * Gets the current Track of a playlist.
+     * @return Track The current Track of the playlist.
+     */
+    public Track getCurrentTrack() {
+        return this.tracks.get(trackIndex);
+    }
+
+    /**
+     * Gets the current state of a playlist.
+     * @return PlaylistState The current state of the playlist.
+     */
+    public PlaylistState getState() {
+        return this.state;
+
+    }
 
     // ====================================================================== ( setters )
 
-    public void setName(String aName) {
-        if (aName.indexOf(' ') != -1) {
-            System.out.println("ERROR: Names cannot contain spaces.");
-        }
-        else {
-            name = aName;
-        }      
+    /**
+     * Sets the current state of shuffle instance variable
+     * @param toSet boolean value for shuffle.
+     */
+    public void setShuffle(boolean toSet) {
+        this.shuffle = toSet;
     }
-    
-    public void addSong(String aSong) {
-        songs.add(aSong);
+
+    /**
+     * Sets the trackIndex instace variable to a specified value.
+     * @param newIndex int of the index to be set.
+     */
+    public void setIndex(int newIndex) {
+        this.trackIndex = newIndex;
     }
-    
-    public void removeSong(String aSong) {
-        songs.remove(aSong);
-     }
+
+    /**
+     * Sets the state of a playlist to specified state.
+     * @param state PlaylistState of what state is to be set.
+     */
+    public void setState(PlaylistState state) {
+        this.state = state;
+    }
 
     // ====================================================================== ( constructors )
-    // ============================================== from new
 
-    public Playlist(String aName) {
-        if (aName.equals("") == false && aName.indexOf(' ') == -1) {
-            name = aName;
-        }
-        else {
-            System.out.println("ERROR: Invalid name.");
-        }
-        
-    }
-    public void PlayList(){
-
+    /**
+     * Creates a null playlist in the default state.
+     */
+    public Playlist() {
+        this.state = new DefaultState(this);
     }
 
-    // ============================================== copy
-
-    public Playlist(Playlist aPlaylist) {
-        name = aPlaylist.getName();
-        songs = aPlaylist.getSongs();
+    /**
+     * Creates a playlist initialized with a track in the default state.
+     * @param aTrack a Track to be added to the playlist.
+     */
+    public Playlist(Track aTrack) {
+        tracks.add(aTrack);
+        this.state = new DefaultState(this);
     }
+    
+    /**
+     * Creates a playlist initialized with an ArrayList of tracks in the default state.
+     * @param tracks an ArrayList<Track> filled with the tracks to be added.
+     */
+    public Playlist(ArrayList<Track> tracks) {
+        this.tracks.addAll(tracks);
+        this.state = new DefaultState(this);
+    }
+
     // ====================================================================== ( toString )
 
+    /**
+     * Lists all the songs in a playlist in a string.
+     * @return String containing all song names.
+     */
     public String songsToString() {
         String allSongs = "";
-        for (String s : songs) {
-            allSongs += s + ", ";
+        for (Track s : tracks) {
+            allSongs += s.getFile().getName() + ", ";
         }
         return allSongs.substring(0, allSongs.length() - 2);
     }
 
     // ====================================================================== ( methods )
-
-    public void userAddSongs() {
-        
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("Enter a directory path to a song you would like to add to this playlist (blank line finish): ");
-        String dirpath = keyboard.nextLine();
-        
-        while (dirpath != "") {
-            songs.add(dirpath);
-            dirpath = keyboard.nextLine();
-        }
-        
-        System.out.println("Songs added.");
-        keyboard.close();
-    }
-
-    public static Boolean validName(String aName) {
-        if (aName.equals("") == true || aName.indexOf(' ') != -1) {
-            return false;
-        }
-        else {
-            return true;
-        }
+	
+    /**
+     * Adds a track to a playlist.
+     * @param aTrack The track to be added.
+     */
+    public void addTrack(Track aTrack) {
+        tracks.add(aTrack);
     }
     
-    // ====================================================================== ( main method )
-    public static void main(String[] args) {
+    /**
+     * Adds an ArrayList of tracks to a playlist.
+     * @param tracks ArrayList<Track> containing the tracks to be added.
+     */
+    public void addTrack(ArrayList<Track> tracks){
+        tracks.addAll(tracks);
+    }
 
-        PlaylistLibrary library = new PlaylistLibrary();
-
-        library.printCommands();
-
-        Scanner keyboard = new Scanner(System.in);
-        String input = keyboard.nextLine();
-
-        while (input != "") {
-            
-            // If user is creating a playlist,
-            if (input.length() > 16 && input.substring(0, 16).contains("create playlist ")) {
-
-                // get the name,
-                int indexOf_ = input.lastIndexOf(' ');
-                String playlistName = input.substring(indexOf_ + 1);
-                
-                // Check if the given name is valid.
-                Boolean validName = validName(playlistName);
-
-                // Handle error of entering "create playlist."
-                if (playlistName.contains("playlist")) {
-                    validName = false;
-                }
-
-                // If name is invalid,
-                if (validName == false) {
-                    library.invalidNameError(playlistName);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-
-                // Check if a playlist by the same name already exists.
-                Boolean playlistExists = library.playlistExists(playlistName);
-
-                // If a playlist by that name exists, notify user and prompt another command.
-                if (playlistExists == true) {
-                    library.playlistExistsError(playlistName);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-                // If a playlist by that name DNE, create one.
-                else if (playlistExists == false) {
-                    library.addPlaylist(new Playlist(playlistName));
-                    library.playlistCreatedSuccess(playlistName);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-            }
-
-            // If user is deleting a playlist,
-            if (input.length() > 16 && input.substring(0, 16).contains("delete playlist ")) {
-
-                // get the name,
-                int indexOf_ = input.lastIndexOf(' ');
-                String playlistName = input.substring(indexOf_ + 1);
-
-                // Check if a playlist by the same name exists.
-                Boolean playlistExists = library.playlistExists(playlistName);
-
-                // If a playlist by that name DNE, notify user.
-                if (playlistExists == false) {
-                    library.playlistDNE_Error(playlistName);
-                    input = keyboard.nextLine();
-                    continue;
-                 }
-
-                // If a playlist by that name exists, delete it, notify user, and prompt another command.
-                else if (playlistExists == true) {
-                    library.removePlaylist(playlistName);
-                    library.playlistDeletedSuccess(playlistName);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-            }
-
-             // If user is adding to a playlist,
-             if (input.length() > 4 && input.substring(0,4).contains("add ")) {
-
-                // find the first space index,
-                int indexOfFirst_ = input.indexOf(" ");
-                
-                // then make a string of the playlist name and the song directory,
-                String nameAndSong = input.substring(indexOfFirst_ + 1);
-
-                // then find the remaining space index, 
-                int indexOfSecond_ = nameAndSong.indexOf(" ");
-
-                // and make a String for playlist name and song directory each.
-                String nameOfPlaylist = nameAndSong.substring(0, indexOfSecond_);
-                String songDirectory = nameAndSong.substring(indexOfSecond_ + 1);
-
-                // Check if a playlist by the same name exists.
-                Boolean playlistExists = library.playlistExists(nameOfPlaylist);
-                
-                // If the the song already exists in that playlist,
-                if (library.songExistsInPlaylist(songDirectory, nameOfPlaylist) == true && playlistExists == true) {
-                        
-                    // notify the user of the error and prompt another commond.
-                    library.songExistsInPlaylistError(songDirectory, nameOfPlaylist);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-
-                // If the song does not exist in the playlist,
-                else if (playlistExists == true) {
-
-                    // add the new song to specified playlist, and prompt another command.
-                    library.addSongToPlaylist(songDirectory, nameOfPlaylist);
-                    library.songAddedSuccess(songDirectory, nameOfPlaylist);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-
-                // If the playlist does not exist, notify user of the error and prompt another command.
-                else {
-                     library.playlistDNE_Error(nameOfPlaylist);
-                     input = keyboard.nextLine();
-                     continue;
-                }
-            }
-        
-            // If user is removing from a playlist,
-            if (input.length() > 3 && input.substring(0,3).contains("rm ")) {
-
-                // find the first space index,
-                int indexOfFirst_ = input.indexOf(" ");
-                
-                // then make a string of the playlist name and the song directory,
-                String nameAndSong = input.substring(indexOfFirst_ + 1);
-
-                // then find the remaining space index,
-                int indexOfSecond_ = nameAndSong.indexOf(" ");
-
-                // and make a String for playlist name and song directory each.
-                String nameOfPlaylist = nameAndSong.substring(0, indexOfSecond_);
-                String songDirectory = nameAndSong.substring(indexOfSecond_ + 1);
-
-                // Check if a playlist by the same name exists.
-                Boolean playlistExists = library.playlistExists(nameOfPlaylist);
-
-                // If the the song exists in the playlist,
-                if (library.songExistsInPlaylist(songDirectory, nameOfPlaylist) == true && playlistExists == true) {
-                        
-                    // remove the song, and prompt another command.
-                    library.removeSongFromPlaylist(songDirectory, nameOfPlaylist);
-                    library.songRemovedSuccess(songDirectory, nameOfPlaylist);
-                    input = keyboard.nextLine();
-                    continue;
-
-                }
-
-                // If the song does not exist in the playlist,
-                else if (playlistExists == true) {
-
-                    // notify the user of the error, and prompt another commond.
-                    library.songDNE_InPlaylistError(songDirectory, nameOfPlaylist);
-                    input = keyboard.nextLine();
-                    continue;
-                }
-
-                // If the playlist does not exist, notify user of the error and prompt another command.
-                else {
-                    library.playlistDNE_Error(nameOfPlaylist);
-                    input = keyboard.nextLine();
-                    continue;
-                }  
-            }
-        
-            // If user enters list,
-            if (input.length() > 5 && input.substring(0,5).contains("list ")) {
-
-                // and user specified all playlists,
-                if (input.length() == 18 && input.substring(5,18).contains("all playlists")) {
-
-                    // check if there are any playlists made,
-                    if (library.getPlaylists().size() > 0) {
-
-                        // print out all playlists, and prompt another command.
-                        System.out.println(library.playlistsToString());
-                        library.playlistsToStringSuccess();
-                        input = keyboard.nextLine();
-                        continue;
-                    }
-
-                    // If there are no playlists made,
-                    else {
-
-                        // notify the user and prompt another command.
-                        library.noPlaylistsError();
-                        input = keyboard.nextLine();
-                        continue;
-                    }
-                }
-                
-                // If user specified a playlist,
-                else {
-
-                    // get the name of the playlist,
-                    String nameOfPlaylist = input.substring(5, input.length());
-                    
-                    // check if the playlist exists,
-                    Boolean playlistExists = library.playlistExists(nameOfPlaylist);
-
-                    // if it does, find the playlist with the matching name,
-                    if (playlistExists == true) {   
-                        for (Playlist p : library.getPlaylists()) {
-
-                            if (p.getName().equals(nameOfPlaylist)) {
-
-                                // print out all songs, and prompt another command.
-                                System.out.println(p.songsToString());
-                                library.songsToStringSuccess();
-                                input = keyboard.nextLine();
-                                continue;
-                            }
-                        }
-                    }
-                    
-                    // If the playlist does not exist,
-                    else {
-
-                        // notify user of error and prompt another commond.
-                        library.playlistDNE_Error(nameOfPlaylist);
-                        input = keyboard.nextLine();
-                        continue;
-                    }
-                }
-            }
-
-            // If user enters menu,
-            if (input.equals("menu")) {
-                library.printCommands();
-                input = keyboard.nextLine();
-                continue;
-            }
-            
-            // If user enters quit,
-            if (input.equals("quit")) {
-                break;
-            }
-
-            // If syntax not reconized,
-            else {
-                library.syntaxError();
-                input = keyboard.nextLine();
-                continue;
-            }
-
-        }
-        
-        
-        
-        
-        
-    
-        
-    
-        keyboard.close();
+    /**
+     * Removes a track from a playlist.
+     * @param aTrack The track to be removed.
+     */
+    public void removeTrack(Track aTrack) {
+        tracks.remove(aTrack);
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

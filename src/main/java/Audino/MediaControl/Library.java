@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import java.lang.ClassNotFoundException;
@@ -23,8 +24,10 @@ import java.util.ArrayList;
  * Written by: Harlan Shaw
  * Email: harlan.shaw@ucalgary.ca
  */
+
 public class Library implements Serializable {
-    private final ArrayList<Track> trackList = new ArrayList<Track>();
+	
+    private ArrayList<Track> trackList = new ArrayList<Track>();
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -44,12 +47,13 @@ public class Library implements Serializable {
             e.printStackTrace();
         }
     }
+   
     /**
      * Reloads the library data into memory.
      *
      * @return Library the library.ser file that was written to disk
      */
-    public static Library deserialize() throws IOException, ClassNotFoundException{
+    public static Library deserialize() throws ClassNotFoundException {
         try {
             ObjectInputStream lib = new ObjectInputStream(new FileInputStream(new File(fileName)));
 
@@ -59,26 +63,29 @@ public class Library implements Serializable {
         }
         catch (final IOException e){
             // TODO
-            e.printStackTrace();
+            return null;
         }
         catch (final ClassNotFoundException e){
             // TODO
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
+    
     /**
      * Finds tracks from user-defined folder list for import into library.
      *
      * @param folderList List of folders that
      */
-    public void collectTracks(final ArrayList<String> folderList){
-        for (final String file: folderList) {
-            final Track newTrack = new Track(file);
-            trackList.add(newTrack);
+    public void collectTracks(final ArrayList<String> folderList) {
+        for (String file: folderList) {
+            Track newTrack = new Track(file);
+            if (newTrack != null){
+                trackList.add(newTrack);
+            }
             // TODO Skip/Retry/Ignore bad trackfile?
         }
     }
+    
     /**
      * Getter for trackList. Currently is a privacy leak.
      *
