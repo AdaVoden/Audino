@@ -24,7 +24,9 @@ import java.util.ArrayList;
  * Written by: Harlan Shaw
  * Email: harlan.shaw@ucalgary.ca
  */
+
 public class Library implements Serializable {
+	
     private ArrayList<Track> trackList = new ArrayList<Track>();
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
@@ -45,6 +47,7 @@ public class Library implements Serializable {
             e.printStackTrace();
         }
     }
+   
     /**
      * Reloads the library data into memory.
      *
@@ -67,12 +70,13 @@ public class Library implements Serializable {
             return null;
         }
     }
+    
     /**
      * Finds tracks from user-defined folder list for import into library.
      *
      * @param folderList List of folders that
      */
-    public void collectTracks(final ArrayList<String> folderList){
+    public void collectTracks(final ArrayList<String> folderList) {
         for (String file: folderList) {
             Track newTrack = new Track(file);
             if (newTrack != null){
@@ -81,6 +85,7 @@ public class Library implements Serializable {
             // TODO Skip/Retry/Ignore bad trackfile?
         }
     }
+    
     /**
      * Getter for trackList. Currently is a privacy leak.
      *

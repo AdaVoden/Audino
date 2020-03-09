@@ -21,6 +21,9 @@ import org.apache.commons.io.FilenameUtils;
  * Email: harlan.shaw@ucalgary.ca
  */
 public class Track implements Serializable {
+	
+	// =============================================================== ( instance )
+	
     private String title;
     private String album;
     private String artist;
@@ -29,6 +32,72 @@ public class Track implements Serializable {
     private int duration = 0;
     private File file;
     private static final long serialVersionUID = 2L;
+    
+    // =============================================================== ( getters )
+    
+    /**
+     * Returns the title of the track.
+     *
+     * @return String the track's title.
+     */
+	public String getTitle() {
+		return title;
+	}
+	
+    /**
+     * Returns the album of the track.
+     *
+     * @return String the track's album.
+     */
+	public String getAlbum() {
+		return album;
+	}
+  
+	/**
+     * Returns the artist of the track.
+     *
+     * @return String the track's artist.
+     */
+	public String getArtist() {
+		return artist;
+	}
+  
+	/**
+     * Returns the duration of the track.
+     *
+     * @return double the track's duration.
+     */
+    public int getDuration() {
+		return duration;
+	}
+
+    /**
+     * Returns new file reference
+     *
+     * @return New file reference
+     * @throws IOException
+     */
+	public File getFile() {
+      File newReference = null;
+      try {
+          newReference = new File(this.file.getCanonicalPath());
+      } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          //This shouldn't fire because we've already done this work
+      }
+      return newReference;
+	}
+    //TODO return true if the file's hash is the same along with location
+	
+	public Media getMedia() throws IOException {
+      String cleanString = file.toURI().toString();
+      Media toReturn = new Media(cleanString);
+		return toReturn;
+	}
+    
+    // =============================================================== ( constructors )
+    
     /**
      * Only constructor for Track as the file location is the only thing
      * that is needed to produce a track, everything else is for
@@ -46,70 +115,17 @@ public class Track implements Serializable {
         int metadataDuration = Integer.parseInt(metadata.get(5));
         this.duration = metadataDuration;
     }
-  /**
-   * Returns the title of the track.
-   *
-   * @return String the track's title.
-   */
-	public String getTitle() {
-		return title;
-	}
-  /**
-   * Returns the album of the track.
-   *
-   * @return String the track's album.
-   */
-	public String getAlbum() {
-		return album;
-	}
-  /**
-   * Returns the artist of the track.
-   *
-   * @return String the track's artist.
-   */
-	public String getArtist() {
-		return artist;
-	}
-  /**
-   * Returns the duration of the track.
-   *
-   * @return double the track's duration.
-   */
-    public int getDuration() {
-		return duration;
-	}
+    
+    // =============================================================== ( methods ) 
 
-  /**
-   * Returns new file reference
-   *
-   * @return New file reference
- * @throws IOException
-   */
-	public File getFile() {
-      File newReference = null;
-      try {
-          newReference = new File(this.file.getCanonicalPath());
-      } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-          //This shouldn't fire because we've already done this work
-      }
-      return newReference;
-	}
-    //TODO return true if the file's hash is the same along with location
-	public Media getMedia() throws IOException {
-      String cleanString = file.toURI().toString();
-      Media toReturn = new Media(cleanString);
-		return toReturn;
-	}
-  /**
-   * Compares two tracks and returns true if equal. It's only the same if the data is the same.
-   *
-   *
-   * @param other A potentially different track to compare with
-   * @return Boolean true if they are the same track, false otherwise
-   */
-  public Boolean equals(Track other){
+    /**
+     * Compares two tracks and returns true if equal. It's only the same if the data is the same.
+     *
+     *
+     * @param other A potentially different track to compare with
+     * @return Boolean true if they are the same track, false otherwise
+     */
+    public Boolean equals(Track other){
       if (!other.album.equals(this.album)){
           return false;
       }

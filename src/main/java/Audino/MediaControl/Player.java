@@ -25,7 +25,9 @@ import javafx.util.Duration;
  * such as pause/play and stop.
  */
 public class Player {
-    /*
+    
+	// =============================================================== ( instance )
+	/*
      * The instance variables are limited to what is useful, for example AudioStream
      * is not an instance variable because we don't need a specific AudioStream to
      * go between functions.
@@ -38,57 +40,61 @@ public class Player {
     private AudioFX audioFX;
     private MediaPlayer mediaPlayer;
 
-    //Getters
-    /*
-     * getFile returns a copy of File 'file' of the Player that this getter is
-     * used on.
+    // =============================================================== ( getters )
+    
+    /**
+     * Gets the current state of the player.
+     * @return PlayerState The state of the player
      */
-    // public File getFile()
-    // {
-    //     String path = this.file.getAbsolutePath();
-    //     return new File(path);
-    // }
-    /*
-
-      /*
-      * IsPlaying returns a boolean that tells you if there is a clip playing or
-      * not.
-      */
-    public boolean IsPlaying()
-    {
-        if (mediaPlayer != null) {
-            Status status = mediaPlayer.getStatus();
-            if (status.equals(MediaPlayer.Status.PLAYING)) {
-                return true;
-            }
-        }
-
-        return false;
+    public PlayerState getState() {
+        return this.state;
     }
-    public boolean IsPaused() {
-        if (mediaPlayer != null){
-            Status status = mediaPlayer.getStatus();
-            if (status.equals(MediaPlayer.Status.PAUSED)) {
-                return true;
-            }
-        }
-
-        return false;
-  
-    }
-    //Setters
-
-    /*
-     * setFile sets the instance variable 'file' to whatever file is at the
-     * directory path inputed.
+    
+    
+    /**
+     * Gets the current Library of the player.
+     * @return Library The library of the player
      */
+    public Library getLibrary() {
+        return this.Library;
+    }
+    
+    /**
+     * Gets the current playlist of the player.
+     * @return Playlist The playlist of the player.
+     */
+    public Playlist getPlaylist() {
+        return this.playlist;
+    }
+    
+    // =============================================================== ( setters )
 
-    //Constructors
+    /**
+     * Passes a new playlist into the player.
+     * @param playlist The playlist to be passed into the player.
+     */
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+        this.currentTrack = this.playlist.getCurrentTrack();
+        this.state = new ReadyState(this);
+    }
+    
+    /**
+     * Passes a new track into the player.
+     * @param track The track to be passed into the player.
+     */
+    public void setTrack(Track track) {
+        this.currentTrack = track;
+        this.playlist = new Playlist(track);
+        this.state = new ReadyState(this);
+    }
+
+    // =============================================================== ( constructors )
+    
     /*
      * Sets every instance variable to null or 0
      */
-    public Player()
-    {
+    public Player() {
         this.state = new UnreadyState(this);
         this.playlist = new Playlist();
         this.mediaPlayer = null;
@@ -98,7 +104,7 @@ public class Player {
             this.Library = Library.deserialize();
             if (this.Library == null){
                     this.Library = new Library();
-                }
+            }
         } catch (ClassNotFoundException e) {
             this.Library = new Library();
         }
@@ -121,20 +127,54 @@ public class Player {
     //     this.file = new File(fileDir);
     //     this.startTime = microSec;
     // }
-    //Methods
+    
+    // =============================================================== ( methods )
+    
+    /**
+     * Tests whether or not a clip is playing.
+     * @return Boolean true if clip is playing, false otherwise
+     */
+    public boolean IsPlaying() {
+        if (mediaPlayer != null) {
+            Status status = mediaPlayer.getStatus();
+            if (status.equals(MediaPlayer.Status.PLAYING)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Tests whether or not a clip is paused.
+     * @return Boolean true if a clip is paused, false otherwise.
+     */
+    public boolean IsPaused() {
+        if (mediaPlayer != null){
+            Status status = mediaPlayer.getStatus();
+            if (status.equals(MediaPlayer.Status.PAUSED)) {
+                return true;
+            }
+        }
+
+        return false;
+  
+    }
+    
     /*
      * Plays the clip (starts audio)
      */
-    public void startPlayback()
-    {
-        if (this.mediaPlayer != null){
+    public void startPlayback() {
+        if (this.mediaPlayer != null) {
+        	
             Status status = mediaPlayer.getStatus();
             Media file;
-            switch (status){
+            
+            switch (status) {
             case PAUSED:
                 mediaPlayer.play();
                 this.state = new PlayingState(this);
                 break;
+                
             case UNKNOWN:
                 try {
                     file = currentTrack.getMedia();
@@ -149,13 +189,14 @@ public class Player {
                     this.state = new UnreadyState(this);
                 }
                 break;
+                
             case PLAYING:
                 // Do nothing
                 break;
+                
             case STOPPED:
                 this.mediaPlayer.play();
                 this.state = new PlayingState(this);
-
                 break;
 
             case READY:
@@ -178,6 +219,7 @@ public class Player {
                     this.state = new UnreadyState(this);
                 }
                 break;
+                
             }
         }
 
@@ -185,6 +227,7 @@ public class Player {
             try {
                 Media file = currentTrack.getMedia();
                 this.mediaPlayer = new MediaPlayer(file);
+                
                 this.mediaPlayer.setOnReady(() ->{
                         this.mediaPlayer.setVolume(volume);
                         this.mediaPlayer.play();
@@ -200,8 +243,7 @@ public class Player {
     /*
      * Stops the clip.
      */
-    public void stopPlayback()
-    {
+    public void stopPlayback() {
         if (this.mediaPlayer != null) {
             this.mediaPlayer.stop();
             this.mediaPlayer.setOnStopped(() -> {
@@ -212,12 +254,12 @@ public class Player {
             this.state = new UnreadyState(this);
         }
     }
+   
     /*
      * Stops the clip and remembers where it left off, in order to be able to resume
      * from the same point again.
      */
-    public void pausePlayback()
-    {
+    public void pausePlayback() {
         if (this.mediaPlayer != null) {
             this.mediaPlayer.pause();
             this.mediaPlayer.setOnPaused(() -> {
@@ -229,6 +271,10 @@ public class Player {
             this.state = new UnreadyState(this);
         }
     }
+    
+    /**
+     * Moves the currentTime of the active mediaPlayer forward by 1000ms.
+     */
     public void fastForward() {
         if (mediaPlayer != null) {
             Duration toAdd = new Duration(1000);
@@ -238,6 +284,10 @@ public class Player {
             this.state = new PlayingState(this);
         }
     }
+    
+    /**
+     * Moves the currentTime of the active mediaPlayer backward by 1000ms.
+     */
     public void rewind() {
         if (mediaPlayer != null) {
             Duration toAdd = new Duration(-1000);
@@ -247,39 +297,36 @@ public class Player {
             this.state = new PlayingState(this);
         }
     }
-    public void seek(double seekTo){
+    
+    /**
+     * Seeks the currentTime of the active mediaPlayer to a specified location.
+     * @param seekTo DOUBLE The time to seek to.
+     */
+    public void seek(double seekTo) {
         if (mediaPlayer != null){
             Duration time = new Duration(seekTo);
             mediaPlayer.seek(time);
         }
     }
+    
+    /**
+     * Plays the next song in the loaded playlist.
+     */
     public void playNext() {
         this.playlist.getState().onNext();
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }
+    
+    /**
+     * Plays the previous song in the loaded playlist
+     */
     public void playPrevious() {
         this.playlist.getState().onPrevious();
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }
-    public PlayerState getState() {
-        return this.state;
-    }
-    public Library getLibrary() {
-        return this.Library;
-    }
-    public Playlist getPlaylist() {
-        return this.playlist;
-    }
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-        this.currentTrack = this.playlist.getCurrentTrack();
-        this.state = new ReadyState(this);
-    }
-    public void setTrack(Track track) {
-        this.currentTrack = track;
-        this.playlist = new Playlist(track);
-        this.state = new ReadyState(this);
-    }
+    
+    
+    
 }
