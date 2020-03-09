@@ -21,13 +21,10 @@ public class AudioControl {
      */
     public AudioControl(Player player) {
         this.player = player;
-        this.setGain(0);
-        this.setPan(0);
-        this.setMute(false);
     }
 
     /**
-     * Constructor for AudioControl.
+     * Constructor for AudioControl. Sets gain, pan, and mute state values if current clip in Player is not null.
      * 
      * @param player The player in which AudioControl manipulates.
      * @param gain The gain value.
@@ -36,9 +33,13 @@ public class AudioControl {
      */
     public AudioControl(Player player, float gain, float pan, boolean mute) {
         this.player = player;
-        this.setGain(gain);
-        this.setPan(pan);
-        this.setMute(mute);
+        
+        if (player.getCurrentClip() != null) {
+            this.setGain(gain);
+            this.setPan(pan);
+            this.setMute(mute);
+        }
+        
     }
 
     public float getCurrentGain() {
