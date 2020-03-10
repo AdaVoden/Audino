@@ -12,7 +12,6 @@
       <TextField fx:id="fileDir" layoutX="14.0" layoutY="83.0" />
       <Label fx:id="instructions" layoutX="14.0" layoutY="62.0" prefHeight="17.0" prefWidth="306.0" text="Enter the filepath to an audio file :" />
       <MaterialDesignIconView fx:id="playButton" glyphName="PLAY" layoutX="14.0" layoutY="40.0" onMouseClicked="#playButtonClicked" size="36" />
-      <MaterialDesignIconView fx:id="pauseButton" glyphName="PAUSE" layoutX="50.0" layoutY="40.0" onMouseClicked="#pauseButtonClicked" size="36" />
       <MaterialDesignIconView fx:id="stopButton" glyphName="STOP" layoutX="86.0" layoutY="40.0" onMouseClicked="#stopButtonClicked" size="36" />
    </children>
 </AnchorPane>

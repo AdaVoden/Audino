@@ -40,7 +40,7 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			AnchorPane root = new AnchorPane();
 			
 			FXMLLoader loader = new FXMLLoader();
-			root = (AnchorPane)loader.load(new FileInputStream("src/main/java/Audino/UI/GUI/Layout.fxml"));
+			root = (AnchorPane)loader.load(new FileInputStream("Layout.fxml"));
 			
 			Scene scene = new Scene(root,326,124);
 			//scene.getStylesheets().add(getClass().getResource("src/main/java/Audino/UI/GUI/application.css").toExternalForm());
