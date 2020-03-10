@@ -74,6 +74,7 @@ public class Player {
      * @param playlist The playlist to be passed into the player.
      */
     public void setPlaylist(Playlist playlist) {
+        stopPlayback();
         this.playlist = playlist;
         this.currentTrack = this.playlist.getCurrentTrack();
         this.state = new ReadyState(this);
@@ -84,9 +85,16 @@ public class Player {
      * @param track The track to be passed into the player.
      */
     public void setTrack(Track track) {
-        this.currentTrack = track;
-        this.playlist = new Playlist(track);
-        this.state = new ReadyState(this);
+        try {
+            stopPlayback();
+            this.currentTrack = track;
+            this.mediaPlayer = new MediaPlayer(track.getMedia());
+            this.playlist = new Playlist(track);
+            this.state = new ReadyState(this);
+        }
+        catch (IOException e){
+            this.state = new UnreadyState(this);
+        }
     }
 
     // =============================================================== ( constructors )
@@ -110,24 +118,7 @@ public class Player {
         }
     }
 
-    /*
-     * Sets 'file' to a new File from the inputed directory path
-     */
-    // public Player(String fileDir) throws Exception
-    // {
-    //     this.file = new File(fileDir);
-    // }
 
-    /*
-     * Sets 'file' to a new File from the inputed directory path and sets
-     * 'startTime' to the inputed long (in microseconds).
-     */
-    // public Player(String fileDir, long microSec) throws Exception
-    // {
-    //     this.file = new File(fileDir);
-    //     this.startTime = microSec;
-    // }
-    
     // =============================================================== ( methods )
     
     /**

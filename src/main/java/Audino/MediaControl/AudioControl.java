@@ -1,6 +1,7 @@
 package Audino.MediaControl;
 
 import Audino.MediaControl.Player;
+
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.BooleanControl;
@@ -34,11 +35,11 @@ public class AudioControl {
     public AudioControl(Player player, float gain, float pan, boolean mute) {
         this.player = player;
         
-        if (player.getCurrentClip() != null) {
-            this.setGain(gain);
-            this.setPan(pan);
-            this.setMute(mute);
-        }
+         // if (player.getCurrentClip() != null) {
+         //     this.setGain(gain);
+         //     this.setPan(pan);
+         //     this.setMute(mute);
+         // }
         
     }
 
@@ -60,17 +61,17 @@ public class AudioControl {
      * @param gain Gain value, max value 6.0206 (inclusive). If value outside range is given, defaults to 0.
      */
     public void setGain(float gain) {
-        Clip clip = player.getCurrentClip();
+        // Clip clip = player.getCurrentClip();
 
-        if (gain <= 6.0206) {
-            gainLvl = gain;
+        // if (gain <= 6.0206) {
+        //     gainLvl = gain;
             
-        } else {
-            gainLvl = 0;
-        }
+        // } else {
+        //     gainLvl = 0;
+        // }
 
-        FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(gainLvl);
+        // FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+        // gainControl.setValue(gainLvl);
     }
 
     /**
@@ -79,16 +80,16 @@ public class AudioControl {
      * @param pan Panning value, ranges from -1 to 1 (inclusive). If value outside range is given, defaults to 0.
      */
     public void setPan(float pan) {
-        Clip clip = player.getCurrentClip();
+    //     Clip clip = player.getCurrentClip();
         
-        if (pan <= 1 && pan >= -1) {
-            panLvl = pan;
-        } else {
-            panLvl = 0;
-        }
+    //     if (pan <= 1 && pan >= -1) {
+    //         panLvl = pan;
+    //     } else {
+    //         panLvl = 0;
+    //     }
 
-        FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
-		panControl.setValue(panLvl);
+    //     FloatControl panControl = (FloatControl)clip.getControl(FloatControl.Type.PAN);
+		// panControl.setValue(panLvl);
     }
 
     /**
@@ -97,10 +98,10 @@ public class AudioControl {
      * @param mute Mute state, either true or false.
      */
     public void setMute(boolean mute) {
-        Clip clip = player.getCurrentClip();
-        muteState = mute;
-        BooleanControl muteToggle = (BooleanControl)clip.getControl(BooleanControl.Type.MUTE);
-		muteToggle.setValue(muteState);
+    //     Clip clip = player.getCurrentClip();
+    //     muteState = mute;
+    //     BooleanControl muteToggle = (BooleanControl)clip.getControl(BooleanControl.Type.MUTE);
+		// muteToggle.setValue(muteState);
     }
 
     /** 

@@ -35,7 +35,7 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
     // methods
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
+        this.player = new Player();
 		try {
 			AnchorPane root = new AnchorPane();
 			
@@ -43,10 +43,15 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			root = (AnchorPane)loader.load(new FileInputStream("src/main/java/Audino/UI/GUI/Layout.fxml"));
 			
 			Scene scene = new Scene(root,326,124);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			//scene.getStylesheets().add(getClass().getResource("src/main/java/Audino/UI/GUI/application.css").toExternalForm());
 			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Player");
+
+            Controller controller = loader.<Controller>getController();
+
+            controller.initData(this.player);
+
 			primaryStage.show();
 			
 		} catch(Exception e) {
