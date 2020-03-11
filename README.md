@@ -2,7 +2,7 @@
 
 ## Run instructions
 
-    Extract the release to a directory, then go into ```bin``` and run ```Audino``` for *Nix systems or ```Audino.bat``` for windows systems.
+Extract the release to a directory, then go into ```bin``` and run ```Audino``` for *Nix systems or ```Audino.bat``` for windows systems.
 
 ## Build Instructions
 To build:
