@@ -125,7 +125,7 @@ public class Player {
      * Tests whether or not a clip is playing.
      * @return Boolean true if clip is playing, false otherwise
      */
-    public boolean IsPlaying() {
+    public boolean isPlaying() {
         if (mediaPlayer != null) {
             Status status = mediaPlayer.getStatus();
             if (status.equals(MediaPlayer.Status.PLAYING)) {
@@ -139,7 +139,7 @@ public class Player {
      * Tests whether or not a clip is paused.
      * @return Boolean true if a clip is paused, false otherwise.
      */
-    public boolean IsPaused() {
+    public boolean isPaused() {
         if (mediaPlayer != null){
             Status status = mediaPlayer.getStatus();
             if (status.equals(MediaPlayer.Status.PAUSED)) {

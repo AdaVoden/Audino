@@ -36,4 +36,9 @@ public class RepeatState extends PlaylistState {
             playlist.setIndex(newIndex);
         }
     }
+
+    @Override
+    public void onNextState() {
+        playlist.setState(new RepeatOneState(playlist));
+    }
 }

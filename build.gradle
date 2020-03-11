@@ -24,22 +24,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-eclipse {
-    jdt {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+sourceSets.main {
+    java {
+        srcDir 'src/main/java' //assume that your source codes are inside this path
     }
-    classpath {
-        file {
-            whenMerged {
-                entries.each { source ->
-                    if (source.kind == 'con' && source.path.startsWith('org.eclipse.jdt.launching.JRE_CONTAINER')) {
-                        source.accessRules.add(new AccessRule('0', 'javafx/**'))
-                        source.accessRules.add(new AccessRule('0', '/com/sun/javafx/**'))
-                    }
-                }
-            }
-        }
+    resources {
+        srcDirs = ['src/main/java', 'src/main/resources']
+        exclude "**/*.java"
     }
 }
 

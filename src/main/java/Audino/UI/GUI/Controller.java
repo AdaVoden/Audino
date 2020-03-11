@@ -8,11 +8,22 @@ import Audino.MediaControl.Player;
 import Audino.MediaControl.Track;
 
 import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.MenuItem;
+
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
+
+import javafx.scene.layout.BorderPane;
+
+import javafx.stage.Window;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.FileChooser;
 
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
@@ -37,9 +48,16 @@ public class Controller {
     private MaterialDesignIconView playButton;
 
     @FXML
+    private MenuItem openMenuClicked;
+
+    @FXML
+    private BorderPane node;
+
+    @FXML
     void playButtonClicked(MouseEvent event) {
-        System.out.println(player.IsPlaying());
         player.getState().onPlay();
+        if (player.isPlaying()){
+        }
     }
 
     @FXML
@@ -57,6 +75,47 @@ public class Controller {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    @FXML
+    void seekBarDragged(DragEvent event){
+
+    }
+    @FXML
+    void nextButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void previousButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void fastForwardButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void rewindButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void shuffleButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void repeatButtonClicked(MouseEvent event){
+
+    }
+    @FXML
+    void openMenuClicked(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Audio File");
+        Window stage = node.getScene().getWindow();
+        fileChooser.getExtensionFilters().addAll(
+                                                 new ExtensionFilter("Audio Files", "*.wav", "*.mp3")
+                                                 );
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null){
+            //DO SOMETHING HERE
         }
     }
 

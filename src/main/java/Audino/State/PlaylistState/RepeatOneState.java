@@ -16,4 +16,10 @@ public class RepeatOneState extends PlaylistState {
     public void onPrevious() {
         // do nothing
     }
+
+    @Override
+    public void onNextState() {
+        playlist.setState(new DefaultState(playlist));
+    }
+
 }

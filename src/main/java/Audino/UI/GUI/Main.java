@@ -8,13 +8,13 @@ import javafx.scene.control.*;
 import javafx.event.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.geometry.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import Audino.MediaControl.*;
 import Audino.UI.UI;
@@ -37,13 +37,14 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 	public void start(Stage primaryStage) throws Exception {
         this.player = new Player();
 		try {
-			AnchorPane root = new AnchorPane();
 			
-			FXMLLoader loader = new FXMLLoader();
-			root = (AnchorPane)loader.load(new FileInputStream("Layout.fxml"));
-			
-			Scene scene = new Scene(root,326,124);
-			//scene.getStylesheets().add(getClass().getResource("src/main/java/Audino/UI/GUI/application.css").toExternalForm());
+      FXMLLoader loader = new FXMLLoader();
+      URL file = getClass().getResource("/fxml/basic_gui.fxml");
+      Parent root = loader.load(file.openStream());
+
+			Scene scene = new Scene(root,640,400);
+      URL stylesheet = getClass().getResource("/css/application.css");
+      scene.getStylesheets().add(stylesheet.toExternalForm());
 			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Player");
