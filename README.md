@@ -4,6 +4,8 @@
 
 Extract the release to a directory, then go into ```bin``` and run ```Audino``` for *Nix systems or ```Audino.bat``` for windows systems.
 
+To run the textUI, open a terminal, go into the extracted or built bin directory and then run ```Audino --text-ui```
+
 ## Build Instructions
 To build:
 

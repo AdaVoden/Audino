@@ -18,12 +18,15 @@ public class App {
      *@param args The list of commandline arguments pass into the application
      */
     public static void main(String[] args) {
-        Player player = new Player();
-        UI ui = new Main();
-        if (args.length > 1){
-            if (args[0].equals("--text-ui")) {
-                ui = new TUI(player);
+        UI ui = null;
+
+        if (args.length > 0) {
+            if (args[0].equals("--text-ui")){
+                ui = new TUI();
             }
+        }
+        else{
+            ui = new Main();
         }
         ui.initialize(args);
     }
