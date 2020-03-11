@@ -1,10 +1,12 @@
 package Audino.MediaControl;
 
-import org.apache.tika.metadata.Metadata;
-
 import Audino.Utility.MetadataParser;
+import javafx.scene.media.Media;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -19,88 +21,111 @@ import org.apache.commons.io.FilenameUtils;
  * Email: harlan.shaw@ucalgary.ca
  */
 public class Track implements Serializable {
+	
+	// =============================================================== ( instance )
+	
     private String title;
     private String album;
     private String artist;
-    private double duration = 0.0;
-    private String fileLocation;
+    private String track;
+    private String year;
+    private int duration = 0;
+    private File file;
     private static final long serialVersionUID = 2L;
+    
+    // =============================================================== ( getters )
+    
+    /**
+     * Returns the title of the track.
+     *
+     * @return String the track's title.
+     */
+	public String getTitle() {
+		return title;
+	}
+	
+    /**
+     * Returns the album of the track.
+     *
+     * @return String the track's album.
+     */
+	public String getAlbum() {
+		return album;
+	}
+  
+	/**
+     * Returns the artist of the track.
+     *
+     * @return String the track's artist.
+     */
+	public String getArtist() {
+		return artist;
+	}
+  
+	/**
+     * Returns the duration of the track.
+     *
+     * @return double the track's duration.
+     */
+    public int getDuration() {
+		return duration;
+	}
+
+    /**
+     * Returns new file reference
+     *
+     * @return New file reference
+     * @throws IOException
+     */
+	public File getFile() {
+      File newReference = null;
+      try {
+          newReference = new File(this.file.getCanonicalPath());
+      } catch (IOException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          //This shouldn't fire because we've already done this work
+      }
+      return newReference;
+	}
+    //TODO return true if the file's hash is the same along with location
+	
+	public Media getMedia() throws IOException {
+      String cleanString = file.toURI().toString();
+      Media toReturn = new Media(cleanString);
+      return toReturn;
+	}
+    
+    // =============================================================== ( constructors )
+    
     /**
      * Only constructor for Track as the file location is the only thing
      * that is needed to produce a track, everything else is for
      * user friendliness.
      */
     public Track(String fileLocation) {
-        Metadata metadata = MetadataParser.parseAudio(fileLocation);
-        this.title = metadata.get("title");
-        //TODO Wav
-        if (FilenameUtils.getExtension(fileLocation).equals("wav")){
-            System.out.println(metadata.toString());
-        }
-        // else {
-            this.album = metadata.get("xmpDM:album");
-        // }
-
-        this.artist = metadata.get("xmpDM:artist");
-        // this.duration = Double.parseDouble(metadata.get("xmpDM:duration"));
-        if (this.title == null){
-            this.title = "????";
-        }
-        if (this.album == null){
-            this.album = "????";
-        }
-        if (this.artist == null){
-            this.artist = "????";
-        }
+        this.file = new File(fileLocation);
+        ArrayList<String> metadata = MetadataParser.parseAudio(this.file);
+        //TODO replace with enum?
+        this.artist = metadata.get(0);
+        this.album = metadata.get(1);
+        this.title = metadata.get(2);
+        this.track = metadata.get(3);
+        this.year = metadata.get(4);
+        int metadataDuration = Integer.parseInt(metadata.get(5));
+        this.duration = metadataDuration;
     }
-  /**
-   * Returns the title of the track.
-   *
-   * @return String the track's title.
-   */
-	public String getTitle() {
-		return title;
-	}
-  /**
-   * Returns the album of the track.
-   *
-   * @return String the track's album.
-   */
-	public String getAlbum() {
-		return album;
-	}
-  /**
-   * Returns the artist of the track.
-   *
-   * @return String the track's artist.
-   */
-	public String getArtist() {
-		return artist;
-	}
-  /**
-   * Returns the duration of the track.
-   *
-   * @return double the track's duration.
-   */
-    public double getDuration() {
-		return duration;
-	}
-  /**
-   * Returns the location of the track on disk.
-   *
-   * @return String the track's location on disk.
-   */
-	public String getFileLocation() {
-		return fileLocation;
-	}
-  /**
-   * Compares two tracks and returns true if equal. It's only the same if the data is the same.
-   * TODO: Return true if the file's hash is the same along with location
-   *
-   * @param other A potentially different track to compare with
-   * @return Boolean true if they are the same track, false otherwise
-   */
-  public Boolean equals(Track other){
+    
+    // =============================================================== ( methods ) 
+
+    /**
+     * Compares two tracks and returns true if equal. It's only the same if the data is the same.
+     *
+     *
+     * @param other A potentially different track to compare with
+     * @return Boolean true if they are the same track, false otherwise
+     */
+    public Boolean equals(Track other){
       if (!other.album.equals(this.album)){
           return false;
       }

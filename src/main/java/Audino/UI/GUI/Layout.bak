@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="124.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
+   <children>
+      <Button fx:id="playButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#playButtonClicked" text="Play" />
+      <Button fx:id="pauseButton" layoutX="58.0" layoutY="14.0" mnemonicParsing="false" onAction="#pauseButtonClicked" text="Pause" />
+      <Button fx:id="stopButton" layoutX="114.0" layoutY="14.0" mnemonicParsing="false" onAction="#stopButtonClicked" text="Stop" />
+      <Button fx:id="loadButton" layoutX="161.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadButtonClicked" text="Load" />
+      <TextField fx:id="fileDir" layoutX="14.0" layoutY="83.0" />
+      <Label fx:id="instructions" layoutX="14.0" layoutY="62.0" prefHeight="17.0" prefWidth="306.0" text="Enter the filepath to an audio file :" />
+   </children>
+</AnchorPane>

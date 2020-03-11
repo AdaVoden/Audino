@@ -1,6 +1,5 @@
 package Audino;
 
-import org.apache.poi.sl.draw.geom.Path;
 import org.junit.Test;
 
 import Audino.MediaControl.Library;
@@ -20,6 +19,7 @@ public class LibraryTest {
         for(File file: folder.listFiles()){
             tracks.add(file.getAbsolutePath());
         }
+        System.out.println(tracks.toString());
         Library test = new Library();
         test.collectTracks(tracks);
         assertEquals(test.getTrackList().size(), tracks.size());
@@ -29,7 +29,12 @@ public class LibraryTest {
         File folder = new File("src/test/resources/test_audio/");
         ArrayList<String> tracks = new ArrayList<String>();
         for (File file : folder.listFiles()) {
-            tracks.add(file.getAbsolutePath());
+            try {
+                tracks.add(file.getCanonicalPath());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         Library test = new Library();
         test.collectTracks(tracks);
@@ -51,7 +56,12 @@ public class LibraryTest {
         File folder = new File("src/test/resources/test_audio/");
         ArrayList<String> tracks = new ArrayList<String>();
         for (File file : folder.listFiles()) {
-            tracks.add(file.getAbsolutePath());
+            try {
+                tracks.add(file.getCanonicalPath());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         Library test = new Library();
         test.collectTracks(tracks);
