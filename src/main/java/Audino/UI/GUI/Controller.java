@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 
+import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -31,6 +33,7 @@ public class Controller {
 
     private Player player = new Player();
     private Boolean isLoaded;
+    private Scene scene;
 
     @FXML
     private Label instructions;
@@ -109,17 +112,19 @@ public class Controller {
     void openMenuClicked(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Audio File");
-        Window stage = node.getScene().getWindow();
+        Window stage = this.scene.getWindow();
         fileChooser.getExtensionFilters().addAll(
                                                  new ExtensionFilter("Audio Files", "*.wav", "*.mp3")
                                                  );
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null){
             //DO SOMETHING HERE
+            // AAAAHGHHHHAHHADFHADFGASDFASDF
         }
     }
 
-    void initData(Player player){
+    void initData(Player player, Scene scene){
         this.player = player;
+        this.scene = scene;
     }
 }
