@@ -15,10 +15,9 @@ import org.apache.commons.io.FilenameUtils;
  * and the file itself to be loaded into a player. Defaults to ???? if the audio file is playable but has
  * no metadata, as to prevent null errors.
  *
- * Takes metadata information using the tika metadata import.
+ * Takes metadata information using the jaudiotagger import
  *
- * Written by: Harlan Shaw
- * Email: harlan.shaw@ucalgary.ca
+ *
  */
 public class Track implements Serializable {
 	
@@ -107,13 +106,24 @@ public class Track implements Serializable {
         this.file = new File(fileLocation);
         ArrayList<String> metadata = MetadataParser.parseAudio(this.file);
         //TODO replace with enum?
-        this.artist = metadata.get(0);
-        this.album = metadata.get(1);
-        this.title = metadata.get(2);
-        this.track = metadata.get(3);
-        this.year = metadata.get(4);
-        int metadataDuration = Integer.parseInt(metadata.get(5));
-        this.duration = metadataDuration;
+        if (metadata != null){
+            this.artist = metadata.get(0);
+            this.album = metadata.get(1);
+            this.title = metadata.get(2);
+            this.track = metadata.get(3);
+            this.year = metadata.get(4);
+            int metadataDuration = Integer.parseInt(metadata.get(5));
+            this.duration = metadataDuration;
+
+        }
+        else {
+            this.artist = "????";
+            this.album = "????";
+            this.title = "????";
+            this.track = "????";
+            this.year = "????";
+            this.duration = 0;
+        }
     }
     
     // =============================================================== ( methods ) 

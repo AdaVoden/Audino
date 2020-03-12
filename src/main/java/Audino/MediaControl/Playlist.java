@@ -49,7 +49,10 @@ public class Playlist {
      * @return Track The current Track of the playlist.
      */
     public Track getCurrentTrack() {
-        return this.tracks.get(trackIndex);
+        if (tracks.size() >= 1){
+            return this.tracks.get(trackIndex);
+        }
+        return null;
     }
 
     /**
@@ -100,8 +103,8 @@ public class Playlist {
      * Creates a playlist initialized with a track in the default state.
      * @param aTrack a Track to be added to the playlist.
      */
-    public Playlist(Track aTrack) {
-        tracks.add(aTrack);
+    public Playlist(Track track) {
+        this.tracks.add(track);
         this.state = new DefaultState(this);
     }
     
@@ -110,7 +113,10 @@ public class Playlist {
      * @param tracks an ArrayList<Track> filled with the tracks to be added.
      */
     public Playlist(ArrayList<Track> tracks) {
-        this.tracks.addAll(tracks);
+        for (Track t: tracks) {
+            this.tracks.add(t);
+        }
+        System.out.println(this.tracks.size());
         this.state = new DefaultState(this);
     }
 

@@ -3,8 +3,11 @@ package Audino.UI.GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import Audino.MediaControl.Player;
+import Audino.MediaControl.Playlist;
 import Audino.MediaControl.Track;
 
 import javafx.event.ActionEvent;
@@ -86,11 +89,11 @@ public class Controller {
     }
     @FXML
     void nextButtonClicked(MouseEvent event){
-
+        player.getState().onNext();
     }
     @FXML
     void previousButtonClicked(MouseEvent event){
-
+        player.getState().onPrevious();
     }
     @FXML
     void fastForwardButtonClicked(MouseEvent event){
@@ -110,16 +113,28 @@ public class Controller {
     }
     @FXML
     void openMenuClicked(ActionEvent event){
+        Window stage = this.scene.getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Audio File");
-        Window stage = this.scene.getWindow();
-        fileChooser.getExtensionFilters().addAll(
+                fileChooser.getExtensionFilters().addAll(
                                                  new ExtensionFilter("Audio Files", "*.wav", "*.mp3")
                                                  );
-        File selectedFile = fileChooser.showOpenDialog(stage);
+        List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
         if (selectedFile != null){
-            //DO SOMETHING HERE
-            // AAAAHGHHHHAHHADFHADFGASDFASDF
+            for (File f : selectedFile) {
+                try {
+                    Track file = new Track(f.getCanonicalPath());
+                    player.getPlaylist().addTrack(file);
+                    System.out.println(f.getCanonicalPath());
+
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+           }
+           System.out.println(player.getPlaylist().getPlaylistSize());
+           player.loadTrackFromPlaylist();
+
         }
     }
 

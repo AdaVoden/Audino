@@ -16,7 +16,7 @@ public class UnreadyState extends PlayerState {
 
 	@Override
 	public void onPlay() {
-		//Npt ready do nothing
+		//Not ready do nothing
 	}
 
 	@Override
