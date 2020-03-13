@@ -32,5 +32,30 @@ public class PlayingState extends PlayerState {
 	public void onPrevious() {
 		player.playPrevious();
 	}
+    @Override
+    public void onFastForward() {
+        player.fastForward();
+    }
+
+    @Override
+    public void onRewind() {
+        player.rewind();
+    }
+
+    @Override
+    public void onSeek(double seekTo) {
+        player.seek(seekTo);
+    }
+
+	@Override
+	public void onRepeatChange() {
+        player.getPlaylist().getState().onNextState();
+	}
+
+	@Override
+	public void onShuffleChange() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

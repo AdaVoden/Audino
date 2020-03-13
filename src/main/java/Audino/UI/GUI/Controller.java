@@ -20,7 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.MenuItem;
-
+import javafx.scene.control.Slider;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -35,7 +35,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 public class Controller {
 
     private Player player = new Player();
-    private Boolean isLoaded;
     private Scene scene;
 
     @FXML
@@ -54,10 +53,10 @@ public class Controller {
     private MaterialDesignIconView playButton;
 
     @FXML
-    private MenuItem openMenuClicked;
+    private MenuItem openMenuItem;
 
     @FXML
-    private BorderPane node;
+    private Slider seek;
 
     @FXML
     void playButtonClicked(MouseEvent event) {
@@ -84,8 +83,14 @@ public class Controller {
         }
     }
     @FXML
-    void seekBarDragged(DragEvent event){
-
+    void seekBarDragged(MouseEvent event){
+        double seekValue = seek.getValue();
+        double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
+        double newVal = trackDur * seekValue;
+        System.out.println(seekValue);
+        System.out.println(trackDur);
+        System.out.println(newVal);
+        this.player.getState().onSeek(newVal);
     }
     @FXML
     void nextButtonClicked(MouseEvent event){
@@ -97,11 +102,11 @@ public class Controller {
     }
     @FXML
     void fastForwardButtonClicked(MouseEvent event){
-
+        player.getState().onFastForward();
     }
     @FXML
     void rewindButtonClicked(MouseEvent event){
-
+        player.getState().onRewind();
     }
     @FXML
     void shuffleButtonClicked(MouseEvent event){
@@ -109,7 +114,7 @@ public class Controller {
     }
     @FXML
     void repeatButtonClicked(MouseEvent event){
-
+        player.getState().onRepeatChange();
     }
     @FXML
     void openMenuClicked(ActionEvent event){
@@ -132,7 +137,7 @@ public class Controller {
                     e.printStackTrace();
                 }
            }
-           System.out.println(player.getPlaylist().getPlaylistSize());
+            //System.out.println(player.getPlaylist().getPlaylistSize());
            player.loadTrackFromPlaylist();
 
         }

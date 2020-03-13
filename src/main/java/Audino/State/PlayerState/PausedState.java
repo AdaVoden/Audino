@@ -33,4 +33,33 @@ public class PausedState extends PlayerState {
 		player.playPrevious();
 	}
 
+	@Override
+	public void onFastForward() {
+      player.fastForward();
+	}
+
+	@Override
+	public void onRewind() {
+        player.rewind();
+	}
+
+	@Override
+	public void onSeek(double seekTo) {
+      player.seek(seekTo);
+	}
+
+	@Override
+	public void onRepeatChange() {
+        player.getPlaylist().getState().onNextState();
+
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onShuffleChange() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

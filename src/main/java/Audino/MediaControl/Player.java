@@ -328,7 +328,8 @@ public class Player {
      */
     public void seek(double seekTo) {
         if (mediaPlayer != null){
-            Duration time = new Duration(seekTo);
+            Duration time = new Duration(seekTo * 1000);
+
             mediaPlayer.seek(time);
         }
     }

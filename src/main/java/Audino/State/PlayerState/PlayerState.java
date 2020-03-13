@@ -18,4 +18,12 @@ public abstract class PlayerState {
     public abstract void onStop();
     public abstract void onNext();
     public abstract void onPrevious();
+
+    public abstract void onFastForward();
+    public abstract void onRewind();
+    public abstract void onSeek(double seekTo);
+
+    public abstract void onRepeatChange();
+
+    public abstract void onShuffleChange();
 }

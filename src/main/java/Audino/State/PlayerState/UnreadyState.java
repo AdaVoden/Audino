@@ -34,4 +34,34 @@ public class UnreadyState extends PlayerState {
 		//not ready do nothing
 	}
 
+	@Override
+	public void onFastForward() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRewind() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSeek(double seekTo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRepeatChange() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onShuffleChange() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

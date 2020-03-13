@@ -28,7 +28,7 @@ public class Track implements Serializable {
     private String artist;
     private String track;
     private String year;
-    private int duration = 0;
+    private double duration = 0;
     private File file;
     private static final long serialVersionUID = 2L;
     
@@ -66,7 +66,7 @@ public class Track implements Serializable {
      *
      * @return double the track's duration.
      */
-    public int getDuration() {
+    public double getDuration() {
 		return duration;
 	}
 
@@ -112,7 +112,7 @@ public class Track implements Serializable {
             this.title = metadata.get(2);
             this.track = metadata.get(3);
             this.year = metadata.get(4);
-            int metadataDuration = Integer.parseInt(metadata.get(5));
+            double metadataDuration = Double.parseDouble(metadata.get(5));
             this.duration = metadataDuration;
 
         }

@@ -24,7 +24,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem fx:id="open" mnemonicParsing="false" onAction="#openMenuClicked" text="Open" />
+                    <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuClicked" text="Open" />
                         <MenuItem fx:id="close" mnemonicParsing="false" text="Exit" />
                   </items>
                 </Menu>
@@ -37,7 +37,7 @@
             </MenuBar>
             <AnchorPane layoutY="337.0" prefHeight="64.0" prefWidth="640.0">
                <children>
-                  <Slider fx:id="seek" layoutX="195.0" layoutY="22.0" onDragDropped="#seekBarDragged" prefHeight="25.0" prefWidth="299.0" />
+                  <Slider fx:id="seek" blockIncrement="0.1" layoutX="195.0" layoutY="22.0" max="1.0" onMouseReleased="#seekBarDragged" prefHeight="25.0" prefWidth="299.0" />
                   <MaterialDesignIconView fx:id="playPause" glyphName="PLAY" layoutX="114.0" layoutY="42.0" onMouseClicked="#playButtonClicked" size="28" />
                   <MaterialDesignIconView fx:id="skipNext" glyphName="SKIP_NEXT" layoutX="138.0" layoutY="40.0" onMouseClicked="#nextButtonClicked" size="24" />
                   <MaterialDesignIconView fx:id="skipPrevious" glyphName="SKIP_PREVIOUS" layoutX="90.0" layoutY="40.0" onMouseClicked="#previousButtonClicked" size="24" />
