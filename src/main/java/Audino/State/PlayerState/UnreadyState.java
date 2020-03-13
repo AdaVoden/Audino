@@ -16,7 +16,7 @@ public class UnreadyState extends PlayerState {
 
 	@Override
 	public void onPlay() {
-		//Npt ready do nothing
+		//Not ready do nothing
 	}
 
 	@Override
@@ -32,6 +32,36 @@ public class UnreadyState extends PlayerState {
 	@Override
 	public void onPrevious() {
 		//not ready do nothing
+	}
+
+	@Override
+	public void onFastForward() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRewind() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSeek(double seekTo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRepeatChange() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onShuffleChange() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

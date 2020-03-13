@@ -96,7 +96,26 @@ public class Player {
             this.state = new UnreadyState(this);
         }
     }
-
+    /**
+     * Tells the player to load a track from the playlist
+     *
+     */
+    public void loadTrackFromPlaylist(){
+        try{
+            stopPlayback();
+            this.currentTrack = playlist.getCurrentTrack();
+            if(this.currentTrack == null){
+                this.state = new UnreadyState(this);
+            }
+            else {
+                this.mediaPlayer = new MediaPlayer(this.currentTrack.getMedia());
+                this.state = new ReadyState(this);
+            }
+        }
+        catch (IOException e){
+            this.state = new UnreadyState(this);
+        }
+    }
     // =============================================================== ( constructors )
     
     /*
@@ -125,7 +144,7 @@ public class Player {
      * Tests whether or not a clip is playing.
      * @return Boolean true if clip is playing, false otherwise
      */
-    public boolean IsPlaying() {
+    public boolean isPlaying() {
         if (mediaPlayer != null) {
             Status status = mediaPlayer.getStatus();
             if (status.equals(MediaPlayer.Status.PLAYING)) {
@@ -139,7 +158,7 @@ public class Player {
      * Tests whether or not a clip is paused.
      * @return Boolean true if a clip is paused, false otherwise.
      */
-    public boolean IsPaused() {
+    public boolean isPaused() {
         if (mediaPlayer != null){
             Status status = mediaPlayer.getStatus();
             if (status.equals(MediaPlayer.Status.PAUSED)) {
@@ -159,7 +178,7 @@ public class Player {
         	
             Status status = mediaPlayer.getStatus();
             Media file;
-            
+            MediaPlayer player;
             switch (status) {
             case PAUSED:
                 mediaPlayer.play();
@@ -169,7 +188,7 @@ public class Player {
             case UNKNOWN:
                 try {
                     file = currentTrack.getMedia();
-                    MediaPlayer player = new MediaPlayer(file);
+                    player = new MediaPlayer(file);
                     player.setVolume(volume);
                     this.state = new PlayingState(this);
                     player.setOnReady(() -> {
@@ -182,8 +201,22 @@ public class Player {
                 break;
                 
             case PLAYING:
-                // Do nothing
+                try {
+                    player = new MediaPlayer(currentTrack.getMedia());
+                    this.mediaPlayer.dispose();
+                    this.mediaPlayer = player;
+                    player.setVolume(volume);
+                    this.state = new PlayingState(this);
+                    player.setOnReady(() -> {
+                        player.play();
+                    });
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                    this.state = new UnreadyState(this);
+                }
                 break;
+
                 
             case STOPPED:
                 this.mediaPlayer.play();
@@ -198,7 +231,7 @@ public class Player {
             case DISPOSED:
                 try {
                     file = currentTrack.getMedia();
-                    MediaPlayer player = new MediaPlayer(file);
+                    player = new MediaPlayer(file);
                     player.setVolume(volume);
                     this.state = new PlayingState(this);
 
@@ -295,7 +328,8 @@ public class Player {
      */
     public void seek(double seekTo) {
         if (mediaPlayer != null){
-            Duration time = new Duration(seekTo);
+            Duration time = new Duration(seekTo * 1000);
+
             mediaPlayer.seek(time);
         }
     }

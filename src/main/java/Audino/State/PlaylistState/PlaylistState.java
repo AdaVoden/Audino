@@ -11,4 +11,6 @@ public abstract class PlaylistState {
 	
     public abstract void onNext();
     public abstract void onPrevious();
+
+    public abstract void onNextState();
 }

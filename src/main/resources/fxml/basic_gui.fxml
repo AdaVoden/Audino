@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="node" minHeight="96.0" minWidth="640.0" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
+   <top>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="405.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+      <children>
+            <HBox layoutY="57.0" prefHeight="285.0" prefWidth="640.0">
+               <children>
+                  <VBox fx:id="library" prefHeight="289.0" prefWidth="439.0" />
+                  <VBox fx:id="playlist" prefHeight="289.0" prefWidth="204.0" />
+               </children>
+            </HBox>
+            <MenuBar layoutY="7.0" prefHeight="32.0" prefWidth="640.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuClicked" text="Open" />
+                        <MenuItem fx:id="close" mnemonicParsing="false" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="There's no help here" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <AnchorPane layoutY="337.0" prefHeight="64.0" prefWidth="640.0">
+               <children>
+                  <Slider fx:id="seek" blockIncrement="0.1" layoutX="195.0" layoutY="22.0" max="1.0" onMouseReleased="#seekBarDragged" prefHeight="25.0" prefWidth="299.0" />
+                  <MaterialDesignIconView fx:id="playPause" glyphName="PLAY" layoutX="114.0" layoutY="42.0" onMouseClicked="#playButtonClicked" size="28" />
+                  <MaterialDesignIconView fx:id="skipNext" glyphName="SKIP_NEXT" layoutX="138.0" layoutY="40.0" onMouseClicked="#nextButtonClicked" size="24" />
+                  <MaterialDesignIconView fx:id="skipPrevious" glyphName="SKIP_PREVIOUS" layoutX="90.0" layoutY="40.0" onMouseClicked="#previousButtonClicked" size="24" />
+                  <MaterialDesignIconView fx:id="fastForward" glyphName="FAST_FORWARD" layoutX="162.0" layoutY="41.0" onMouseClicked="#fastForwardButtonClicked" size="24" />
+                  <MaterialDesignIconView fx:id="rewind" glyphName="REWIND" layoutX="60.0" layoutY="40.0" onMouseClicked="#rewindButtonClicked" size="24" />
+                  <MaterialDesignIconView fx:id="shuffle" glyphName="SHUFFLE" layoutX="513.0" layoutY="41.0" onMouseClicked="#shuffleButtonClicked" size="24" />
+                  <MaterialDesignIconView fx:id="repeat" glyphName="REPEAT" layoutX="556.0" layoutY="41.0" onMouseClicked="#repeatButtonClicked" size="24" />
+               </children>
+            </AnchorPane>
+      </children>
+    </AnchorPane>
+   </top>
+</BorderPane>
