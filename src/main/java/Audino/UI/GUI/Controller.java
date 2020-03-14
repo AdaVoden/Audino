@@ -87,9 +87,6 @@ public class Controller {
         double seekValue = seek.getValue();
         double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
         double newVal = trackDur * seekValue;
-        System.out.println(seekValue);
-        System.out.println(trackDur);
-        System.out.println(newVal);
         this.player.getState().onSeek(newVal);
     }
     @FXML
@@ -126,23 +123,18 @@ public class Controller {
                                                  );
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
         if (selectedFile != null){
-            for (File f : selectedFile) {
-                try {
-                    Track file = new Track(f.getCanonicalPath());
-                    player.getPlaylist().addTrack(file);
-                    System.out.println(f.getCanonicalPath());
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-           }
-            //System.out.println(player.getPlaylist().getPlaylistSize());
-           player.loadTrackFromPlaylist();
-
+            try {
+                Playlist playlist = new Playlist(selectedFile);
+                player.setPlaylist(playlist);
+                player.loadTrackFromPlaylist();
+            }
+            catch (IOException e) {
+                System.out.println("Error " + e.getMessage());
+                e.printStackTrace();
+                //TODO something here
+            }
         }
     }
-
     void initData(Player player, Scene scene){
         this.player = player;
         this.scene = scene;
