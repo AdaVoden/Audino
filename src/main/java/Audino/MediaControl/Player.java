@@ -174,93 +174,23 @@ public class Player {
      * Plays the clip (starts audio)
      */
     public void startPlayback() {
-        if (this.mediaPlayer != null) {
-        	
+        MediaPlayer player = this.mediaPlayer;
+        if (player != null) {
             Status status = mediaPlayer.getStatus();
-            Media file;
-            MediaPlayer player;
             switch (status) {
             case PAUSED:
-                mediaPlayer.play();
-                this.state = new PlayingState(this);
-                break;
-                
-            case UNKNOWN:
-                try {
-                    file = currentTrack.getMedia();
-                    player = new MediaPlayer(file);
-                    player.setVolume(volume);
-                    this.state = new PlayingState(this);
-                    player.setOnReady(() -> {
-                         player.play();
-                        });
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    this.state = new UnreadyState(this);
-                }
-                break;
-                
-            case PLAYING:
-                try {
-                    player = new MediaPlayer(currentTrack.getMedia());
-                    this.mediaPlayer.dispose();
-                    this.mediaPlayer = player;
-                    player.setVolume(volume);
-                    this.state = new PlayingState(this);
-                    player.setOnReady(() -> {
-                        player.play();
-                    });
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                    this.state = new UnreadyState(this);
-                }
-                break;
-
-                
             case STOPPED:
-                this.mediaPlayer.play();
-                this.state = new PlayingState(this);
-                break;
-
             case READY:
-                this.mediaPlayer.play();
+                player.play();
                 this.state = new PlayingState(this);
-
                 break;
-            case DISPOSED:
-                try {
-                    file = currentTrack.getMedia();
-                    player = new MediaPlayer(file);
-                    player.setVolume(volume);
-                    this.state = new PlayingState(this);
-
-                    player.setOnReady(() -> {
-                        player.play();
-                    });
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    this.state = new UnreadyState(this);
-                }
+            default:
+                newPlayer();
                 break;
-                
             }
         }
-
         else {
-            try {
-                Media file = currentTrack.getMedia();
-                this.mediaPlayer = new MediaPlayer(file);
-                
-                this.mediaPlayer.setOnReady(() ->{
-                        this.mediaPlayer.setVolume(volume);
-                        this.mediaPlayer.play();
-                        this.state = new PlayingState(this);
-                    });
-            }
-            catch (IOException e) {
-                this.state = new UnreadyState(this);
-            }
+            newPlayer();
         }
     }
 
@@ -300,26 +230,14 @@ public class Player {
      * Moves the currentTime of the active mediaPlayer forward by 1000ms.
      */
     public void fastForward() {
-        if (mediaPlayer != null) {
-            Duration toAdd = new Duration(1000);
-            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-            mediaPlayer.seek(newTime);
-            mediaPlayer.play();
-            this.state = new PlayingState(this);
-        }
+        seek(1);
     }
     
     /**
      * Moves the currentTime of the active mediaPlayer backward by 1000ms.
      */
     public void rewind() {
-        if (mediaPlayer != null) {
-            Duration toAdd = new Duration(-1000);
-            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-            mediaPlayer.seek(newTime);
-            mediaPlayer.play();
-            this.state = new PlayingState(this);
-        }
+        seek(-1);
     }
     
     /**
@@ -351,7 +269,23 @@ public class Player {
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }
-    
-    
-    
+    /**
+     * Destroys the old player, if present and creates a new one with the a new
+     * track from the playlist
+     */
+    private void newPlayer(){
+        try {
+            Media file = currentTrack.getMedia();
+            this.mediaPlayer.dispose();
+            this.mediaPlayer = new MediaPlayer(file);
+            this.mediaPlayer.setVolume(volume);
+            this.mediaPlayer.setOnReady(() -> {
+                this.mediaPlayer.play();
+                this.state = new PlayingState(this);
+            });
+        }
+        catch (IOException e) {
+            this.state = new UnreadyState(this);
+        }
+    }
 }
