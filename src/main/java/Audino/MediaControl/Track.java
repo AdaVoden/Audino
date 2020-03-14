@@ -1,6 +1,7 @@
 package Audino.MediaControl;
 
 import Audino.Utility.MetadataParser;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.media.Media;
 
 import java.io.File;
@@ -23,11 +24,11 @@ public class Track implements Serializable {
 	
 	// =============================================================== ( instance )
 	
-    private String title;
-    private String album;
-    private String artist;
-    private String track;
-    private String year;
+    private SimpleStringProperty title;
+    private SimpleStringProperty album;
+    private SimpleStringProperty artist;
+    private SimpleStringProperty track;
+    private SimpleStringProperty year;
     private double duration = 0;
     private File file;
     private static final long serialVersionUID = 2L;
@@ -40,7 +41,7 @@ public class Track implements Serializable {
      * @return String the track's title.
      */
 	public String getTitle() {
-		return title;
+		return title.get();
 	}
 	
     /**
@@ -49,7 +50,7 @@ public class Track implements Serializable {
      * @return String the track's album.
      */
 	public String getAlbum() {
-		return album;
+		return album.get();
 	}
   
 	/**
@@ -58,7 +59,7 @@ public class Track implements Serializable {
      * @return String the track's artist.
      */
 	public String getArtist() {
-		return artist;
+		return artist.get();
 	}
   
 	/**
@@ -103,25 +104,27 @@ public class Track implements Serializable {
      * user friendliness.
      */
     public Track(String fileLocation) {
+    	
         this.file = new File(fileLocation);
         ArrayList<String> metadata = MetadataParser.parseAudio(this.file);
+        
         //TODO replace with enum?
+        
         if (metadata != null){
-            this.artist = metadata.get(0);
-            this.album = metadata.get(1);
-            this.title = metadata.get(2);
-            this.track = metadata.get(3);
-            this.year = metadata.get(4);
+            this.artist = new SimpleStringProperty(metadata.get(0));
+            this.album = new SimpleStringProperty(metadata.get(1));
+            this.title = new SimpleStringProperty(metadata.get(2));
+            this.track = new SimpleStringProperty(metadata.get(3));
+            this.year = new SimpleStringProperty(metadata.get(4));
             double metadataDuration = Double.parseDouble(metadata.get(5));
             this.duration = metadataDuration;
 
-        }
-        else {
-            this.artist = "????";
-            this.album = "????";
-            this.title = "????";
-            this.track = "????";
-            this.year = "????";
+        } else {
+            this.artist = new SimpleStringProperty("????");
+            this.album = new SimpleStringProperty("????");
+            this.title = new SimpleStringProperty("????");
+            this.track = new SimpleStringProperty("????");
+            this.year = new SimpleStringProperty("????");
             this.duration = 0;
         }
     }

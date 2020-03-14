@@ -27,6 +27,8 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
     Button playButton, pauseButton, stopButton, loadButton;
     boolean isLoaded;
     Player player;
+    Stage primaryStage;
+    Scene scene1, scene2;
 
     // constructor
     public Main(){
@@ -38,29 +40,26 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
         this.player = new Player();
 		try {
 			
-			FXMLLoader loader = new FXMLLoader();
+			FXMLLoader loader1 = new FXMLLoader();			
 			URL file = getClass().getResource("/fxml/basic_gui.fxml");
-			Parent root = loader.load(file.openStream());
-
-			Scene scene = new Scene(root,640,400);
-			URL stylesheet = getClass().getResource("/css/application.css");
-			scene.getStylesheets().add(stylesheet.toExternalForm());
+			Parent root = loader1.load(file.openStream());
 			
-			primaryStage.setScene(scene);
+			FXMLLoader loader2 = new FXMLLoader();
+			URL file2 = getClass().getResource("/fxml/PlaylistNamePrompt.fxml");
+			Parent root2 = loader2.load(file2.openStream());
+
+			Scene scene1 = new Scene(root,640,400);
+			Scene scene2 = new Scene(root2,250,100);
+			
+			URL stylesheet = getClass().getResource("/css/application.css");
+			scene1.getStylesheets().add(stylesheet.toExternalForm());
+			
+			primaryStage.setScene(scene1);
 			primaryStage.setTitle("Player");
 
-            Controller controller = loader.<Controller>getController();
+            Controller controller = loader1.<Controller>getController();
             
-            TableColumn<?, ?> playlistView = controller.getPlaylistTableView().getColumns().get(0);
-            TableColumn<?, ?> songView = controller.getPlaylistTableView().getColumns().get(1);
-            
-            
-
-//            playlistView.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
-//            songView.setCellValueFactory(new PropertyValueFactory<Track, String>("title"));
-            
-            controller.initData(this.player, scene);
-            
+            controller.initData(this.player, scene1, scene2, primaryStage);
             
 			primaryStage.show();
 			
@@ -83,5 +82,24 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	
+	public void switchScene(Stage primaryStage, Scene toSwitch, String title) {
+		primaryStage.setScene(toSwitch);
+		primaryStage.setTitle(title);
+	}
+	
+	public Stage getPrimaryStage() {
+		return this.primaryStage;
+	}
+	
+	public Scene getScene1() {
+		return this.scene1;
+	}
+	
+	public Scene getScene2() {
+		return this.scene2;
 	}
 }

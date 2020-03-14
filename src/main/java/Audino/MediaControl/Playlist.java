@@ -10,7 +10,7 @@ public class Playlist {
     
     // ====================================================================== ( instance )
 
-    private String name;
+    private SimpleStringProperty name;
 	private ArrayList<Track> tracks = new ArrayList<Track>();
     private PlaylistState state;
     private int trackIndex = 0;
@@ -79,7 +79,7 @@ public class Playlist {
      * @return The name of the playlist.
      */
     public String getName() {
-    	return this.getName();
+    	return name.get();
     }
 
     // ====================================================================== ( setters )
@@ -132,8 +132,13 @@ public class Playlist {
         tracks.remove(aTrack);
     }
     
+    /**
+     * Takes a string for a name and converts it to SimpleStringProperty
+     * before storing it in the playlist.
+     * @param aName String containing desired name
+     */
     public void setName(String aName) {
-    	name = aName;
+    	name = new SimpleStringProperty(aName);
     }
 
     // ====================================================================== ( constructors )
@@ -177,6 +182,14 @@ public class Playlist {
     	shuffle = toCopy.getShuffle();
     }
     
+    /**
+     * Creates a playlist with a name.
+     * @param name The name of the playlist.
+     */
+    public Playlist(String name) {
+    	this.name = new SimpleStringProperty(name);
+    	this.state = new DefaultState(this);
+    }
 
     // ====================================================================== ( toString )
 
