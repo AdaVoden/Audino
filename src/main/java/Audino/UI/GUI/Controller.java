@@ -166,10 +166,11 @@ public class Controller {
      * @param player The player to be loaded
      * @param scene The Scene to be loaded
      */
-    void initData(Player player, Scene scene1, Scene scene2, Stage primaryStage){
+    void initData(Player player, Scene scene1, // Scene scene2,
+                  Stage primaryStage){
         this.player = player;
         this.scene1 = scene1;
-        this.scene2 = scene2;
+         // this.scene2 = scene2;
         this.primaryStage = primaryStage;
     }
     
@@ -178,10 +179,12 @@ public class Controller {
      * Sets up the columns in the tables.
      */
     public void initialize() {
-    	playlistTableColumn.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
+      playlistTableColumn.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
     	songTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("title"));
     	artistTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("artist"));
-    	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, Double>("duration"));    			
+    	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, Double>("duration"));
+
+
     }
 
     
@@ -189,10 +192,10 @@ public class Controller {
     
     // ============================================================== ( methods )
     
-    public void switchScene(Stage primaryStage, Scene toSwitch, String title) {
-		primaryStage.setScene(toSwitch);
-		primaryStage.setTitle(title);
-	}
+  //   public void switchScene(Stage primaryStage, Scene toSwitch, String title) {
+	// 	primaryStage.setScene(toSwitch);
+	// 	primaryStage.setTitle(title);
+	// }
     
     // ============================================================== ( react methods )
     
@@ -328,6 +331,10 @@ public class Controller {
            }
             //System.out.println(player.getPlaylist().getPlaylistSize());
            player.loadTrackFromPlaylist();
+           Playlist playlist = player.getPlaylist();
+           playlistsList.add(playlist);
+           trackList.addAll(playlist.getTracks());
+           updateTableView();
 
         }
     }
@@ -340,7 +347,7 @@ public class Controller {
      */
     @FXML void addPlaylistButtonClicked(ActionEvent event) {
     	
-    	switchScene(primaryStage, scene2, "Add a Playlist");
+    	// switchScene(primaryStage, scene2, "Add a Playlist");
    
     }
 

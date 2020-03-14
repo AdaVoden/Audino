@@ -10,8 +10,8 @@ public class Playlist {
     
     // ====================================================================== ( instance )
 
-    private SimpleStringProperty name;
-	private ArrayList<Track> tracks = new ArrayList<Track>();
+    private SimpleStringProperty name = new SimpleStringProperty("Default");
+    private ArrayList<Track> tracks = new ArrayList<Track>();
     private PlaylistState state;
     private int trackIndex = 0;
     private boolean shuffle = false;
@@ -29,7 +29,6 @@ public class Playlist {
         }
         return cloneList;
     }
-    
     /**
      * Gets the size of a playlist.
      * @return int The size of the playlist.
@@ -37,7 +36,6 @@ public class Playlist {
     public int getPlaylistSize() {
         return this.tracks.size();
     }
-    
     /**
      * Gets the current trackIndex of a playlist.
      * @return int The trackIndex of the playlist.
@@ -65,21 +63,26 @@ public class Playlist {
         return this.state;
 
     }
-    
     /**
      * Gets the shuffle state of a playlist.
      * @return The current shuffle state of the playlist.
      */
     public Boolean getShuffle() {
-    	return this.shuffle;
+      return this.shuffle;
     }
-    
+    /**
+     * Returns the property of a playlist's name
+     * @return Name property of playlist
+     */
+    public SimpleStringProperty nameProperty(){
+        return this.name;
+    }
     /**
      * Gets the name of a playlist.
      * @return The name of the playlist.
      */
     public String getName() {
-    	return name.get();
+      return name.get();
     }
 
     // ====================================================================== ( setters )
@@ -107,7 +110,6 @@ public class Playlist {
     public void setState(PlaylistState state) {
         this.state = state;
     }
-    
     /**
      * Adds a track to a playlist.
      * @param aTrack The track to be added.
@@ -115,7 +117,6 @@ public class Playlist {
     public void addTrack(Track aTrack) {
         tracks.add(aTrack);
     }
-    
     /**
      * Adds an ArrayList of tracks to a playlist.
      * @param tracks ArrayList<Track> containing the tracks to be added.
@@ -131,14 +132,13 @@ public class Playlist {
     public void removeTrack(Track aTrack) {
         tracks.remove(aTrack);
     }
-    
     /**
      * Takes a string for a name and converts it to SimpleStringProperty
      * before storing it in the playlist.
      * @param aName String containing desired name
      */
     public void setName(String aName) {
-    	name = new SimpleStringProperty(aName);
+      name = new SimpleStringProperty(aName);
     }
 
     // ====================================================================== ( constructors )
@@ -158,7 +158,6 @@ public class Playlist {
         this.tracks.add(track);
         this.state = new DefaultState(this);
     }
-    
     /**
      * Creates a playlist initialized with an ArrayList of tracks in the default state.
      * @param tracks an ArrayList<Track> filled with the tracks to be added.
@@ -170,25 +169,23 @@ public class Playlist {
         System.out.println(this.tracks.size());
         this.state = new DefaultState(this);
     }
-    
     /**
      * Creates a playlist as a copy of an existing playlist.
      * @param toCopy Playlist to be copied.
      */
     public Playlist(Playlist toCopy) {
-    	this.tracks.addAll(toCopy.getTracks());
-    	state = toCopy.getState();
-    	trackIndex = toCopy.getTrackIndex();
-    	shuffle = toCopy.getShuffle();
+      this.tracks.addAll(toCopy.getTracks());
+      state = toCopy.getState();
+      trackIndex = toCopy.getTrackIndex();
+      shuffle = toCopy.getShuffle();
     }
-    
     /**
      * Creates a playlist with a name.
      * @param name The name of the playlist.
      */
     public Playlist(String name) {
-    	this.name = new SimpleStringProperty(name);
-    	this.state = new DefaultState(this);
+      this.name = new SimpleStringProperty(name);
+      this.state = new DefaultState(this);
     }
 
     // ====================================================================== ( toString )

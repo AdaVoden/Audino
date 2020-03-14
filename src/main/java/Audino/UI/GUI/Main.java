@@ -44,12 +44,12 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			URL file = getClass().getResource("/fxml/basic_gui.fxml");
 			Parent root = loader1.load(file.openStream());
 			
-			FXMLLoader loader2 = new FXMLLoader();
-			URL file2 = getClass().getResource("/fxml/PlaylistNamePrompt.fxml");
-			Parent root2 = loader2.load(file2.openStream());
+      // FXMLLoader loader2 = new FXMLLoader();
+      // URL file2 = getClass().getResource("/fxml/PlaylistNamePrompt.fxml");
+      // Parent root2 = loader2.load(file2.openStream());
 
 			Scene scene1 = new Scene(root,640,400);
-			Scene scene2 = new Scene(root2,250,100);
+			// Scene scene2 = new Scene(root2,250,100);
 			
 			URL stylesheet = getClass().getResource("/css/application.css");
 			scene1.getStylesheets().add(stylesheet.toExternalForm());
@@ -57,9 +57,10 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			primaryStage.setScene(scene1);
 			primaryStage.setTitle("Player");
 
-            Controller controller = loader1.<Controller>getController();
+      Controller controller = loader1.<Controller>getController();
             
-            controller.initData(this.player, scene1, scene2, primaryStage);
+      controller.initData(this.player, scene1, // scene2,
+                          primaryStage);
             
 			primaryStage.show();
 			
