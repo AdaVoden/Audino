@@ -71,9 +71,11 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'net.jthink:jaudiotagger:2.2.6-PATHRIK'
     implementation 'com.googlecode.lanterna:lanterna:3.0.2'
+
     implementation 'de.jensd:fontawesomefx-commons:8.15'
     implementation 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-4'
     implementation 'de.jensd:fontawesomefx-materialicons:2.2.0-5'
+    implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-5'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

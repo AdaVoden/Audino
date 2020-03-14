@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import Audino.State.PlaylistState.DefaultState;
 import Audino.State.PlaylistState.PlaylistState;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Playlist {
     
     // ====================================================================== ( instance )
 
-    private ArrayList<Track> tracks = new ArrayList<Track>();
+    private String name;
+	private ArrayList<Track> tracks = new ArrayList<Track>();
     private PlaylistState state;
     private int trackIndex = 0;
     private boolean shuffle = false;
@@ -63,6 +65,22 @@ public class Playlist {
         return this.state;
 
     }
+    
+    /**
+     * Gets the shuffle state of a playlist.
+     * @return The current shuffle state of the playlist.
+     */
+    public Boolean getShuffle() {
+    	return this.shuffle;
+    }
+    
+    /**
+     * Gets the name of a playlist.
+     * @return The name of the playlist.
+     */
+    public String getName() {
+    	return this.getName();
+    }
 
     // ====================================================================== ( setters )
 
@@ -88,6 +106,34 @@ public class Playlist {
      */
     public void setState(PlaylistState state) {
         this.state = state;
+    }
+    
+    /**
+     * Adds a track to a playlist.
+     * @param aTrack The track to be added.
+     */
+    public void addTrack(Track aTrack) {
+        tracks.add(aTrack);
+    }
+    
+    /**
+     * Adds an ArrayList of tracks to a playlist.
+     * @param tracks ArrayList<Track> containing the tracks to be added.
+     */
+    public void addTrack(ArrayList<Track> tracks){
+        tracks.addAll(tracks);
+    }
+
+    /**
+     * Removes a track from a playlist.
+     * @param aTrack The track to be removed.
+     */
+    public void removeTrack(Track aTrack) {
+        tracks.remove(aTrack);
+    }
+    
+    public void setName(String aName) {
+    	name = aName;
     }
 
     // ====================================================================== ( constructors )
@@ -119,6 +165,18 @@ public class Playlist {
         System.out.println(this.tracks.size());
         this.state = new DefaultState(this);
     }
+    
+    /**
+     * Creates a playlist as a copy of an existing playlist.
+     * @param toCopy Playlist to be copied.
+     */
+    public Playlist(Playlist toCopy) {
+    	this.tracks.addAll(toCopy.getTracks());
+    	state = toCopy.getState();
+    	trackIndex = toCopy.getTrackIndex();
+    	shuffle = toCopy.getShuffle();
+    }
+    
 
     // ====================================================================== ( toString )
 
@@ -132,31 +190,5 @@ public class Playlist {
             allSongs += s.getFile().getName() + ", ";
         }
         return allSongs.substring(0, allSongs.length() - 2);
-    }
-
-    // ====================================================================== ( methods )
-	
-    /**
-     * Adds a track to a playlist.
-     * @param aTrack The track to be added.
-     */
-    public void addTrack(Track aTrack) {
-        tracks.add(aTrack);
-    }
-    
-    /**
-     * Adds an ArrayList of tracks to a playlist.
-     * @param tracks ArrayList<Track> containing the tracks to be added.
-     */
-    public void addTrack(ArrayList<Track> tracks){
-        tracks.addAll(tracks);
-    }
-
-    /**
-     * Removes a track from a playlist.
-     * @param aTrack The track to be removed.
-     */
-    public void removeTrack(Track aTrack) {
-        tracks.remove(aTrack);
     }
 }

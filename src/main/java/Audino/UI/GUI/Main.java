@@ -5,9 +5,9 @@ import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.*;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.geometry.*;
 
@@ -38,21 +38,30 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
         this.player = new Player();
 		try {
 			
-      FXMLLoader loader = new FXMLLoader();
-      URL file = getClass().getResource("/fxml/basic_gui.fxml");
-      Parent root = loader.load(file.openStream());
+			FXMLLoader loader = new FXMLLoader();
+			URL file = getClass().getResource("/fxml/basic_gui.fxml");
+			Parent root = loader.load(file.openStream());
 
 			Scene scene = new Scene(root,640,400);
-      URL stylesheet = getClass().getResource("/css/application.css");
-      scene.getStylesheets().add(stylesheet.toExternalForm());
+			URL stylesheet = getClass().getResource("/css/application.css");
+			scene.getStylesheets().add(stylesheet.toExternalForm());
 			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Player");
 
             Controller controller = loader.<Controller>getController();
+            
+            TableColumn<?, ?> playlistView = controller.getPlaylistTableView().getColumns().get(0);
+            TableColumn<?, ?> songView = controller.getPlaylistTableView().getColumns().get(1);
+            
+            
 
+//            playlistView.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
+//            songView.setCellValueFactory(new PropertyValueFactory<Track, String>("title"));
+            
             controller.initData(this.player, scene);
-
+            
+            
 			primaryStage.show();
 			
 		} catch(Exception e) {

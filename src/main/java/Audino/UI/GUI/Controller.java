@@ -21,47 +21,105 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.BorderPane;
-
+import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.FileChooser;
-
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
 public class Controller {
 
+	// Project Variables
     private Player player = new Player();
     private Scene scene;
 
+    
+    // Scene variables
     @FXML
-    private Label instructions;
+    private TableView<Track> tracksTableView;
+    
+    @FXML
+    private TableView<Playlist> playlistTableView;
+    
+    @FXML
+    private TableColumn<Playlist, ?> playlistTableColumn;
 
     @FXML
-    private MaterialDesignIconView stopButton;
+    private TableColumn<?, ?> artistTableColumn;
 
     @FXML
-    private Button loadButton;
+    private TableColumn<?, ?> songTableColumn;
 
     @FXML
-    private TextField fileDir;
+    private FontAwesomeIconView artistIcon;
 
     @FXML
-    private MaterialDesignIconView playButton;
+    private TableColumn<?, ?> durationTableColumn;
 
     @FXML
-    private MenuItem openMenuItem;
+    private VBox playlists;
+
+    @FXML
+    private MaterialDesignIconView skipNext;
 
     @FXML
     private Slider seek;
 
     @FXML
+    private MaterialDesignIconView songIcon;
+
+    @FXML
+    private BorderPane node;
+
+    @FXML
+    private VBox trackView;
+
+    @FXML
+    private MenuItem openMenuItem;
+
+    @FXML
+    private MaterialDesignIconView durationIcon;
+
+    @FXML
+    private MaterialDesignIconView skipPrevious;
+
+    @FXML
+    private MaterialDesignIconView rewind;
+
+    @FXML
+    private MaterialDesignIconView repeat;
+
+    @FXML
+    private MaterialDesignIconView playPause;
+
+    @FXML
+    private MaterialDesignIconView fastForward;
+
+    @FXML
+    private MaterialDesignIconView shuffle;
+
+    @FXML
+    private MenuItem close;
+
+    @FXML
+    private FontAwesomeIconView addPlaylistButton;
+
+    // React methods
+    @FXML
     void playButtonClicked(MouseEvent event) {
         player.getState().onPlay();
-        if (player.isPlaying()){
+
+        if (playPause.getGlyphName().equals("PLAY")) {
+        	playPause.setGlyphName("PAUSE");
+        } else if (playPause.getGlyphName().contentEquals("PAUSE")) {
+        	playPause.setGlyphName("PLAY");
         }
     }
 
@@ -69,19 +127,7 @@ public class Controller {
     void stopButtonClicked(MouseEvent event) {
         player.getState().onStop();
     }
-
-    @FXML
-    void loadButtonClicked(ActionEvent event) {
-        // if ((player.IsPlaying() == false) && (player.IsPaused() == false)) {
-        File file = new File(fileDir.getText());
-        try {
-            player.setTrack(new Track(file.getCanonicalPath()));
-            instructions.setText("File loaded.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
     @FXML
     void seekBarDragged(MouseEvent event){
         double seekValue = seek.getValue();
@@ -92,39 +138,48 @@ public class Controller {
         System.out.println(newVal);
         this.player.getState().onSeek(newVal);
     }
+    
     @FXML
     void nextButtonClicked(MouseEvent event){
         player.getState().onNext();
     }
+    
     @FXML
     void previousButtonClicked(MouseEvent event){
         player.getState().onPrevious();
     }
+    
     @FXML
     void fastForwardButtonClicked(MouseEvent event){
         player.getState().onFastForward();
     }
+    
     @FXML
     void rewindButtonClicked(MouseEvent event){
         player.getState().onRewind();
     }
+    
     @FXML
     void shuffleButtonClicked(MouseEvent event){
 
     }
+    
     @FXML
     void repeatButtonClicked(MouseEvent event){
         player.getState().onRepeatChange();
     }
+    
     @FXML
     void openMenuClicked(ActionEvent event){
+    	
         Window stage = this.scene.getWindow();
         FileChooser fileChooser = new FileChooser();
+        
         fileChooser.setTitle("Open Audio File");
-                fileChooser.getExtensionFilters().addAll(
-                                                 new ExtensionFilter("Audio Files", "*.wav", "*.mp3")
-                                                 );
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Audio Files", "*.wav", "*.mp3"));
+        
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
+        
         if (selectedFile != null){
             for (File f : selectedFile) {
                 try {
@@ -142,9 +197,24 @@ public class Controller {
 
         }
     }
+    
+    @FXML
+    void addPlaylistButtonClicked(ActionEvent event) {
+    	player.getLibrary().getPlaylists().add(new Playlist());
+    }
 
     void initData(Player player, Scene scene){
         this.player = player;
         this.scene = scene;
     }
+
+    // getters
+    public TableView<?> getTracksTableView() {
+    	return this.tracksTableView;
+    }
+    
+    public TableView<?> getPlaylistTableView() {
+    	return this.playlistTableView;
+    }
+
 }

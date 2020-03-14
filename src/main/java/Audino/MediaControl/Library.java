@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class Library implements Serializable {
 	
     private ArrayList<Track> trackList = new ArrayList<Track>();
+    private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -94,6 +95,14 @@ public class Library implements Serializable {
      */
     public ArrayList<Track> getTrackList(){
         return trackList; //TODO Privacy leak.
+    }
+    
+    public ArrayList<Playlist> getPlaylists() {
+    	return playlists;
+    }
+    
+    public void addPlaylist(Playlist toAdd) {
+    	playlists.add(new Playlist(toAdd));
     }
 
 }
