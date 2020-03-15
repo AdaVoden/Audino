@@ -308,39 +308,31 @@ public class Controller {
      * @param event an ActionEvent
      */
     @FXML void openMenuClicked(ActionEvent event){
-    	
         Window stage = this.scene1.getWindow();
         FileChooser fileChooser = new FileChooser();
-        
         fileChooser.setTitle("Open Audio File");
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Audio Files", "*.wav", "*.mp3"));
-        
+        fileChooser.getExtensionFilters().addAll(
+                                                 new ExtensionFilter("Audio Files", "*.wav", "*.mp3")
+                                                 );
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
-        
         if (selectedFile != null){
-            for (File f : selectedFile) {
-                try {
-                    Track file = new Track(f.getCanonicalPath());
-                    player.getPlaylist().addTrack(file);
-                    System.out.println(f.getCanonicalPath());
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-           }
-            //System.out.println(player.getPlaylist().getPlaylistSize());
-           player.loadTrackFromPlaylist();
-           Playlist playlist = player.getPlaylist();
-           playlistsList.add(playlist);
-           trackList.addAll(playlist.getTracks());
-           updateTableView();
-
+            try {
+                Playlist playlist = new Playlist(selectedFile);
+                player.setPlaylist(playlist);
+                player.loadTrackFromPlaylist();
+                trackList.clear();
+                trackList.addAll(playlist.getTracks());
+                playlistsList.add(playlist);
+                updateTableView();
+                playPause.setGlyphName("PLAY");
+            }
+            catch (IOException e) {
+                System.out.println("Error " + e.getMessage());
+                e.printStackTrace();
+                //TODO something here
+            }
         }
     }
-    
-    
-    
     /**
      * Called when addPlaylist icon clicked: adds a new playlist.
      * @param event an ActionEvent

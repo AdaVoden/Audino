@@ -1,6 +1,9 @@
 package Audino.MediaControl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import Audino.State.PlaylistState.DefaultState;
 import Audino.State.PlaylistState.PlaylistState;
@@ -186,6 +189,26 @@ public class Playlist {
     public Playlist(String name) {
       this.name = new SimpleStringProperty(name);
       this.state = new DefaultState(this);
+    }
+    /**
+     * Creates a playlist with default name, from files opened from disk
+     * @param tracks All the tracks in a List<File>
+     */
+    public Playlist(List<File> tracks) throws IOException {
+        for (File f : tracks) {
+            try {
+                Track t = new Track(f.getCanonicalPath());
+                this.tracks.add(t);
+            } catch (IOException e) {
+                // skip for now
+            }
+        }
+        if (this.tracks.size() == 0) {
+            throw new IOException("no files loaded");
+        }
+        this.name = new SimpleStringProperty("Default");
+        this.state = new DefaultState(this);
+
     }
 
     // ====================================================================== ( toString )
