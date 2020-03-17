@@ -1,6 +1,7 @@
 package Audino.UI.GUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -48,7 +49,7 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
       // URL file2 = getClass().getResource("/fxml/PlaylistNamePrompt.fxml");
       // Parent root2 = loader2.load(file2.openStream());
 
-			Scene scene1 = new Scene(root,640,400);
+			Scene scene1 = new Scene(root);
 			// Scene scene2 = new Scene(root2,250,100);
 			
 			URL stylesheet = getClass().getResource("/css/application.css");
@@ -61,7 +62,8 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
             
       controller.initData(this.player, scene1, // scene2,
                           primaryStage);
-            
+      primaryStage.onCloseRequestProperty().setValue(e -> Platform.exit());
+     
 			primaryStage.show();
 			
 		} catch(Exception e) {

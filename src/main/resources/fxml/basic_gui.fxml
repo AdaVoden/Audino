@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.materialicons.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.geometry.*?>
-<?import de.jensd.fx.glyphs.materialdesignicons.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="node" minHeight="96.0" minWidth="640.0" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
+<BorderPane fx:id="node" minHeight="96.0" minWidth="640.0" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
    <top>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="405.0" prefWidth="640.0" BorderPane.alignment="CENTER">
       <children>
@@ -29,7 +25,7 @@
                           <columns>
                             <TableColumn fx:id="playlistTableColumn" prefWidth="129.0" text="Playlists">
                                  <graphic>
-                                    <FontAwesomeIconView fx:id="addPlaylistButton" glyphName="PLUS" onMouseClicked="#addPlaylistButtonClicked" />
+                                    <FontAwesomeIconView glyphName="PLUS" />
                                  </graphic></TableColumn>
                           </columns>
                         </TableView>
@@ -63,7 +59,8 @@
                 <Menu mnemonicParsing="false" text="File">
                   <items>
                     <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuClicked" text="Open Song" />
-                        <MenuItem fx:id="close" mnemonicParsing="false" text="Exit" />
+                        <MenuItem fx:id="addPlaylistItem" mnemonicParsing="false" onAction="#addPlaylistItemClicked" text="Add Playlist" />
+                        <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeMenuItemClicked" text="Exit" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

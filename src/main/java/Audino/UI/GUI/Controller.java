@@ -7,36 +7,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.print.DocFlavor.URL;
+import java.net.URL;
+
 
 import Audino.MediaControl.Player;
 import Audino.MediaControl.Playlist;
 import Audino.MediaControl.Track;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.DragEvent;
+import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
@@ -77,7 +83,6 @@ public class Controller {
 
     // ========================================== ( tableColumn icons )
     
-    @FXML private FontAwesomeIconView addPlaylistButton;
     @FXML private MaterialDesignIconView songIcon;
     @FXML private FontAwesomeIconView artistIcon;
     @FXML private MaterialDesignIconView durationIcon; 
@@ -96,6 +101,7 @@ public class Controller {
     // ========================================== ( menu )
     
     @FXML private MenuItem openMenuItem;
+    @FXML private MenuItem addPlaylistItem;
     @FXML private MenuItem close;
     
     // ========================================== ( playlist create )
@@ -105,11 +111,11 @@ public class Controller {
     
     // ============================================================== ( getters )
     
-    public TableView<?> getTracksTableView() {
+    public TableView<Track> getTracksTableView() {
     	return this.tracksTableView;
     }
     
-    public TableView<?> getPlaylistTableView() {
+    public TableView<Playlist> getPlaylistTableView() {
     	return this.playlistTableView;
     }
     
@@ -176,7 +182,7 @@ public class Controller {
     
     
     /**
-     * Sets up the columns in the tables.
+     * Sets up the columns and rows in the tables.
      */
     public void initialize() {
       playlistTableColumn.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
@@ -184,7 +190,19 @@ public class Controller {
     	artistTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("artist"));
     	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, Double>("duration"));
 
-
+      tracksTableView.setRowFactory(evs -> {
+              TableRow<Track> row = new TableRow<>();
+              row.setOnMouseClicked(event -> {
+                      if (event.getClickCount() == 2 && (!row.isEmpty())){
+                          int index = row.getIndex();
+                          Playlist playlist = player.getPlaylist();
+                          playlist.setIndex(index);
+                          player.loadTrackFromPlaylist();
+                          player.startPlayback();
+                      }
+                  });
+              return row;
+          });
     }
 
     
@@ -304,7 +322,7 @@ public class Controller {
     
     
     /**
-     * Called when openMenu clicked: opens the menu.
+     * Called when openMenu clicked: opens the open file dialogue.
      * @param event an ActionEvent
      */
     @FXML void openMenuClicked(ActionEvent event){
@@ -334,23 +352,31 @@ public class Controller {
         }
     }
     /**
+     * Closes the application when pressed
+     *
+     */
+    @FXML void closeMenuItemClicked(){
+        Platform.exit();
+    }
+    /**
      * Called when addPlaylist icon clicked: adds a new playlist.
      * @param event an ActionEvent
      */
-    @FXML void addPlaylistButtonClicked(ActionEvent event) {
-    	
-    	// switchScene(primaryStage, scene2, "Add a Playlist");
-   
-    }
-
-    
-    /**
-     * Called when playlistCreate button clicked: creates a new playlist.
-     * @param event a MouseEvent
-     */
-    @FXML void playlistCreateButtonClicked(MouseEvent event) {
-    	String playlistName = playlistNameTextField.getText();
-    	addPlaylist(new Playlist(playlistName));
-    	updateTableView();
+    @FXML void addPlaylistItemClicked(ActionEvent event) {
+        try{
+            URL file = getClass().getResource("/fxml/PlaylistNamePrompt.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = (Parent) loader.load(file.openStream());
+            AddPlaylistController controller = loader.getController();
+            controller.setMainWindow(this);
+            Stage stage = new Stage();
+            stage.setTitle("Add Playlist");
+            stage.initOwner(this.scene1.getWindow());
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e){
+            // do nothing
+        }
     }
 }
