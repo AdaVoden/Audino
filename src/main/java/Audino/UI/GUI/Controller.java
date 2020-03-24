@@ -79,7 +79,7 @@ public class Controller {
     @FXML private TableColumn<Playlist, String> playlistTableColumn;
     @FXML private TableColumn<Track, String> songTableColumn;
     @FXML private TableColumn<Track, String> artistTableColumn;
-    @FXML private TableColumn<Track, Double> durationTableColumn;
+    @FXML private TableColumn<Track, String> durationTableColumn;
 
     // ========================================== ( tableColumn icons )
     
@@ -188,7 +188,7 @@ public class Controller {
       playlistTableColumn.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
     	songTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("title"));
     	artistTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("artist"));
-    	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, Double>("duration"));
+    	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("playtime"));
 
       tracksTableView.setRowFactory(evs -> {
               TableRow<Track> row = new TableRow<>();

@@ -37,11 +37,13 @@ public class Library implements Serializable {
      *
      * @param obj Library that's going to be written to disk.
      */
-    public void serialize(final java.io.Serializable obj) throws IOException{
+    public void serialize() throws IOException{
         try {
-            final ObjectOutputStream libOut = new ObjectOutputStream(new FileOutputStream(new File(fileName)));
-            libOut.writeObject(obj);
+            FileOutputStream file = new FileOutputStream(fileName);
+            final ObjectOutputStream libOut = new ObjectOutputStream(file);
+            libOut.writeObject(this);
             libOut.close();
+            file.close();
         }
         catch(final IOException e){
             // TODO
@@ -56,20 +58,21 @@ public class Library implements Serializable {
      */
     public static Library deserialize() throws ClassNotFoundException {
         try {
-            ObjectInputStream lib = new ObjectInputStream(new FileInputStream(new File(fileName)));
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream lib = new ObjectInputStream(file);
 
             Library toReturn = (Library) lib.readObject();
             lib.close();
+            file.close();
             return toReturn;
         }
         catch (final IOException e){
-            // TODO
-            return null;
+            e.printStackTrace();
         }
         catch (final ClassNotFoundException e){
-            // TODO
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
     
     /**

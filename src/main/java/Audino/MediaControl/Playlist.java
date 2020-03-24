@@ -2,6 +2,7 @@ package Audino.MediaControl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,11 @@ import Audino.State.PlaylistState.DefaultState;
 import Audino.State.PlaylistState.PlaylistState;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Playlist {
+public class Playlist implements Serializable {
     
     // ====================================================================== ( instance )
 
+    final static private long serialVersionUID = 2L;
     private SimpleStringProperty name = new SimpleStringProperty("Default");
     private ArrayList<Track> tracks = new ArrayList<Track>();
     private PlaylistState state;
