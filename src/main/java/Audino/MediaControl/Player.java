@@ -6,7 +6,7 @@ import Audino.MediaControl.Playlist;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import Audino.MediaControl.AudioFX;
+import Audino.MediaControl.AudioControl;
 
 import Audino.State.PlayerState.PausedState;
 import Audino.State.PlayerState.PlayingState;
@@ -37,8 +37,10 @@ public class Player {
     private double volume = 1;
     private Playlist playlist;
     private Library Library;
-    private AudioFX audioFX;
+    private AudioControl audioController;
     private MediaPlayer mediaPlayer;
+    private boolean paused;
+    private boolean playing;
 
     // =============================================================== ( getters )
     
@@ -66,6 +68,16 @@ public class Player {
     public Playlist getPlaylist() {
         return this.playlist;
     }
+    /**
+     * Gets the current mediaplayer's status
+     * @return MediaPlayer.Status the current status of the mediaplayer.
+     */
+    public Status getStatus(){
+        if (this.mediaPlayer == null){
+            return null;
+        }
+        return this.mediaPlayer.getStatus();
+    }
     
     // =============================================================== ( setters )
 
@@ -74,27 +86,18 @@ public class Player {
      * @param playlist The playlist to be passed into the player.
      */
     public void setPlaylist(Playlist playlist) {
-        stopPlayback();
         this.playlist = playlist;
-        this.currentTrack = this.playlist.getCurrentTrack();
-        this.state = new ReadyState(this);
+        loadTrackFromPlaylist();
     }
+
     
     /**
      * Passes a new track into the player.
      * @param track The track to be passed into the player.
      */
     public void setTrack(Track track) {
-        try {
-            stopPlayback();
-            this.currentTrack = track;
-            this.mediaPlayer = new MediaPlayer(track.getMedia());
-            this.playlist = new Playlist(track);
-            this.state = new ReadyState(this);
-        }
-        catch (IOException e){
-            this.state = new UnreadyState(this);
-        }
+        this.playlist = new Playlist(track);
+        loadTrackFromPlaylist();
     }
     /**
      * Tells the player to load a track from the playlist
@@ -132,49 +135,37 @@ public class Player {
             if (this.Library == null){
                     this.Library = new Library();
             }
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             this.Library = new Library();
         }
     }
 
 
     // =============================================================== ( methods )
-    
-    /**
-     * Tests whether or not a clip is playing.
-     * @return Boolean true if clip is playing, false otherwise
-     */
-    public boolean isPlaying() {
-        if (mediaPlayer != null) {
-            Status status = mediaPlayer.getStatus();
-            if (status.equals(MediaPlayer.Status.PLAYING)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Tests whether or not a clip is paused.
-     * @return Boolean true if a clip is paused, false otherwise.
-     */
-    public boolean isPaused() {
-        if (mediaPlayer != null){
-            Status status = mediaPlayer.getStatus();
-            if (status.equals(MediaPlayer.Status.PAUSED)) {
-                return true;
-            }
-        }
-
-        return false;
-  
-    }
-    
+    // These two below don't work at the moment
+    // /**
+    //  * Tests whether or not a clip is playing.
+    //  * @return Boolean true if clip is playing, false otherwise
+    //  */
+    // public boolean isPlaying() {
+    //     return this.playing;
+    // }
+    // /**
+    //  * Tests whether or not a clip is paused.
+    //  * @return Boolean true if a clip is paused, false otherwise.
+    //  */
+    // public boolean isPaused() {
+    //     return this.paused;
+    // }
     /*
      * Plays the clip (starts audio)
      */
     public void startPlayback() {
         MediaPlayer player = this.mediaPlayer;
+        if (this.currentTrack == null){
+            this.state = new UnreadyState(this);
+            return; // Things are critically screwed up here
+        }
         if (player != null) {
             Status status = mediaPlayer.getStatus();
             switch (status) {
@@ -200,6 +191,8 @@ public class Player {
             this.mediaPlayer.stop();
             this.mediaPlayer.setOnStopped(() -> {
                     this.state = new ReadyState(this);
+                    this.paused = false;
+                    this.playing = false;
             });
         }
         else {
@@ -216,6 +209,8 @@ public class Player {
             this.mediaPlayer.pause();
             this.mediaPlayer.setOnPaused(() -> {
                 this.state = new PausedState(this);
+                this.paused = true;
+                this.playing = false;
             });
 
         }
@@ -292,7 +287,12 @@ public class Player {
             this.mediaPlayer.setVolume(volume);
             this.mediaPlayer.setOnReady(() -> {
                 this.mediaPlayer.play();
+            });
+            this.mediaPlayer.setOnPlaying(() -> {
+                this.playing = true;
+                this.paused = false;
                 this.state = new PlayingState(this);
+
             });
         } catch (IOException e) {
             this.state = new UnreadyState(this);

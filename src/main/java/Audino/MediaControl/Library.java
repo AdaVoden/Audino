@@ -29,6 +29,7 @@ public class Library implements Serializable {
 	
     private ArrayList<Track> trackList = new ArrayList<Track>();
     private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+    private ArrayList<File> folderList = new ArrayList<File>();
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -56,8 +57,7 @@ public class Library implements Serializable {
      *
      * @return Library the library.ser file that was written to disk
      */
-    public static Library deserialize() throws ClassNotFoundException {
-        try {
+    public static Library deserialize() throws ClassNotFoundException, IOException {
             FileInputStream file = new FileInputStream(fileName);
             ObjectInputStream lib = new ObjectInputStream(file);
 
@@ -65,14 +65,7 @@ public class Library implements Serializable {
             lib.close();
             file.close();
             return toReturn;
-        }
-        catch (final IOException e){
-            e.printStackTrace();
-        }
-        catch (final ClassNotFoundException e){
-            e.printStackTrace();
-        }
-        return null;
+
     }
     
     /**

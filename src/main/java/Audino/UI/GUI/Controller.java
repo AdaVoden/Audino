@@ -356,6 +356,11 @@ public class Controller {
      *
      */
     @FXML void closeMenuItemClicked(){
+        try {
+            player.getLibrary().serialize();
+        } catch (IOException e) {
+            //it broke and we don't care. HDD failure?
+        }
         Platform.exit();
     }
     /**

@@ -6,8 +6,6 @@ import Audino.MediaControl.Playlist;
 import Audino.MediaControl.Track;
 import Audino.State.PlaylistState.RepeatOneState;
 import Audino.State.PlaylistState.RepeatState;
-import javafx.scene.media.Media;
-
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -123,6 +121,44 @@ public class PlaylistTest {
         assertTrue("Index should not change on next", testPlaylist.getTrackIndex() == 0);
         testPlaylist.getState().onPrevious();
         assertTrue("Index should not change on previous", testPlaylist.getTrackIndex() == 0);
+    }
+    @Test
+    public void testTracks(){
+        Playlist testPlaylist = playlistSetup();
+        Track test = testPlaylist.getCurrentTrack();
+        assertNotNull("Track has to exist", test);
+
+        testPlaylist.removeTrack(test);
+        Track afterRemoved = testPlaylist.getCurrentTrack();
+        assertNotEquals("Getting a new track shouldn't be the same after removal", test, afterRemoved);
+    }
+    @Test
+    public void testPlaylistCreation(){
+        Playlist testPlaylist = new Playlist();
+        assertNull("Empty playlist returns null", testPlaylist.getCurrentTrack());
+        Playlist copyPlaylist = new Playlist(testPlaylist);
+        assertEquals("Copy playlist should be equal to normal playlist", testPlaylist.getCurrentTrack(), copyPlaylist.getCurrentTrack());
+        File file = new File("src/test/resources/test_audio/testmp3.mp3");
+        String filepath = "";
+        try {
+            filepath = file.getCanonicalPath();
+        }
+        catch (IOException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+        testPlaylist = new Playlist(new Track(filepath));
+
+        assertNotNull("Should return at least one song, from file", testPlaylist.getCurrentTrack());
+
+        testPlaylist = new Playlist("testName");
+        assertEquals("Should return proper non-default name", "testName", testPlaylist.getName());
+
+        testPlaylist = playlistSetup();
+        ArrayList<Track> tracks = testPlaylist.getTracks();
+
+        testPlaylist = new Playlist(tracks);
+        assertTrue("Track lists have to match", tracks.equals(testPlaylist.getTracks()));
     }
 
 }

@@ -64,7 +64,9 @@ public class TrackTest {
     public void testTrackEquals(){
         Track one = setupTestTrack();
         Track two = setupTestTrack();
-        assertTrue(one.equals(two));
+        assertTrue("Same tracks should be equal", one.equals(two));
+        two = new Track("");
+        assertFalse("Null track not equal to other track", one.equals(two));
     }
     @Test
     public void testGetAlbum(){
@@ -95,4 +97,5 @@ public class TrackTest {
             e.printStackTrace();
         }
     }
+
 }
