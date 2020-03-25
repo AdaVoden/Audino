@@ -30,6 +30,7 @@ public class Library implements Serializable {
     private ArrayList<Track> trackList = new ArrayList<Track>();
     private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
     private ArrayList<File> folderList = new ArrayList<File>();
+    private int playlistIndex = 0;
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -101,4 +102,13 @@ public class Library implements Serializable {
     	playlists.add(new Playlist(toAdd));
     }
 
+    public int getPlaylistIndex() {
+    	return this.playlistIndex;
+    }
+    
+    public void setPlaylistIndex(int toSet) {
+    	if (0 <= toSet && toSet < playlists.size()) {
+    		this.playlistIndex = toSet;
+    	}
+    }
 }

@@ -50,7 +50,7 @@ public class Controller {
 
 	// ============================================================== ( project variables )
 	
-    private Player player = new Player();
+    protected Player player = new Player();
     private Scene scene1, scene2;
     private Stage primaryStage;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
@@ -106,7 +106,8 @@ public class Controller {
     
     // ========================================== ( playlist create )
     
-    @FXML private TextField playlistNameTextField;
+    @FXML
+	protected TextField playlistNameTextField;
     @FXML private Button playlistCreateButton;
     
     // ============================================================== ( getters )
@@ -161,6 +162,15 @@ public class Controller {
     	this.updateTrackTableView();
     }
     
+    public void updateSeek() {
+
+    	double seekValue = seek.getValue();
+        double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
+        seek.setMax(trackDur);
+        double newVal = trackDur * seekValue;
+        seek.setValue(newVal);
+    }
+    
     
     
     // ============================================================== ( initialization )
@@ -199,23 +209,31 @@ public class Controller {
                           playlist.setIndex(index);
                           player.loadTrackFromPlaylist();
                           player.startPlayback();
+                          playPause.setGlyphName("PAUSE");
                       }
                   });
               return row;
           });
+      
+      playlistTableView.setRowFactory(evs -> {
+          TableRow<Playlist> row = new TableRow<>();
+          row.setOnMouseClicked(event -> {
+                  if (event.getClickCount() == 2 && (!row.isEmpty())){
+                      int index = row.getIndex();
+                      ArrayList<Playlist> playlists = player.getLibrary().getPlaylists();                      
+                      player.setPlaylist(playlists.get(index));
+                      trackList.clear();
+                      trackList.addAll(playlists.get(index).getTracks());
+                      playPause.setGlyphName("PLAY");
+                      updateTableView();
+                  }
+              });
+          return row;
+      });
+      
     }
 
-    
-    
-    
-    // ============================================================== ( methods )
-    
-  //   public void switchScene(Stage primaryStage, Scene toSwitch, String title) {
-	// 	primaryStage.setScene(toSwitch);
-	// 	primaryStage.setTitle(title);
-	// }
-    
-    // ============================================================== ( react methods )
+ 
     
     // ============================================================== ( react methods )
     
@@ -335,12 +353,17 @@ public class Controller {
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
         if (selectedFile != null){
             try {
-                Playlist playlist = new Playlist(selectedFile);
+            	Playlist playlist = new Playlist(selectedFile);
+                
+                // add playlist to player library and to controller list to be displayed
+                player.getLibrary().addPlaylist(playlist);
+                playlistsList.add(playlist);
+                
                 player.setPlaylist(playlist);
                 player.loadTrackFromPlaylist();
                 trackList.clear();
                 trackList.addAll(playlist.getTracks());
-                playlistsList.add(playlist);
+                
                 updateTableView();
                 playPause.setGlyphName("PLAY");
             }

@@ -1,9 +1,10 @@
 package Audino.UI.GUI;
 
+import Audino.MediaControl.Playlist;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
-public class AddPlaylistController {
+public class AddPlaylistController extends Controller {
 
     private Controller mainController;
 
@@ -13,16 +14,21 @@ public class AddPlaylistController {
      * @param event a MouseEvent
      */
     @FXML public void playlistCreateButtonClicked(MouseEvent event) {
-        // String playlistName = playlistNameTextField.getText();
-        // addPlaylist(new Playlist(playlistName));
-        // updateTableView();
+
+        String playlistName = playlistNameTextField.getText();       
+        Playlist playlist = new Playlist(playlistName);
+        
+        addPlaylist(playlist);
+        player.getLibrary().addPlaylist(playlist);
+        
+        updateTableView();
     }
     public AddPlaylistController(){
 
     }
 
     @FXML
-    private void initialize(){
+    public void initialize(){
         System.out.println("I ran!");
     }
 
