@@ -39,6 +39,7 @@ public class Player {
     private Library Library;
     private AudioFX audioFX;
     private MediaPlayer mediaPlayer;
+    private double decibel;
 
     // =============================================================== ( getters )
     
@@ -173,6 +174,19 @@ public class Player {
     /*
      * Plays the clip (starts audio)
      */
+    
+    public double getDecibel() {
+    	    this.mediaPlayer.setAudioSpectrumListener((double d, double d1, float[] magnitudes , float[] phases) -> {
+    	 	double avgVol = 0;
+    	 	for(int i=0;i<magnitudes.length;i++){
+    	            avgVol = avgVol + magnitudes[i]+60; 
+    	    }
+    	 	avgVol = avgVol/magnitudes.length;
+        this.decibel = avgVol;
+        });
+    	return this.decibel;
+    }
+    
     public void startPlayback() {
         MediaPlayer player = this.mediaPlayer;
         if (player != null) {

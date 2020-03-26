@@ -25,7 +25,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.BorderPane;
-
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.FileChooser;
@@ -36,6 +36,7 @@ public class Controller {
 
     private Player player = new Player();
     private Scene scene;
+    private final int volVizMult = 3;
 
     @FXML
     private Label instructions;
@@ -57,6 +58,14 @@ public class Controller {
 
     @FXML
     private Slider seek;
+    
+    @FXML
+    private Rectangle volViz;
+    
+    private void updateViz() {
+    	volViz.setScaleY(this.player.getDecibel()*volVizMult);
+    	System.out.println("Updating VolViz: " + volViz.toString() + " Y Scale to " + volVizMult*player.getDecibel());
+    }
 
     @FXML
     void playButtonClicked(MouseEvent event) {
@@ -107,7 +116,7 @@ public class Controller {
     }
     @FXML
     void shuffleButtonClicked(MouseEvent event){
-
+    	this.updateViz();
     }
     @FXML
     void repeatButtonClicked(MouseEvent event){

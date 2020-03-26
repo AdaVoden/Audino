@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -10,14 +15,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="node" minHeight="96.0" minWidth="640.0" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
+<BorderPane fx:id="node" minHeight="96.0" minWidth="640.0" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Audino.UI.GUI.Controller">
    <top>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="405.0" prefWidth="640.0" BorderPane.alignment="CENTER">
       <children>
             <HBox layoutY="57.0" prefHeight="285.0" prefWidth="640.0">
                <children>
                   <VBox fx:id="library" prefHeight="289.0" prefWidth="439.0" />
-                  <VBox fx:id="playlist" prefHeight="289.0" prefWidth="204.0" />
+                  <VBox fx:id="playlist" prefHeight="289.0" prefWidth="204.0">
+                     <children>
+                        <Rectangle fx:id="volViz" arcHeight="5.0" arcWidth="5.0" height="15.0" scaleY="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="90.0" translateY="120.0" width="15.0" />
+                     </children></VBox>
                </children>
             </HBox>
             <MenuBar layoutY="7.0" prefHeight="32.0" prefWidth="640.0">
