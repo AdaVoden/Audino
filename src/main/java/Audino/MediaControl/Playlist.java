@@ -178,7 +178,7 @@ public class Playlist implements Serializable {
     /**
      * Creates a playlist initialized with an ArrayList of tracks in the default state.
      * @throws IOException if the file cannot be loaded the playlist is broken and cannot continue
-     * @param tracks an ArrayList<Track> filled with the tracks to be added.
+     * @param tracks an List<File> filled with the tracks to be added.
      */
     public Playlist(List<File> tracks) throws IOException {
         for (File f : tracks) {
@@ -193,9 +193,22 @@ public class Playlist implements Serializable {
         if (this.tracks.size() == 0){
             throw new IOException("no files loaded");
         }
+        this.name = new SimpleStringProperty("Default");
         this.state = new DefaultState(this);
+    }    /**
+          * Creates a playlist initialized with an ArrayList of tracks in the default state.
+          * @throws IOException if the file cannot be loaded the playlist is broken and cannot continue
+          * @param tracks an ArrayList<Track> filled with the tracks to be added.
+          */
+    public Playlist(ArrayList<Track> tracks) throws IOException {
+        for (Track t: tracks) {
+            this.tracks.add(new Track(t.getFile().getCanonicalPath()));
+        }
 
+        this.name = new SimpleStringProperty("Default");
+        this.state = new DefaultState(this);
     }
+
     /**
      * Creates a playlist as a copy of an existing playlist.
      * @param toCopy Playlist to be copied.
@@ -213,29 +226,6 @@ public class Playlist implements Serializable {
     public Playlist(String name) {
       this.name = new SimpleStringProperty(name);
       this.state = new DefaultState(this);
-    }
-    /**
-     * Creates a playlist with default name, from files opened from disk
-     * @param tracks All the tracks in a List<File>
-     */
-    public Playlist(List<File> tracks) throws IOException {
-        for (File f : tracks) {
-            try {
-                Track t = new Track(f.getCanonicalPath());
-                this.tracks.add(t);
-            } catch (IOException e) {
-                // skip for now
-            }
-        }
-        if (this.tracks.size() == 0) {
-            throw new IOException("no files loaded");
-        }
-        this.name = new SimpleStringProperty("Default");
-        this.state = new DefaultState(this);
-
-    }
-
-
     }
     // ====================================================================== ( toString )
 

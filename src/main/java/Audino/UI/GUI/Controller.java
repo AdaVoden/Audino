@@ -59,6 +59,7 @@ public class Controller implements Observer {
     private Stage primaryStage;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
+    private final int volVizMult = 3;
 
 
     
@@ -111,9 +112,12 @@ public class Controller implements Observer {
     
     // ========================================== ( playlist create )
     
-    @FXML
-	protected TextField playlistNameTextField;
+    @FXML protected TextField playlistNameTextField;
     @FXML private Button playlistCreateButton;
+
+    @FXML private Rectangle volViz;
+
+
     
     // ============================================================== ( getters )
     
@@ -242,14 +246,7 @@ public class Controller implements Observer {
               });
           return row;
       });
-      
-
-    @FXML
-    private Slider seek;
-    
-    @FXML
-    private Rectangle volViz;
-    
+    }
     private void updateViz() {
     	volViz.setScaleY(this.player.getDecibel()*volVizMult);
     	System.out.println("Updating VolViz: " + volViz.toString() + " Y Scale to " + volVizMult*player.getDecibel());

@@ -217,8 +217,6 @@ public class Player extends Observable{
             this.mediaPlayer.stop();
             this.mediaPlayer.setOnStopped(() -> {
                     this.state = new ReadyState(this);
-                    this.paused = false;
-                    this.playing = false;
             });
         }
         else {
@@ -235,8 +233,6 @@ public class Player extends Observable{
             this.mediaPlayer.pause();
             this.mediaPlayer.setOnPaused(() -> {
                 this.state = new PausedState(this);
-                this.paused = true;
-                this.playing = false;
             });
 
         }
@@ -303,8 +299,6 @@ public class Player extends Observable{
                 this.mediaPlayer.play();
             });
             this.mediaPlayer.setOnPlaying(() -> {
-                this.playing = true;
-                this.paused = false;
                 this.state = new PlayingState(this);
 
             });
