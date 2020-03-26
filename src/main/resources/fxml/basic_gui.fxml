@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -10,6 +11,8 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -19,8 +22,40 @@
    <top>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="405.0" prefWidth="640.0" BorderPane.alignment="CENTER">
       <children>
-            <HBox layoutY="57.0" prefHeight="285.0" prefWidth="640.0">
+            <HBox layoutY="30.0" prefHeight="312.0" prefWidth="640.0">
                <children>
+                  <VBox fx:id="playlists" prefHeight="281.0" prefWidth="130.0">
+                     <children>
+                        <TableView fx:id="playlistTableView" prefHeight="589.0" prefWidth="130.0">
+                          <columns>
+                            <TableColumn fx:id="playlistTableColumn" prefWidth="129.0" text="Playlists">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="PLUS" />
+                                 </graphic></TableColumn>
+                          </columns>
+                        </TableView>
+                     </children></VBox>
+                  <VBox fx:id="trackView" prefHeight="285.0" prefWidth="510.0">
+                     <children>
+                        <TableView fx:id="tracksTableView" prefHeight="323.0" prefWidth="510.0">
+                          <columns>
+                              <TableColumn fx:id="songTableColumn" prefWidth="226.0">
+                                 <graphic>
+                                    <MaterialDesignIconView fx:id="songIcon" glyphName="MUSIC_NOTE" size="15" text="" />
+                                 </graphic>
+                              </TableColumn>
+                            <TableColumn fx:id="artistTableColumn" prefWidth="215.0">
+                                 <graphic>
+                                    <FontAwesomeIconView fx:id="artistIcon" glyphName="USER" size="15" text="" />
+                                 </graphic>
+                              </TableColumn>
+                            <TableColumn fx:id="durationTableColumn" prefWidth="68.0">
+                                 <graphic>
+                                    <MaterialDesignIconView fx:id="durationIcon" glyphName="TIMER" size="15" />
+                                 </graphic>
+                              </TableColumn>
+                          </columns>
+                        </TableView>
                   <VBox fx:id="library" prefHeight="289.0" prefWidth="439.0" />
                   <VBox fx:id="playlist" prefHeight="289.0" prefWidth="204.0">
                      <children>
@@ -28,12 +63,13 @@
                      </children></VBox>
                </children>
             </HBox>
-            <MenuBar layoutY="7.0" prefHeight="32.0" prefWidth="640.0">
+            <MenuBar layoutY="-2.0" prefHeight="32.0" prefWidth="640.0">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuClicked" text="Open" />
-                        <MenuItem fx:id="close" mnemonicParsing="false" text="Exit" />
+                    <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuClicked" text="Open Song" />
+                        <MenuItem fx:id="addPlaylistItem" mnemonicParsing="false" onAction="#addPlaylistItemClicked" text="Add Playlist" />
+                        <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeMenuItemClicked" text="Exit" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

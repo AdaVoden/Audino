@@ -28,6 +28,9 @@ import java.util.ArrayList;
 public class Library implements Serializable {
 	
     private ArrayList<Track> trackList = new ArrayList<Track>();
+    private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+    private ArrayList<File> folderList = new ArrayList<File>();
+    private int playlistIndex = 0;
     private static final long serialVersionUID = 4L;
     private static final String fileName = "Library.ser";
 
@@ -36,11 +39,13 @@ public class Library implements Serializable {
      *
      * @param obj Library that's going to be written to disk.
      */
-    public void serialize(final java.io.Serializable obj) throws IOException{
+    public void serialize() throws IOException{
         try {
-            final ObjectOutputStream libOut = new ObjectOutputStream(new FileOutputStream(new File(fileName)));
-            libOut.writeObject(obj);
+            FileOutputStream file = new FileOutputStream(fileName);
+            final ObjectOutputStream libOut = new ObjectOutputStream(file);
+            libOut.writeObject(this);
             libOut.close();
+            file.close();
         }
         catch(final IOException e){
             // TODO
@@ -53,22 +58,15 @@ public class Library implements Serializable {
      *
      * @return Library the library.ser file that was written to disk
      */
-    public static Library deserialize() throws ClassNotFoundException {
-        try {
-            ObjectInputStream lib = new ObjectInputStream(new FileInputStream(new File(fileName)));
+    public static Library deserialize() throws ClassNotFoundException, IOException {
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream lib = new ObjectInputStream(file);
 
             Library toReturn = (Library) lib.readObject();
             lib.close();
+            file.close();
             return toReturn;
-        }
-        catch (final IOException e){
-            // TODO
-            return null;
-        }
-        catch (final ClassNotFoundException e){
-            // TODO
-            return null;
-        }
+
     }
     
     /**
@@ -95,5 +93,22 @@ public class Library implements Serializable {
     public ArrayList<Track> getTrackList(){
         return trackList; //TODO Privacy leak.
     }
+    
+    public ArrayList<Playlist> getPlaylists() {
+    	return playlists;
+    }
+    
+    public void addPlaylist(Playlist toAdd) {
+    	playlists.add(new Playlist(toAdd));
+    }
 
+    public int getPlaylistIndex() {
+    	return this.playlistIndex;
+    }
+    
+    public void setPlaylistIndex(int toSet) {
+    	if (0 <= toSet && toSet < playlists.size()) {
+    		this.playlistIndex = toSet;
+    	}
+    }
 }

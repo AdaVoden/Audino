@@ -12,34 +12,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class LibraryTest {
-    @Test
-    public void testLibraryCreation(){
+    private ArrayList<String> getTracks() {
         File folder = new File("src/test/resources/test_audio/");
         ArrayList<String> tracks = new ArrayList<String>();
         for(File file: folder.listFiles()){
             tracks.add(file.getAbsolutePath());
         }
-        System.out.println(tracks.toString());
+        return tracks;
+    }
+    private void deleteLibraryForTesting(){
+        File lib = new File("Library.ser");
+        if (lib.exists()){
+            lib.delete();
+        }
+    }
+
+    @Test
+    public void testLibraryCreation(){
+        ArrayList<String> tracks = getTracks();
         Library test = new Library();
         test.collectTracks(tracks);
         assertEquals(test.getTrackList().size(), tracks.size());
     }
     @Test
     public void testSerialization(){
-        File folder = new File("src/test/resources/test_audio/");
-        ArrayList<String> tracks = new ArrayList<String>();
-        for (File file : folder.listFiles()) {
-            try {
-                tracks.add(file.getCanonicalPath());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        ArrayList<String> tracks = getTracks();
+        deleteLibraryForTesting();
         Library test = new Library();
         test.collectTracks(tracks);
         try{
-            test.serialize(test);
+            test.serialize();
         }
         catch (IOException e){
             e.printStackTrace();
@@ -47,30 +49,19 @@ public class LibraryTest {
         File file = new File("Library.ser");
 
         assertTrue(file.exists());
-        if (file.exists()){
-            file.delete();
-        }
+        deleteLibraryForTesting();
     }
     @Test
     public void testDeserialization(){
-        File folder = new File("src/test/resources/test_audio/");
-        ArrayList<String> tracks = new ArrayList<String>();
-        for (File file : folder.listFiles()) {
-            try {
-                tracks.add(file.getCanonicalPath());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        deleteLibraryForTesting();
+        ArrayList<String> tracks = getTracks();
         Library test = new Library();
         test.collectTracks(tracks);
         try{
-            test.serialize(test);
+            test.serialize();
             File file = new File("Library.ser");
             assertTrue(file.exists());
-            Library deserialized = new Library();
-            deserialized = Library.deserialize();
+            Library deserialized = Library.deserialize();
             ArrayList<Track> testTrackList = test.getTrackList();
             ArrayList<Track> desTrackList = deserialized.getTrackList();
 
@@ -78,13 +69,16 @@ public class LibraryTest {
             for (int i = 0; i < testTrackList.size(); i++){
                 assertTrue(testTrackList.get(i).equals(desTrackList.get(i)));
             }
+            deleteLibraryForTesting();
 
         }
         catch (IOException e){
             e.printStackTrace();
+            deleteLibraryForTesting();
         }
         catch (ClassNotFoundException e){
             e.printStackTrace();
+            deleteLibraryForTesting();
         }
     }
 }
