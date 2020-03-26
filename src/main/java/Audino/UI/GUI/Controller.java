@@ -37,7 +37,9 @@ import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -57,6 +59,7 @@ public class Controller implements Observer {
     private Stage primaryStage;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
+
 
     
     
@@ -206,6 +209,7 @@ public class Controller implements Observer {
     	artistTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("artist"));
     	durationTableColumn.setCellValueFactory(new PropertyValueFactory<Track, String>("playtime"));
 
+
       tracksTableView.setRowFactory(evs -> {
               TableRow<Track> row = new TableRow<>();
               row.setOnMouseClicked(event -> {
@@ -239,6 +243,16 @@ public class Controller implements Observer {
           return row;
       });
       
+
+    @FXML
+    private Slider seek;
+    
+    @FXML
+    private Rectangle volViz;
+    
+    private void updateViz() {
+    	volViz.setScaleY(this.player.getDecibel()*volVizMult);
+    	System.out.println("Updating VolViz: " + volViz.toString() + " Y Scale to " + volVizMult*player.getDecibel());
     }
 
  
@@ -328,15 +342,10 @@ public class Controller implements Observer {
     @FXML void rewindButtonClicked(MouseEvent event){
         player.getState().onRewind();
     }
-    
-    
-    
-    /**
-     * Called when shuffle button clicked: sets playlist mode to shuffle.
-     * @param event a MouseEvent
-     */
-    @FXML void shuffleButtonClicked(MouseEvent event){
 
+    @FXML
+    void shuffleButtonClicked(MouseEvent event){
+    	this.updateViz();
     }
     
     
@@ -365,6 +374,7 @@ public class Controller implements Observer {
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(stage);
         if (selectedFile != null){
             try {
+
             	Playlist playlist = new Playlist(selectedFile);
                 
                 // add playlist to player library and to controller list to be displayed
@@ -380,6 +390,7 @@ public class Controller implements Observer {
                 updateSeek();
                 updateObservables();
                 playPause.setGlyphName("PLAY");
+
             }
             catch (IOException e) {
                 System.out.println("Error " + e.getMessage());
@@ -388,6 +399,7 @@ public class Controller implements Observer {
             }
         }
     }
+
     /**
      * Closes the application when pressed
      *

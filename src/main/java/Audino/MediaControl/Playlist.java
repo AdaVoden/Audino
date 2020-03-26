@@ -10,8 +10,9 @@ import Audino.State.PlaylistState.DefaultState;
 import Audino.State.PlaylistState.PlaylistState;
 import javafx.beans.property.SimpleStringProperty;
 
+
 public class Playlist implements Serializable {
-    
+
     // ====================================================================== ( instance )
 
     final static private long serialVersionUID = 2L;
@@ -157,22 +158,43 @@ public class Playlist implements Serializable {
 
     /**
      * Creates a playlist initialized with a track in the default state.
-     * @param aTrack a Track to be added to the playlist.
+     * @param track a Track to be added to the playlist.
      */
     public Playlist(Track track) {
         this.tracks.add(track);
         this.state = new DefaultState(this);
     }
+
+    /**
+     * Creates a playlist initialized with a file, in the default state
+     * @throws IOException if the file cannot be loaded the playlist is broken and cannot continue
+     * @param track a file to be turned into a track and added to the playlist
+     */
+    public Playlist(File track) throws IOException {
+        Track t = new Track(track.getCanonicalPath());
+        this.tracks.add(t);
+        this.state = new DefaultState(this);
+    }
     /**
      * Creates a playlist initialized with an ArrayList of tracks in the default state.
+     * @throws IOException if the file cannot be loaded the playlist is broken and cannot continue
      * @param tracks an ArrayList<Track> filled with the tracks to be added.
      */
-    public Playlist(ArrayList<Track> tracks) {
-        for (Track t: tracks) {
-            this.tracks.add(t);
+    public Playlist(List<File> tracks) throws IOException {
+        for (File f : tracks) {
+            try {
+                Track t = new Track(f.getCanonicalPath());
+                this.tracks.add(t);
+            }
+            catch (IOException e) {
+                //skip for now
+            }
         }
-        System.out.println(this.tracks.size());
+        if (this.tracks.size() == 0){
+            throw new IOException("no files loaded");
+        }
         this.state = new DefaultState(this);
+
     }
     /**
      * Creates a playlist as a copy of an existing playlist.
@@ -213,6 +235,8 @@ public class Playlist implements Serializable {
 
     }
 
+
+    }
     // ====================================================================== ( toString )
 
     /**

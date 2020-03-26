@@ -43,8 +43,7 @@ public class Player extends Observable{
     private Library Library;
     private AudioControl audioController;
     private MediaPlayer mediaPlayer;
-    private boolean paused;
-    private boolean playing;
+    private double decibel;
 
     // =============================================================== ( getters )
     
@@ -171,8 +170,22 @@ public class Player extends Observable{
     /*
      * Plays the clip (starts audio)
      */
+    
+    public double getDecibel() {
+    	    this.mediaPlayer.setAudioSpectrumListener((double d, double d1, float[] magnitudes , float[] phases) -> {
+    	 	double avgVol = 0;
+    	 	for(int i=0;i<magnitudes.length;i++){
+    	            avgVol = avgVol + magnitudes[i]+60; 
+    	    }
+    	 	avgVol = avgVol/magnitudes.length;
+        this.decibel = avgVol;
+        });
+    	return this.decibel;
+    }
+    
     public void startPlayback() {
         MediaPlayer player = this.mediaPlayer;
+
         if (this.currentTrack == null){
             this.state = new UnreadyState(this);
             return; // Things are critically screwed up here
@@ -190,7 +203,9 @@ public class Player extends Observable{
                 newPlayer();
                 break;
             }
-        } else {
+
+        }
+        else {
             newPlayer();
         }
     }
@@ -234,26 +249,14 @@ public class Player extends Observable{
      * Moves the currentTime of the active mediaPlayer forward by 1000ms.
      */
     public void fastForward() {
-        if (mediaPlayer != null) {
-            Duration toAdd = new Duration(1000);
-            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-            mediaPlayer.seek(newTime);
-            mediaPlayer.play();
-            this.state = new PlayingState(this);
-        }
+        seek(1);
     }
     
     /**
      * Moves the currentTime of the active mediaPlayer backward by 1000ms.
      */
     public void rewind() {
-        if (mediaPlayer != null) {
-            Duration toAdd = new Duration(-1000);
-            Duration newTime = mediaPlayer.getCurrentTime().add(toAdd);
-            mediaPlayer.seek(newTime);
-            mediaPlayer.play();
-            this.state = new PlayingState(this);
-        }
+        seek(-1);
     }
     
     /**
@@ -285,11 +288,11 @@ public class Player extends Observable{
         this.currentTrack = playlist.getCurrentTrack();
         startPlayback();
     }
-
     /**
      * Destroys the old player, if present and creates a new one with the a new
      * track from the playlist
      */
+
     private void newPlayer() {
         try {
             Media file = currentTrack.getMedia();
@@ -314,6 +317,4 @@ public class Player extends Observable{
             this.state = new UnreadyState(this);
         }
     }
-    
-    
 }
