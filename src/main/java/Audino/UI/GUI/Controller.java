@@ -1,19 +1,22 @@
 package Audino.UI.GUI;
 
-
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Observable;
+import java.util.Observer;
 
 import java.net.URL;
-
 
 import Audino.MediaControl.Player;
 import Audino.MediaControl.Playlist;
 import Audino.MediaControl.Track;
+
 import javafx.application.Platform;
+
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,15 +41,14 @@ import javafx.scene.layout.VBox;
 
 import javafx.stage.Window;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.util.Duration;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
-public class Controller {
+public class Controller implements Observer {
 
 	// ============================================================== ( project variables )
 	
@@ -163,16 +165,20 @@ public class Controller {
     }
     
     public void updateSeek() {
-
-    	double seekValue = seek.getValue();
         double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
         seek.setMax(trackDur);
-        double newVal = trackDur * seekValue;
-        seek.setValue(newVal);
+        seek.setValue(0);
     }
-    
-    
-    
+
+    public void updateObservables() {
+        ReadOnlyObjectProperty<Duration> currentTime = player.getCurrentTime();
+        currentTime.addListener((observable, oldValue, newValue) -> {
+            seek.setValue(newValue.toSeconds());
+        });
+   
+    }
+
+
     // ============================================================== ( initialization )
     
     // ============================================================== ( methods )
@@ -209,6 +215,8 @@ public class Controller {
                           playlist.setIndex(index);
                           player.loadTrackFromPlaylist();
                           player.startPlayback();
+                          updateSeek();
+                          updateObservables();
                           playPause.setGlyphName("PAUSE");
                       }
                   });
@@ -236,6 +244,15 @@ public class Controller {
  
     
     // ============================================================== ( react methods )
+
+    /**
+     * Called when Player updates its media file so that the player can re-initialize itself
+     * @param event
+     */
+    public void update(Observable obj, Object arg){
+        updateSeek();
+        updateObservables();
+    }
     
     /**
      * Called when play button clicked: plays/pauses song,
@@ -269,12 +286,7 @@ public class Controller {
      */
     @FXML void seekBarDragged(MouseEvent event){
         double seekValue = seek.getValue();
-        double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
-        double newVal = trackDur * seekValue;
-        System.out.println(seekValue);
-        System.out.println(trackDur);
-        System.out.println(newVal);
-        this.player.getState().onSeek(newVal);
+        this.player.getState().onSeek(seekValue);
     }
     
     
@@ -365,6 +377,8 @@ public class Controller {
                 trackList.addAll(playlist.getTracks());
                 
                 updateTableView();
+                updateSeek();
+                updateObservables();
                 playPause.setGlyphName("PLAY");
             }
             catch (IOException e) {

@@ -3,8 +3,9 @@ package Audino.MediaControl;
 import Audino.MediaControl.Library;
 import Audino.MediaControl.Playlist;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import java.util.Observable;
 
 import Audino.MediaControl.AudioControl;
 
@@ -14,6 +15,9 @@ import Audino.State.PlayerState.ReadyState;
 import Audino.State.PlayerState.PlayerState;
 import Audino.State.PlayerState.UnreadyState;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
+
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -24,7 +28,7 @@ import javafx.util.Duration;
  * This class takes care of playing audio and all of the basic functions
  * such as pause/play and stop.
  */
-public class Player {
+public class Player extends Observable{
     
 	// =============================================================== ( instance )
 	/*
@@ -78,7 +82,14 @@ public class Player {
         }
         return this.mediaPlayer.getStatus();
     }
-    
+    public ReadOnlyObjectProperty<Duration> getCurrentTime(){
+        if (this.mediaPlayer == null){
+            return null;
+        }
+        return this.mediaPlayer.currentTimeProperty();
+    }
+
+
     // =============================================================== ( setters )
 
     /**
@@ -247,7 +258,7 @@ public class Player {
     
     /**
      * Seeks the currentTime of the active mediaPlayer to a specified location.
-     * @param seekTo DOUBLE The time to seek to.
+     * @param seekTo DOUBLE The time to seek to in seconds.
      */
     public void seek(double seekTo) {
         if (mediaPlayer != null){
@@ -294,6 +305,11 @@ public class Player {
                 this.state = new PlayingState(this);
 
             });
+            this.mediaPlayer.setOnEndOfMedia(() -> {
+                    this.getState().onNext();
+                });
+            setChanged();
+            notifyObservers();
         } catch (IOException e) {
             this.state = new UnreadyState(this);
         }
