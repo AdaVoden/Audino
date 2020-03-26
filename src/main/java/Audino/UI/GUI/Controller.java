@@ -63,7 +63,7 @@ public class Controller implements Observer {
     private Stage primaryStage;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
-    private final int volVizMult = 3;
+    private final int volVizMult = 100;
 
 
     
@@ -187,9 +187,15 @@ public class Controller implements Observer {
             seek.setValue(newValue.toSeconds());
         });
         ObjectProperty<AudioSpectrumListener> spectrum = player.getSpectrumListener();
-        spectrum.addListener((observable, oldValue, newValue) -> {
-                // DO STUFF HERE
-            });
+        spectrum.set((double timestamp, double duration, float[] magnitude, float[] phases) -> {
+        	double avgVol = 0;
+    	 	for(int i=0;i<magnitude.length;i++){
+    	            avgVol = avgVol + magnitude[i]+60; 
+
+    	    }
+    	 	avgVol = avgVol/magnitude.length;
+    	 	volViz.setScaleY((avgVol / 128)*volVizMult);
+        });
 
     }
 
@@ -254,10 +260,6 @@ public class Controller implements Observer {
               });
           return row;
       });
-    }
-    private void updateViz() {
-    	volViz.setScaleY(this.player.getDecibel()*volVizMult);
-    	System.out.println("Updating VolViz: " + volViz.toString() + " Y Scale to " + volVizMult*player.getDecibel());
     }
 
  
@@ -350,7 +352,6 @@ public class Controller implements Observer {
 
     @FXML
     void shuffleButtonClicked(MouseEvent event){
-    	this.updateViz();
     }
     
     
