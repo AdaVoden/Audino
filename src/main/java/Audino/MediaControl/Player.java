@@ -14,7 +14,7 @@ import Audino.State.PlayerState.PlayingState;
 import Audino.State.PlayerState.ReadyState;
 import Audino.State.PlayerState.PlayerState;
 import Audino.State.PlayerState.UnreadyState;
-
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
 import javafx.scene.media.AudioSpectrumListener;
@@ -86,6 +86,12 @@ public class Player extends Observable{
             return null;
         }
         return this.mediaPlayer.currentTimeProperty();
+    }
+    public ObjectProperty<AudioSpectrumListener> getSpectrumListener(){
+        if(this.mediaPlayer == null){
+            return null;
+        }
+        return this.mediaPlayer.audioSpectrumListenerProperty();
     }
 
 

@@ -14,9 +14,13 @@ import Audino.MediaControl.Player;
 import Audino.MediaControl.Playlist;
 import Audino.MediaControl.Track;
 
+import javafx.scene.media.AudioSpectrumListener;
+
+
 import javafx.application.Platform;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -182,7 +186,11 @@ public class Controller implements Observer {
         currentTime.addListener((observable, oldValue, newValue) -> {
             seek.setValue(newValue.toSeconds());
         });
-   
+        ObjectProperty<AudioSpectrumListener> spectrum = player.getSpectrumListener();
+        spectrum.addListener((observable, oldValue, newValue) -> {
+                // DO STUFF HERE
+            });
+
     }
 
 
