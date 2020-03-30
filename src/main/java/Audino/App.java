@@ -6,9 +6,6 @@ import Audino.UI.TUI.TUI;
 import Audino.UI.GUI.Main;
 /**
  * Runner class. This is the main code that initializes and runs the project.
- *
- * Written by: Harlan Shaw
- * Email: harlan.shaw@ucalgary.ca
  */
 public class App {
     /**

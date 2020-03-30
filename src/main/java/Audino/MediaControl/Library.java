@@ -21,9 +21,10 @@ import java.util.ArrayList;
  * re-iteration through potentially vast amounts of track data. Only one file
  * name is allowed to prevent duplication.
  *
- * Written by: Harlan Shaw
- * Email: harlan.shaw@ucalgary.ca
+ *
+ *
  */
+
 
 public class Library implements Serializable {
 	

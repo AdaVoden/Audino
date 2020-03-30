@@ -16,7 +16,6 @@ import Audino.MediaControl.Track;
 
 import javafx.scene.media.AudioSpectrumListener;
 
-
 import javafx.application.Platform;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -57,48 +56,47 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 public class Controller implements Observer {
 
 	// ============================================================== ( project variables )
-	
+
     protected Player player = new Player();
-    private Scene scene1, scene2;
-    private Stage primaryStage;
+    private Scene scene;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
-    private final int volVizMult = 3;
+    private final int volVizMult = 10;
 
 
     
     
     // ============================================================== ( scene variables )
     // ========================================== ( root )
-    
+
     @FXML private BorderPane node;
     @FXML private AnchorPane node2;
-    
-    // ========================================== ( vBoxes ) 
-    
+
+    // ========================================== ( vBoxes )
+
     @FXML private VBox playlists;
     @FXML private VBox trackView;
-    
+
     // ========================================== ( tableViews )
-    
-    @FXML private TableView<Track> tracksTableView;    
+
+    @FXML private TableView<Track> tracksTableView;
     @FXML private TableView<Playlist> playlistTableView;
-    
+
     // ========================================== ( tableColumns )
-    
+
     @FXML private TableColumn<Playlist, String> playlistTableColumn;
     @FXML private TableColumn<Track, String> songTableColumn;
     @FXML private TableColumn<Track, String> artistTableColumn;
     @FXML private TableColumn<Track, String> durationTableColumn;
 
     // ========================================== ( tableColumn icons )
-    
+
     @FXML private MaterialDesignIconView songIcon;
     @FXML private FontAwesomeIconView artistIcon;
-    @FXML private MaterialDesignIconView durationIcon; 
+    @FXML private MaterialDesignIconView durationIcon;
 
     // ========================================== ( slider + icons )
-    
+
     @FXML private Slider seek;
     @FXML private MaterialDesignIconView playPause;
     @FXML private MaterialDesignIconView skipNext;
@@ -107,15 +105,15 @@ public class Controller implements Observer {
     @FXML private MaterialDesignIconView fastForward;
     @FXML private MaterialDesignIconView shuffle;
     @FXML private MaterialDesignIconView repeat;
-    
+
     // ========================================== ( menu )
-    
+
     @FXML private MenuItem openMenuItem;
     @FXML private MenuItem addPlaylistItem;
     @FXML private MenuItem close;
-    
+
     // ========================================== ( playlist create )
-    
+
     @FXML protected TextField playlistNameTextField;
     @FXML private Button playlistCreateButton;
 
@@ -124,19 +122,9 @@ public class Controller implements Observer {
 
     
     // ============================================================== ( getters )
-    
-    public TableView<Track> getTracksTableView() {
-    	return this.tracksTableView;
-    }
-    
-    public TableView<Playlist> getPlaylistTableView() {
-    	return this.playlistTableView;
-    }
-    
-    
-    
+
     // ============================================================== ( setters )
-    
+
     /**
      * Adds a playlist to the ObservableArrayList used for displaying the playlists in the table.
      * @param toAdd The playlist to be added.
@@ -144,7 +132,7 @@ public class Controller implements Observer {
     public void addPlaylist(Playlist toAdd) {
     	playlistsList.add(toAdd);
     }
-    
+
     /**
      * Adds a track to the ObservableArrayList used for displaying tracks in the table.
      * @param toAdd The track to be added.
@@ -152,21 +140,21 @@ public class Controller implements Observer {
     public void addTrack(Track toAdd) {
     	trackList.add(toAdd);
     }
-    
+
     /**
      * Updates playlistTableView to include all playlists currently stored.
      */
     public void updatePlaylistTableView() {
     	playlistTableView.setItems(playlistsList);
     }
-    
+
     /**
      * Updates tracksTableView to include all tracks currently stored.
      */
     public void updateTrackTableView() {
     	tracksTableView.setItems(trackList);
     }
-    
+
     /**
      * Uses updatePlaylistTableView() and updateTrackTableView() to completely refresh the table view data.
      */
@@ -174,7 +162,7 @@ public class Controller implements Observer {
     	this.updatePlaylistTableView();
     	this.updateTrackTableView();
     }
-    
+
     public void updateSeek() {
         double trackDur = this.player.getPlaylist().getCurrentTrack().getDuration();
         seek.setMax(trackDur);
@@ -187,31 +175,33 @@ public class Controller implements Observer {
             seek.setValue(newValue.toSeconds());
         });
         ObjectProperty<AudioSpectrumListener> spectrum = player.getSpectrumListener();
-        spectrum.addListener((observable, oldValue, newValue) -> {
-                // DO STUFF HERE
-            });
+        spectrum.set((double timestamp, double duration, float[] magnitude, float[] phases) -> {
+            double avgVol = 0;
+             for(int i=0;i<magnitude.length;i++){
+                    avgVol = avgVol + magnitude[i]+60;
+
+            }
+             avgVol = avgVol/magnitude.length;
+             volViz.setScaleY((avgVol / 128)*volVizMult);
+        });
+
 
     }
 
 
     // ============================================================== ( initialization )
-    
+
     // ============================================================== ( methods )
-    
+
     /**
      * Initializes with a player and scene.
      * @param player The player to be loaded
      * @param scene The Scene to be loaded
      */
-    void initData(Player player, Scene scene1, // Scene scene2,
-                  Stage primaryStage){
+    void initData(Player player, Scene scene){
         this.player = player;
-        this.scene1 = scene1;
-         // this.scene2 = scene2;
-        this.primaryStage = primaryStage;
+        this.scene = scene;
     }
-    
-    
     /**
      * Sets up the columns and rows in the tables.
      */
@@ -238,13 +228,13 @@ public class Controller implements Observer {
                   });
               return row;
           });
-      
+
       playlistTableView.setRowFactory(evs -> {
           TableRow<Playlist> row = new TableRow<>();
           row.setOnMouseClicked(event -> {
                   if (event.getClickCount() == 2 && (!row.isEmpty())){
                       int index = row.getIndex();
-                      ArrayList<Playlist> playlists = player.getLibrary().getPlaylists();                      
+                      ArrayList<Playlist> playlists = player.getLibrary().getPlaylists();
                       player.setPlaylist(playlists.get(index));
                       trackList.clear();
                       trackList.addAll(playlists.get(index).getTracks());
@@ -255,13 +245,7 @@ public class Controller implements Observer {
           return row;
       });
     }
-    private void updateViz() {
-    	volViz.setScaleY(this.player.getDecibel()*volVizMult);
-    	System.out.println("Updating VolViz: " + volViz.toString() + " Y Scale to " + volVizMult*player.getDecibel());
-    }
 
- 
-    
     // ============================================================== ( react methods )
 
     /**
@@ -272,7 +256,7 @@ public class Controller implements Observer {
         updateSeek();
         updateObservables();
     }
-    
+
     /**
      * Called when play button clicked: plays/pauses song,
      * and updates button to indicate state.
@@ -288,7 +272,7 @@ public class Controller implements Observer {
         }
     }
 
-    
+
     /**
      * Called when stop button clicked: stops song.
      * @param event a MouseEvent
@@ -298,7 +282,7 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when seek bar dragged: seeks song to selected duration.
      * @param event a MouseEvent
@@ -309,7 +293,7 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when next button clicked: plays next song in queue.
      * @param event a MouseEvent
@@ -319,7 +303,7 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when previous button clicked: plays previous song in queue.
      * @param event a MouseEvent
@@ -329,7 +313,7 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when ff button clicked: fastforwards song.
      * @param event a MouseEvent
@@ -339,7 +323,7 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when rw button clicked: rewinds song.
      * @param event a MouseEvent
@@ -350,11 +334,10 @@ public class Controller implements Observer {
 
     @FXML
     void shuffleButtonClicked(MouseEvent event){
-    	this.updateViz();
     }
     
     
-    
+
     /**
      * Called when repeat button clicked: sets the playlist mode to repeat.
      * @param event a MouseEvent
@@ -364,13 +347,13 @@ public class Controller implements Observer {
     }
     
     
-    
+
     /**
      * Called when openMenu clicked: opens the open file dialogue.
      * @param event an ActionEvent
      */
     @FXML void openMenuClicked(ActionEvent event){
-        Window stage = this.scene1.getWindow();
+        Window stage = this.scene.getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Audio File");
         fileChooser.getExtensionFilters().addAll(
@@ -381,16 +364,16 @@ public class Controller implements Observer {
             try {
 
             	Playlist playlist = new Playlist(selectedFile);
-                
+
                 // add playlist to player library and to controller list to be displayed
                 player.getLibrary().addPlaylist(playlist);
                 playlistsList.add(playlist);
-                
+
                 player.setPlaylist(playlist);
                 player.loadTrackFromPlaylist();
                 trackList.clear();
                 trackList.addAll(playlist.getTracks());
-                
+
                 updateTableView();
                 updateSeek();
                 updateObservables();
@@ -430,7 +413,7 @@ public class Controller implements Observer {
             controller.setMainWindow(this);
             Stage stage = new Stage();
             stage.setTitle("Add Playlist");
-            stage.initOwner(this.scene1.getWindow());
+            stage.initOwner(this.scene.getWindow());
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

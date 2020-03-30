@@ -27,11 +27,7 @@ import Audino.UI.UI;
 public class Main extends Application implements EventHandler<ActionEvent>, UI {
 
     // instance
-    Button playButton, pauseButton, stopButton, loadButton;
-    boolean isLoaded;
     Player player;
-    Stage primaryStage;
-    Scene scene1, scene2;
 
     // constructor
     public Main(){
@@ -48,17 +44,16 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			Parent root = loader1.load(file.openStream());
 			
 
-			Scene scene1 = new Scene(root);
+			Scene scene = new Scene(root);
 			
 			URL stylesheet = getClass().getResource("/css/application.css");
-			scene1.getStylesheets().add(stylesheet.toExternalForm());
+			scene.getStylesheets().add(stylesheet.toExternalForm());
 			
-			primaryStage.setScene(scene1);
+			primaryStage.setScene(scene);
 			primaryStage.setTitle("Player");
 		 	Controller controller = loader1.<Controller>getController();
             
-     		controller.initData(this.player, scene1, // scene2,
-							  primaryStage);
+      controller.initData(this.player, scene);
 			player.addObserver(controller);
 			primaryStage.onCloseRequestProperty().setValue(e -> Platform.exit());
      
@@ -68,11 +63,6 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
-
 	@Override
 	public void initialize(String[] args) {
 		launch(args);
@@ -84,23 +74,5 @@ public class Main extends Application implements EventHandler<ActionEvent>, UI {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-	
-	public void switchScene(Stage primaryStage, Scene toSwitch, String title) {
-		primaryStage.setScene(toSwitch);
-		primaryStage.setTitle(title);
-	}
-	
-	public Stage getPrimaryStage() {
-		return this.primaryStage;
-	}
-	
-	public Scene getScene1() {
-		return this.scene1;
-	}
-	
-	public Scene getScene2() {
-		return this.scene2;
-	}
+
 }
