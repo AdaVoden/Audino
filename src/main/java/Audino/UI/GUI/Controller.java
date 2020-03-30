@@ -61,7 +61,7 @@ public class Controller implements Observer {
     private Scene scene;
     private ObservableList<Playlist> playlistsList = FXCollections.observableArrayList();
     private ObservableList<Track> trackList = FXCollections.observableArrayList();
-    private final int volVizMult = 10;
+    private final int volVizMult = 100;
 
 
     
@@ -184,8 +184,6 @@ public class Controller implements Observer {
              avgVol = avgVol/magnitude.length;
              volViz.setScaleY((avgVol / 128)*volVizMult);
         });
-
-
     }
 
 
