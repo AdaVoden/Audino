@@ -221,14 +221,14 @@ public class Player extends Observable {
      * Moves the currentTime of the active mediaPlayer forward by 1000ms.
      */
     public void fastForward() {
-        seek(1);
+        seek(mediaPlayer.getCurrentTime().toSeconds() + 1);
     }
 
     /**
      * Moves the currentTime of the active mediaPlayer backward by 1000ms.
      */
     public void rewind() {
-        seek(-1);
+        seek(mediaPlayer.getCurrentTime().toSeconds() - 1);
     }
 
     /**
