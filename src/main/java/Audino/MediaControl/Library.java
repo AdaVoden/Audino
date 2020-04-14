@@ -92,21 +92,37 @@ public class Library implements Serializable {
      * @return ArrayList<Track> Returns the tracks stored in the library
      */
     public ArrayList<Track> getTrackList(){
-        return trackList; //TODO Privacy leak.
+        return trackList;
     }
     
+    /**
+     * Getter for playlists.
+     * @return ArrayList<Playlist> Returns the playlists stored in the library.
+     */
     public ArrayList<Playlist> getPlaylists() {
     	return playlists;
     }
     
+    /**
+     * Adds a playlist to the library.
+     * @param toAdd : The playlist to be added.
+     */
     public void addPlaylist(Playlist toAdd) {
     	playlists.add(new Playlist(toAdd));
     }
 
+    /**
+     * Gets the index of the current playlist from the library.
+     * @return int The current index.
+     */
     public int getPlaylistIndex() {
     	return this.playlistIndex;
     }
     
+    /**
+     * Setter for the playlist index of the library.
+     * @param toSet : The integer to be set.
+     */
     public void setPlaylistIndex(int toSet) {
     	if (0 <= toSet && toSet < playlists.size()) {
     		this.playlistIndex = toSet;
