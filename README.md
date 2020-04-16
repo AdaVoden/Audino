@@ -1,5 +1,7 @@
 # Audino
 
+Note : since addition of visualizer, the headers for track name, artist, and duration may not be visible. To fix, drag the headers to the left.
+
 ## Run instructions
 
 Extract the release to a directory, then go into ```bin``` and run ```Audino``` for *Nix systems or ```Audino.bat``` for windows systems.
